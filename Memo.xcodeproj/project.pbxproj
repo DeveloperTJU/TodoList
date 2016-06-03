@@ -37,6 +37,8 @@
 		A5C5C4CD1CF688360078C4CF /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = A5C5C4C71CF688360078C4CF /* FMResultSet.m */; };
 		A5C5C4CE1CF688360078C4CF /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A5C5C4C81CF688360078C4CF /* Info.plist */; };
 		A5DAA8851CFFCFD9008B8CAC /* StringHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DAA8841CFFCFD9008B8CAC /* StringHelper.swift */; };
+		C336EB3B1D01591900563840 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C336EB3A1D01591900563840 /* EditViewController.swift */; };
+		C336EB3D1D01596000563840 /* EditDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C336EB3C1D01596000563840 /* EditDetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -87,6 +89,8 @@
 		A5C5C4C71CF688360078C4CF /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
 		A5C5C4C81CF688360078C4CF /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A5DAA8841CFFCFD9008B8CAC /* StringHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringHelper.swift; sourceTree = "<group>"; };
+		C336EB3A1D01591900563840 /* EditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
+		C336EB3C1D01596000563840 /* EditDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditDetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,6 +155,7 @@
 		A5A9A0E41CEBF6C4006BB3A1 /* Memo */ = {
 			isa = PBXGroup;
 			children = (
+				C336EB3E1D01598400563840 /* Edit */,
 				A5A9A0E51CEBF6C4006BB3A1 /* AppDelegate.swift */,
 				A548B9A51CF5892B00773A58 /* Memo-Bridging-Header.h */,
 				A599E43B1CF68C44005CDB8D /* DataBaseService.swift */,
@@ -284,6 +289,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		C336EB3E1D01598400563840 /* Edit */ = {
+			isa = PBXGroup;
+			children = (
+				C336EB3A1D01591900563840 /* EditViewController.swift */,
+				C336EB3C1D01596000563840 /* EditDetailViewController.swift */,
+			);
+			name = Edit;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -356,6 +370,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C336EB3B1D01591900563840 /* EditViewController.swift in Sources */,
 				A5A9A1151CEC3795006BB3A1 /* ItemCell.swift in Sources */,
 				A5046D871D0115230046B511 /* AFHTTPSessionManager.m in Sources */,
 				A5046D881D0115230046B511 /* AFNetworkReachabilityManager.m in Sources */,
@@ -364,6 +379,7 @@
 				A5C5C4C91CF688360078C4CF /* FMDatabase.m in Sources */,
 				A5A9A0F81CEBF77F006BB3A1 /* BaseViewController.swift in Sources */,
 				A5046D8A1D0115230046B511 /* AFURLRequestSerialization.m in Sources */,
+				C336EB3D1D01596000563840 /* EditDetailViewController.swift in Sources */,
 				A5046D891D0115230046B511 /* AFSecurityPolicy.m in Sources */,
 				A5046D8C1D0115230046B511 /* AFURLSessionManager.m in Sources */,
 				A592E0DD1CF5FF4A004762A8 /* UserViewController.swift in Sources */,
