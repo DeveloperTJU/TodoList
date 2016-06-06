@@ -21,12 +21,22 @@ class UnfinishedViewController: BaseViewController{
         let newItemFrame = CGRectMake(8, 8, self.view.bounds.width - 16, 42)
         let newItemView = MyRect(frame: newItemFrame)
         newItemView.addSubview(newItemFirstView)
+        let addButton = UIButton()
+        addButton.setImage(UIImage(named: "new"), forState: .Normal)
+        addButton.frame = CGRectMake(11, 11, 20, 20)
+        let menuButton = UIButton()
+        menuButton.setImage(UIImage(named: "menu"), forState: .Normal)
+        menuButton.frame = CGRectMake(newItemFirstFrame.width-31, 11, 20, 20)
+        let addTextField = UITextField()
+        addTextField.frame = CGRectMake(42, 11, newItemFirstFrame.width-84, 20)
+        
+        newItemFirstView.addSubview(addButton)
+        newItemFirstView.addSubview(addTextField)
+        newItemFirstView.addSubview(menuButton)
         self.view.addSubview(newItemView)
         super.loadTableView()
         let tableViewFrame = CGRectMake(0, 54, self.view.bounds.width, self.view.bounds.height - 54)
         self.mainTableView.frame = tableViewFrame
-        
-//        let 
     }
     
     override func viewDidLoad() {

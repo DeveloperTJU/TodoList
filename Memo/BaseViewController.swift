@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol BaseViewControllerDelegate{
+    func switchState()
+}
+
 class BaseViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
 
     
@@ -16,8 +20,6 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     private var originConstant: CGFloat = 0
     var dataArr:[ItemModel]!
     var isFinished:Bool!    //表示当前标签页是"已完成"还是"未完成"。
-    var dataBase:FMDatabase!
-    var dbQueue:FMDatabaseQueue!
     
     init(){
         super.init(nibName: nil, bundle: nil)
@@ -38,28 +40,28 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //从数据库读入数据
     func loadData(){
-        self.dataBase = DataBaseService.getDataBase()
-        self.dbQueue = DataBaseService.getDataBaseQueue()
+        let dataBase = DataBaseService.sharedInstance.getDataBase()
+        let dbQueue = DataBaseService.sharedInstance.getDataBaseQueue()
         
         //CGAffineTransformIdentity
         //MJRefresh
         
-        self.dataBase.open()
+        dataBase.open()
         var sqlStr = "DROP TABLE IF EXISTS data_\(UserVC.currentUser.md5)"
-        self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [])
+        dataBase.executeUpdate(sqlStr, withArgumentsInArray: [])
         sqlStr = "CREATE TABLE IF NOT EXISTS data_\(UserVC.currentUser.md5)(TITLE TEXT, CONTENT TEXT, CREATE_TIME TEXT, LAST_EDIT_TIME TEXT, ALERT_TIME TEXT, LEVEL INT, STATE INT, PRIMARY KEY(CREATE_TIME))"
-        self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [])
+        dataBase.executeUpdate(sqlStr, withArgumentsInArray: [])
         sqlStr = "INSERT INTO data_\(UserVC.currentUser.md5) VALUES (?, ?, ?, ?, ?, ?, ?)"
-        self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task1", "no content1", "2016-05-27 12:01:00", "2016-05-27 12:01:00", "2017-05-27 12:01:00", 1, 4])
-        self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task2", "no content2", "2016-05-27 12:02:01", "2016-05-27 12:02:01", "2017-05-27 12:02:01", 1, 4])
-        self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task3", "no content3", "2016-05-27 12:03:02", "2016-05-27 12:03:02", "2017-05-27 12:03:02", 1, 0])
-        self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task4", "no content4", "2016-05-27 12:04:03", "2016-05-27 12:04:03", "2017-05-27 12:04:03", 1, 0])
-        self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task5", "no content5", "2016-05-27 12:05:02", "2016-05-27 12:05:02", "2017-05-27 12:05:02", 1, 1])
-        self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task6", "no content6", "2016-05-27 12:06:00", "2016-05-27 12:06:00", "2017-05-27 12:06:00", 1, 1])
-        self.dataBase.close()
+        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task1", "no content1", "2016-05-27 12:01:00", "2016-05-27 12:01:00", "2017-05-27 12:01:00", 1, 4])
+        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task2", "no content2", "2016-05-27 12:02:01", "2016-05-27 12:02:01", "2017-05-27 12:02:01", 1, 4])
+        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task3", "no content3", "2016-05-27 12:03:02", "2016-05-27 12:03:02", "2017-05-27 12:03:02", 1, 0])
+        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task4", "no content4", "2016-05-27 12:04:03", "2016-05-27 12:04:03", "2017-05-27 12:04:03", 1, 0])
+        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task5", "no content5", "2016-05-27 12:05:02", "2016-05-27 12:05:02", "2017-05-27 12:05:02", 1, 1])
+        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task6", "no content6", "2016-05-27 12:06:00", "2016-05-27 12:06:00", "2017-05-27 12:06:00", 1, 1])
+        dataBase.close()
     }
     
-    //在初始化时添加TableView以在尚未加载视图时存取数据。
+    //在初始化时添加TableView以在尚未加载视图时存取dataArr数据。
     func loadTableView() {
         let tableViewFrame:CGRect = self.view.bounds
         self.mainTableView = UITableView(frame: tableViewFrame, style: UITableViewStyle.Plain)
@@ -77,9 +79,6 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.view.backgroundColor = UIColor(patternImage: image)
         self.mainTableView.backgroundColor = UIColor.clearColor()
         self.mainTableView.separatorStyle = .None
-//        let panGesture = UIPanGestureRecognizer(target: self, action: "handlePan:")
-//        panGesture.delegate = self
-//        self.mainTableView.addGestureRecognizer(panGesture)
     }
     
     override func viewDidLoad() {
@@ -113,7 +112,9 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func search(){
-        
+//        let nav = SearchViewController()
+//        nav.hidesBottomBarWhenPushed = true
+//        self.navigationController!.pushViewController(nav,animated:true);
     }
     
     func userInfo(sender: UIButton){
@@ -249,8 +250,8 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
                 break
             }
         }
-        let state = data.state % 4 + (isFinished == true ? 4 : 0)
-        if self.insertInDB(data, state: state){
+        data.state = data.state % 2 + (isFinished == true ? 2 : 0)
+        if DataBaseService.sharedInstance.insertInDB(data){
             dataArr.insert(data, atIndex: index)
             self.mainTableView.beginUpdates()
             self.mainTableView.insertRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: hasAnimation ? .Automatic : .None)
@@ -266,7 +267,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //删除指定位置的数据，单刷视图。
     func removeData(row index:Int){
-        if self.deleteInDB(index){
+        if DataBaseService.sharedInstance.deleteInDB(self.dataArr[index].createTime){
             dataArr.removeAtIndex(index)
             self.mainTableView.beginUpdates()
             self.mainTableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .None)
@@ -290,7 +291,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.titleLabel.text = item.title
         cell.timeLabel.text = friendlyTime(item.lastEditTime)
         cell.selectionStyle = UITableViewCellSelectionStyle.None
-        
+        cell.switchState()
         return cell
     }
     
@@ -323,53 +324,6 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(editVC, animated: true)
         }
-    }
-    
-    func insertInDB(data:ItemModel, state:Int) -> Bool {
-        self.dataBase.open()
-        let sqlStr = "INSERT INTO data_\(UserVC.currentUser.md5) VALUES (?, ?, ?, ?, ?, ?, ?)"
-        let succeed = self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [data.title, data.content, data.createTime, data.lastEditTime, data.alertTime, data.level, state])
-        self.dataBase.close()
-        return succeed
-    }
-    
-    
-    func deleteInDB(index:Int) -> Bool {
-        self.dataBase.open()
-        let sqlStr = "DELETE FROM data_\(UserVC.currentUser.md5) WHERE CREATE_TIME=?"
-        let succeed =  self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [self.dataArr[index].createTime])
-        self.dataBase.close()
-        return succeed
-    }
-    
-    func updateInDB(data:ItemModel, index:Int) -> Bool {
-        self.dataBase.open()
-        let sqlStr = "UPDATE data_\(UserVC.currentUser.md5) set TITLE=?, CONTENT=?, LAST_EDIT_TIME=?, ALERT_TIME=?, LEVEL=?, STATE=? WHERE CREATE_TIME=?"
-        let succeed = self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [data.title, data.content, data.createTime, data.lastEditTime, data.alertTime, data.level, data.state, self.dataArr[index].createTime])
-        self.dataBase.close()
-        return succeed
-    }
-    
-    func selectAllInDB() -> ([ItemModel], [ItemModel]) {
-        self.dataBase.open()
-        let sqlStr = "SELECT * FROM data_\(UserVC.currentUser.md5) ORDER BY LEVEL, LAST_EDIT_TIME DESC"
-        let rs =  self.dataBase.executeQuery(sqlStr, withArgumentsInArray: [])
-        var unfinished:[ItemModel] = [ItemModel]()
-        var finished:[ItemModel] = [ItemModel]()
-        while rs.next(){
-            let state = rs.longForColumn("STATE")
-            let data = ItemModel(title: rs.stringForColumn("TITLE"), content: rs.stringForColumn("CONTENT"), createTime: rs.stringForColumn("CREATE_TIME"), lastEditTime: rs.stringForColumn("LAST_EDIT_TIME"), alertTime: rs.stringForColumn("ALERT_TIME"), level: rs.longForColumn("LEVEL"), state: state)
-            if state & 2 == 0{  //未删除
-                if rs.longForColumn("state") >= 4{
-                    finished.append(data)
-                }
-                else{
-                    unfinished.append(data)
-                }
-            }
-        }
-        self.dataBase.close()
-        return (unfinished, finished)
     }
     
 }

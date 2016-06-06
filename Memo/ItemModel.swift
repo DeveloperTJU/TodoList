@@ -15,7 +15,7 @@ class ItemModel: NSObject {
     var lastEditTime:String = ""
     var alertTime = ""
     var level:Int = 0
-    var state:Int = 0    //state范围0-7，三个二进制位分别表示 未完成/已完成、未删除/已删除、未同步/已同步
+    var state:Int = 0    //state范围0-3，两个二进制位分别表示 未完成/已完成、未删除/已删除
     
     override init(){
         super.init()
