@@ -8,11 +8,13 @@
 
 import UIKit
 
-class EditDetailViewController: BaseViewController,UITextFieldDelegate,UITextViewDelegate {
+class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     
+    var currentList:ItemModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
         
         //
@@ -47,7 +49,7 @@ class EditDetailViewController: BaseViewController,UITextFieldDelegate,UITextVie
         //        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:UIFont(name: "Zapfino", size: 24.0)!];
         
         //给导航增加item
-        let rightItem = UIBarButtonItem(title: "完成", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(EditDetailViewController.FinishItem(_:)))
+        let rightItem = UIBarButtonItem(title: "完成", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("EditDetailViewController.FinishItem:"))
         rightItem.title = "完成"
         self.navigationItem.rightBarButtonItem = rightItem
         
@@ -72,7 +74,7 @@ class EditDetailViewController: BaseViewController,UITextFieldDelegate,UITextVie
         Datebutt.setTitle("假装有时间", forState:UIControlState.Normal)
         Datebutt.setTitleColor(UIColor.blackColor(),forState: .Normal)
         Datebutt.titleLabel?.font=UIFont(name:"Zapfino", size:15)
-        Datebutt.addTarget(self, action: #selector(selectDate(_:)), forControlEvents: .TouchUpInside)
+        Datebutt.addTarget(self, action: Selector("selectDate:"), forControlEvents: .TouchUpInside)
         self.view.addSubview(Datebutt)
         
         //添加星级边框

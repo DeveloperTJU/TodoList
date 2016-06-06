@@ -8,11 +8,18 @@
 
 import UIKit
 
-class EditViewController: BaseViewController,UITextFieldDelegate,UITextViewDelegate {
+class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     
+    var currentList:ItemModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        UIGraphicsBeginImageContext(self.view.frame.size)
+        UIImage(named: "background")!.drawInRect(CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height))
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        self.view.backgroundColor = UIColor(patternImage: image)
         
         
         //
@@ -47,7 +54,7 @@ class EditViewController: BaseViewController,UITextFieldDelegate,UITextViewDeleg
         //        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:UIFont(name: "Zapfino", size: 24.0)!];
         
         //给导航增加item
-        let rightItem = UIBarButtonItem(title: "编辑", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(EditViewController.EditItem(_:)))
+        let rightItem = UIBarButtonItem(title: "编辑", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("EditViewController.EditItem:"))
         rightItem.title = "编辑"
         self.navigationItem.rightBarButtonItem = rightItem
         
@@ -125,8 +132,10 @@ class EditViewController: BaseViewController,UITextFieldDelegate,UITextViewDeleg
     func EditItem(right:UIBarButtonItem)
     {
         let editDetailVC = EditDetailViewController()
+        editDetailVC.currentList = currentList
         self.hidesBottomBarWhenPushed = true;
         self.navigationController?.pushViewController(editDetailVC, animated: true)
+
         
     }
     

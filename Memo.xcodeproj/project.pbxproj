@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A502F6A41D05159800C519E9 /* EditDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502F6A21D05159800C519E9 /* EditDetailViewController.swift */; };
+		A502F6A51D05159800C519E9 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502F6A31D05159800C519E9 /* EditViewController.swift */; };
 		A5046D871D0115230046B511 /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5046D7B1D0115220046B511 /* AFHTTPSessionManager.m */; };
 		A5046D881D0115230046B511 /* AFNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5046D7E1D0115220046B511 /* AFNetworkReachabilityManager.m */; };
 		A5046D891D0115230046B511 /* AFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = A5046D801D0115220046B511 /* AFSecurityPolicy.m */; };
@@ -37,6 +39,7 @@
 		A5C5C4CD1CF688360078C4CF /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = A5C5C4C71CF688360078C4CF /* FMResultSet.m */; };
 		A5C5C4CE1CF688360078C4CF /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A5C5C4C81CF688360078C4CF /* Info.plist */; };
 		A5DAA8851CFFCFD9008B8CAC /* StringHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DAA8841CFFCFD9008B8CAC /* StringHelper.swift */; };
+
 		A85783451D03F54E003D73D9 /* MOBFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A85783431D03F54E003D73D9 /* MOBFoundation.framework */; };
 		A85783461D03F54E003D73D9 /* SMS_SDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A85783441D03F54E003D73D9 /* SMS_SDK.framework */; };
 		A85783481D03F57B003D73D9 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A85783471D03F57B003D73D9 /* libz.tbd */; };
@@ -49,9 +52,12 @@
 		A87690841D050EE700BAB593 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87690831D050EE700BAB593 /* ViewController.swift */; };
 		C336EB3B1D01591900563840 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C336EB3A1D01591900563840 /* EditViewController.swift */; };
 		C336EB3D1D01596000563840 /* EditDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C336EB3C1D01596000563840 /* EditDetailViewController.swift */; };
+
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A502F6A21D05159800C519E9 /* EditDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditDetailViewController.swift; sourceTree = "<group>"; };
+		A502F6A31D05159800C519E9 /* EditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
 		A5046D7A1D0115220046B511 /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
 		A5046D7B1D0115220046B511 /* AFHTTPSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPSessionManager.m; sourceTree = "<group>"; };
 		A5046D7C1D0115220046B511 /* AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworking.h; sourceTree = "<group>"; };
@@ -111,6 +117,7 @@
 		A87690831D050EE700BAB593 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		C336EB3A1D01591900563840 /* EditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
 		C336EB3C1D01596000563840 /* EditDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditDetailViewController.swift; sourceTree = "<group>"; };
+
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -191,6 +198,7 @@
 				A5A9A1061CEBF95A006BB3A1 /* Base */,
 				A5A9A1041CEBF8E1006BB3A1 /* Unfinished */,
 				A5A9A1031CEBF8D8006BB3A1 /* Finished */,
+				A5046DE71D012CCC0046B511 /* Assets.xcassets */,
 				A5A9A0EE1CEBF6C4006BB3A1 /* LaunchScreen.storyboard */,
 				A5A9A0F11CEBF6C4006BB3A1 /* Info.plist */,
 				A87690831D050EE700BAB593 /* ViewController.swift */,
@@ -203,7 +211,6 @@
 			children = (
 				A5A9A10A1CEBF9B0006BB3A1 /* Controller */,
 				A5A9A10B1CEBF9B7006BB3A1 /* View */,
-				A5046DE71D012CCC0046B511 /* Assets.xcassets */,
 			);
 			name = Finished;
 			sourceTree = "<group>";
@@ -242,6 +249,8 @@
 				A5A9A0F91CEBF806006BB3A1 /* RootTabBarController.swift */,
 				A5A9A0F71CEBF77F006BB3A1 /* BaseViewController.swift */,
 				A592E0DC1CF5FF4A004762A8 /* UserViewController.swift */,
+				A502F6A21D05159800C519E9 /* EditDetailViewController.swift */,
+				A502F6A31D05159800C519E9 /* EditViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -359,6 +368,7 @@
 			name = Edit;
 			sourceTree = "<group>";
 		};
+
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -431,7 +441,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C336EB3B1D01591900563840 /* EditViewController.swift in Sources */,
 				A5A9A1151CEC3795006BB3A1 /* ItemCell.swift in Sources */,
 				A85783591D03F7D5003D73D9 /* PhoneNumberViewController.swift in Sources */,
 				A5046D871D0115230046B511 /* AFHTTPSessionManager.m in Sources */,
@@ -442,7 +451,6 @@
 				A5A9A0F81CEBF77F006BB3A1 /* BaseViewController.swift in Sources */,
 				A87690841D050EE700BAB593 /* ViewController.swift in Sources */,
 				A5046D8A1D0115230046B511 /* AFURLRequestSerialization.m in Sources */,
-				C336EB3D1D01596000563840 /* EditDetailViewController.swift in Sources */,
 				A5046D891D0115230046B511 /* AFSecurityPolicy.m in Sources */,
 				A85783581D03F7D5003D73D9 /* LogInViewController.swift in Sources */,
 				A5046D8C1D0115230046B511 /* AFURLSessionManager.m in Sources */,
@@ -451,6 +459,7 @@
 				A5046DE61D011D2F0046B511 /* MyRect.swift in Sources */,
 				A599E43C1CF68C44005CDB8D /* DataBaseService.swift in Sources */,
 				A5C5C4CD1CF688360078C4CF /* FMResultSet.m in Sources */,
+				A502F6A41D05159800C519E9 /* EditDetailViewController.swift in Sources */,
 				A5A9A0FC1CEBF862006BB3A1 /* CustomNavController.swift in Sources */,
 				A527006A1CF3E765003D88FB /* CellFrameInfo.swift in Sources */,
 				A5C5C4CA1CF688360078C4CF /* FMDatabaseAdditions.m in Sources */,
@@ -461,6 +470,7 @@
 				A5A9A1001CEBF8B2006BB3A1 /* UnfinishedViewController.swift in Sources */,
 				A599E4401CF68CA6005CDB8D /* MBProgressHUD.m in Sources */,
 				A5046D8B1D0115230046B511 /* AFURLResponseSerialization.m in Sources */,
+				A502F6A51D05159800C519E9 /* EditViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -564,13 +574,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/SMS_SDK",
 				);
+
 				INFOPLIST_FILE = Memo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hui.Memo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -591,6 +604,7 @@
 					"$(PROJECT_DIR)/SMS_SDK",
 				);
 				INFOPLIST_FILE = Memo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hui.Memo;
 				PRODUCT_NAME = "$(TARGET_NAME)";

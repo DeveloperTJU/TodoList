@@ -40,9 +40,12 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     func loadData(){
         self.dataBase = DataBaseService.getDataBase()
         self.dbQueue = DataBaseService.getDataBaseQueue()
-
+        
+        //CGAffineTransformIdentity
+        //MJRefresh
+        
         self.dataBase.open()
-        var sqlStr = "DROP TABLE data_\(UserVC.currentUser.md5)"
+        var sqlStr = "DROP TABLE IF EXISTS data_\(UserVC.currentUser.md5)"
         self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [])
         sqlStr = "CREATE TABLE IF NOT EXISTS data_\(UserVC.currentUser.md5)(TITLE TEXT, CONTENT TEXT, CREATE_TIME TEXT, LAST_EDIT_TIME TEXT, ALERT_TIME TEXT, LEVEL INT, STATE INT, PRIMARY KEY(CREATE_TIME))"
         self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [])
@@ -227,8 +230,8 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
                 } else {  
                     return "\(year)/\(month)/\(day)"
                 }  
-            }  
-        }  
+            }
+        }
         return ""
     }
     
@@ -292,26 +295,34 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-//        let currentItem = self.dataArr[indexPath.row]
         return 50
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        var hudText = ""
-        let temp = self.dataArr[indexPath.row]
-        self.removeData(row: indexPath.row)
-        if (isFinished == true){
-            UnfinishedVC.insertData(temp, withAnimation: true)
-            hudText = "已恢复"
+        if false{
+            var hudText = ""
+            let temp = self.dataArr[indexPath.row]
+            self.removeData(row: indexPath.row)
+            if (isFinished == true){
+                UnfinishedVC.insertData(temp, withAnimation: true)
+                hudText = "已恢复"
+            }
+            else{
+                FinishedVC.insertData(temp, withAnimation: true)
+                hudText = "已完成"
+            }
+            let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+            hud.mode = MBProgressHUDMode.Text
+            hud.label.text = hudText
+            hud.hideAnimated(true, afterDelay: 1.5)
         }
         else{
-            FinishedVC.insertData(temp, withAnimation: true)
-            hudText = "已完成"
+            let editVC = EditViewController()
+            editVC.currentList = dataArr[indexPath.row]
+            editVC.hidesBottomBarWhenPushed = true
+            self.hidesBottomBarWhenPushed = true
+            self.navigationController?.pushViewController(editVC, animated: true)
         }
-        let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-        hud.mode = MBProgressHUDMode.Text
-        hud.label.text = hudText
-        hud.hideAnimated(true, afterDelay: 1.5)
     }
     
     func insertInDB(data:ItemModel, state:Int) -> Bool {
@@ -321,6 +332,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.dataBase.close()
         return succeed
     }
+    
     
     func deleteInDB(index:Int) -> Bool {
         self.dataBase.open()
