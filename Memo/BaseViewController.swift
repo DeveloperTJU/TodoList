@@ -230,8 +230,8 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
                 } else {  
                     return "\(year)/\(month)/\(day)"
                 }  
-            }  
-        }  
+            }
+        }
         return ""
     }
     
@@ -319,6 +319,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         else{
             let editVC = EditViewController()
             editVC.currentList = dataArr[indexPath.row]
+            editVC.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(editVC, animated: true)
         }
     }
