@@ -319,6 +319,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         else{
             let editVC = EditViewController()
             editVC.currentList = dataArr[indexPath.row]
+            self.hidesBottomBarWhenPushed = true;
             self.navigationController?.pushViewController(editVC, animated: true)
         }
     }

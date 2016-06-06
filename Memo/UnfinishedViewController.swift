@@ -98,42 +98,42 @@ class UnfinishedViewController: BaseViewController{
     }
     
     //Cell点击事件，编辑事件。
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let alert = UIAlertController(title: "编辑任务", message: "", preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addTextFieldWithConfigurationHandler { (textField : UITextField!) -> Void in
-            textField.placeholder = "Title"
-            textField.text = self.dataArr[indexPath.row].title
-        }
-        alert.addTextFieldWithConfigurationHandler { (textField : UITextField!) -> Void in
-            textField.placeholder = "Content"
-            textField.text = self.dataArr[indexPath.row].content
-        }
-        alert.addAction(UIAlertAction(title: "确定", style: UIAlertActionStyle.Default, handler:{ (UIAlertAction) in
-            if (alert.textFields?.first)!.text == ""{
-                let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-                hud.mode = MBProgressHUDMode.Text
-                hud.label.text = "请输入标题"
-                hud.hideAnimated(true, afterDelay: 1.5)
-            }
-            else{
-                let formatter:NSDateFormatter = NSDateFormatter()
-                formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-                let data = ItemModel(title: (alert.textFields?.first)!.text!, content: (alert.textFields?.last)!.text!, createTime: self.dataArr[indexPath.row].createTime, lastEditTime: self.dataArr[indexPath.row].lastEditTime, alertTime: self.dataArr[indexPath.row].alertTime, level: self.dataArr[indexPath.row].level, state: self.dataArr[indexPath.row].state)
-                self.removeData(row: indexPath.row)
-                self.insertData(data, withAnimation: true)
-                let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-                hud.mode = MBProgressHUDMode.Text
-                hud.label.text = "完成"
-                hud.hideAnimated(true, afterDelay: 1.5)
-            }
-        }))
-        alert.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.Default, handler: {(UIAlertAction) in
-            let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-            hud.mode = MBProgressHUDMode.Text
-            hud.label.text = "已取消"
-            hud.hideAnimated(true, afterDelay: 1.5)
-        }))
-        self.presentViewController(alert, animated: true, completion: nil)
-    }
+//    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+//        let alert = UIAlertController(title: "编辑任务", message: "", preferredStyle: UIAlertControllerStyle.Alert)
+//        alert.addTextFieldWithConfigurationHandler { (textField : UITextField!) -> Void in
+//            textField.placeholder = "Title"
+//            textField.text = self.dataArr[indexPath.row].title
+//        }
+//        alert.addTextFieldWithConfigurationHandler { (textField : UITextField!) -> Void in
+//            textField.placeholder = "Content"
+//            textField.text = self.dataArr[indexPath.row].content
+//        }
+//        alert.addAction(UIAlertAction(title: "确定", style: UIAlertActionStyle.Default, handler:{ (UIAlertAction) in
+//            if (alert.textFields?.first)!.text == ""{
+//                let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+//                hud.mode = MBProgressHUDMode.Text
+//                hud.label.text = "请输入标题"
+//                hud.hideAnimated(true, afterDelay: 1.5)
+//            }
+//            else{
+//                let formatter:NSDateFormatter = NSDateFormatter()
+//                formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//                let data = ItemModel(title: (alert.textFields?.first)!.text!, content: (alert.textFields?.last)!.text!, createTime: self.dataArr[indexPath.row].createTime, lastEditTime: self.dataArr[indexPath.row].lastEditTime, alertTime: self.dataArr[indexPath.row].alertTime, level: self.dataArr[indexPath.row].level, state: self.dataArr[indexPath.row].state)
+//                self.removeData(row: indexPath.row)
+//                self.insertData(data, withAnimation: true)
+//                let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+//                hud.mode = MBProgressHUDMode.Text
+//                hud.label.text = "完成"
+//                hud.hideAnimated(true, afterDelay: 1.5)
+//            }
+//        }))
+//        alert.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.Default, handler: {(UIAlertAction) in
+//            let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+//            hud.mode = MBProgressHUDMode.Text
+//            hud.label.text = "已取消"
+//            hud.hideAnimated(true, afterDelay: 1.5)
+//        }))
+//        self.presentViewController(alert, animated: true, completion: nil)
+//    }
     
 }

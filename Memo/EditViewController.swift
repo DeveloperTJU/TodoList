@@ -15,6 +15,11 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        UIGraphicsBeginImageContext(self.view.frame.size)
+        UIImage(named: "background")!.drawInRect(CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height))
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        self.view.backgroundColor = UIColor(patternImage: image)
         
         
         //
@@ -127,8 +132,10 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     func EditItem(right:UIBarButtonItem)
     {
         let editDetailVC = EditDetailViewController()
+        editDetailVC.currentList = currentList
         self.hidesBottomBarWhenPushed = true;
         self.navigationController?.pushViewController(editDetailVC, animated: true)
+
         
     }
     

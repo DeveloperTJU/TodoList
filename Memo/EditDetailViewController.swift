@@ -16,6 +16,7 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         super.viewDidLoad()
         
         
+        
         //
         //        let textField = UITextField(frame: CGRectMake(30, 120, self.view.frame.size.width - 60, 50))
         //        textField.layer.borderWidth=1  //边框粗细
