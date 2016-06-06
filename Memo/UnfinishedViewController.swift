@@ -30,6 +30,28 @@ class UnfinishedViewController: BaseViewController{
     override func viewDidLoad() {
         isFinished = false
         super.viewDidLoad()
+        let baseURL = NSURL(string: "http://10.1.43.56/")
+        let manager = AFHTTPSessionManager(baseURL: baseURL)
+        let paramDict:Dictionary = ["user_phoneNumber":"18222773726","user_psw":"worldhello"]
+        let url:String = "todolist/index.php/Home/User/Login"
+        //请求数据的序列化器
+        manager.requestSerializer = AFHTTPRequestSerializer()
+        //返回数据的序列化器
+        manager.responseSerializer = AFHTTPResponseSerializer()
+        let resSet = NSSet(array: ["text/html"])
+        manager.responseSerializer.acceptableContentTypes = resSet as? Set<String>
+        manager.POST(url, parameters: paramDict, success: { (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
+            //成功回调
+            print("success")
+            
+            let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
+            
+            print("请求结果：\(resultDict)")
+            
+            }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
+                //失败回调
+                print("网络调用失败:\(error)")        // Do any additional setup after loading the view.
+        }
     }
     
     //新建事件按钮

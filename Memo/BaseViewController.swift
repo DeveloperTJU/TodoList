@@ -292,26 +292,30 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-//        let currentItem = self.dataArr[indexPath.row]
         return 50
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        var hudText = ""
-        let temp = self.dataArr[indexPath.row]
-        self.removeData(row: indexPath.row)
-        if (isFinished == true){
-            UnfinishedVC.insertData(temp, withAnimation: true)
-            hudText = "已恢复"
+        if false{
+            var hudText = ""
+            let temp = self.dataArr[indexPath.row]
+            self.removeData(row: indexPath.row)
+            if (isFinished == true){
+                UnfinishedVC.insertData(temp, withAnimation: true)
+                hudText = "已恢复"
+            }
+            else{
+                FinishedVC.insertData(temp, withAnimation: true)
+                hudText = "已完成"
+            }
+            let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+            hud.mode = MBProgressHUDMode.Text
+            hud.label.text = hudText
+            hud.hideAnimated(true, afterDelay: 1.5)
         }
         else{
-            FinishedVC.insertData(temp, withAnimation: true)
-            hudText = "已完成"
+            self.presentViewController(EditViewController(), animated: true, completion: nil)
         }
-        let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-        hud.mode = MBProgressHUDMode.Text
-        hud.label.text = hudText
-        hud.hideAnimated(true, afterDelay: 1.5)
     }
     
     func insertInDB(data:ItemModel, state:Int) -> Bool {

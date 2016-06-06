@@ -23,14 +23,9 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ukG-tl-QJa">
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" image="finished" highlightedImage="finished_selected" translatesAutoresizingMaskIntoConstraints="NO" id="Oy7-uF-OhV" userLabel="StateImage">
                                 <rect key="frame" x="8" y="11" width="20" height="20"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <color key="tintColor" red="1" green="0.85882352939999995" blue="0.36078431370000003" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" image="finished">
-                                    <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
+                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="5/18" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rUo-uG-eWv">
                                 <rect key="frame" x="292" y="13" width="43" height="16"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="13"/>
@@ -55,10 +50,11 @@
                 <outlet property="timeLabel" destination="rUo-uG-eWv" id="fvf-l0-Vxb"/>
                 <outlet property="titleLabel" destination="LRZ-tM-ORO" id="GZ2-Nj-3EW"/>
             </connections>
-            <point key="canvasLocation" x="191.5" y="178.5"/>
+            <point key="canvasLocation" x="222.5" y="197.5"/>
         </tableViewCell>
     </objects>
     <resources>
         <image name="finished" width="57" height="57"/>
+        <image name="finished_selected" width="57" height="57"/>
     </resources>
 </document>
