@@ -12,7 +12,7 @@ class UnfinishedViewController: BaseViewController{
     
     override func loadData() {
         super.loadData()
-        self.dataArr = self.selectAllInDB().0
+        self.dataArr = DataBaseService.sharedInstance.selectAllInDB().0
     }
     
     override func loadTableView() {

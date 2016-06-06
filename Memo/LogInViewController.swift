@@ -20,7 +20,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         //获取屏幕尺寸
         let mainSize = UIScreen.mainScreen().bounds.size
         self.view.backgroundColor = UIColor.whiteColor()
-        let img = UIImage(named:"bgimage")
+        let img = UIImage(named:"background")
         let vImg = UIImageView(image: img)
         vImg.frame = CGRect(x:0,y:0,width:mainSize.width ,height:mainSize.height)
         self.view.sendSubviewToBack(vImg)
@@ -75,7 +75,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         //设置按钮文字
         button.setTitle("立即注册", forState:UIControlState.Normal)
         button.tintColor = UIColor(red: 67/255, green: 67/255, blue: 67/255, alpha: 1)
-        button.addTarget(self,action:#selector(tapped(_:)),forControlEvents:.TouchUpInside)
+        button.addTarget(self,action:Selector("tapped:"),forControlEvents:.TouchUpInside)
         self.view.addSubview(button)
         
         let button1:UIButton = UIButton(type:.System)
@@ -85,7 +85,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         button1.tintColor = UIColor(red: 232/255, green: 208/255, blue: 120/255, alpha: 1)
        //设置按钮文字
         button1.setTitle("登录", forState:UIControlState.Normal)
-        button1.addTarget(self,action:#selector(tapped1(_:)),forControlEvents:.TouchUpInside)
+        button1.addTarget(self,action:Selector("tapped1:"),forControlEvents:.TouchUpInside)
         self.view.addSubview(button1)
         
         let button2:UIButton = UIButton(type:.System)
@@ -96,7 +96,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         
         //设置按钮文字
         button2.setTitle("游客模式", forState:UIControlState.Normal)
-        button2.addTarget(self,action:#selector(tapped2(_:)),forControlEvents:.TouchUpInside)
+        button2.addTarget(self,action:Selector("tapped2:"),forControlEvents:.TouchUpInside)
         self.view.addSubview(button2)
         
         

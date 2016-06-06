@@ -12,7 +12,7 @@ class FinishedViewController: BaseViewController {
     
     override func loadData() {
         super.loadData()
-        self.dataArr = self.selectAllInDB().1
+        self.dataArr = DataBaseService.sharedInstance.selectAllInDB().1
     }
     
     override func viewDidLoad() {

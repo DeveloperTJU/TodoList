@@ -27,7 +27,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         
         self.view.backgroundColor = UIColor.whiteColor()
         let mainSize = UIScreen.mainScreen().bounds.size
-        let img = UIImage(named:"bgimage")
+        let img = UIImage(named:"background")
         let vImg = UIImageView(image: img)
         vImg.frame = CGRect(x:0,y:0,width:mainSize.width ,height:mainSize.height)
         self.view.sendSubviewToBack(vImg)
@@ -71,7 +71,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         self.register.tintColor = UIColor(red: 232/255, green: 208/255, blue: 120/255, alpha: 1)
         //设置按钮文字
         self.register.setTitle("发送验证码", forState:UIControlState.Normal)
-        self.register.addTarget(self,action:#selector(tapped(_:)),forControlEvents:.TouchUpInside)
+        self.register.addTarget(self, action:Selector("tapped:"),forControlEvents:.TouchUpInside)
         vLogin.addSubview(self.register)
         
         let buttonVerifyCode:UIButton = UIButton(type:.System)
@@ -82,7 +82,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         buttonVerifyCode.setTitle("注册", forState:UIControlState.Normal)
         buttonVerifyCode.backgroundColor = UIColor(red: 67/255, green: 67/255, blue: 67/255, alpha: 1)
         buttonVerifyCode.tintColor = UIColor(red: 232/255, green: 208/255, blue: 120/255, alpha: 1)
-        buttonVerifyCode.addTarget(self,action:#selector(tapped1(_:)),forControlEvents:.TouchUpInside)
+        buttonVerifyCode.addTarget(self, action:Selector("tapped1:"),forControlEvents:.TouchUpInside)
         self.view.addSubview(buttonVerifyCode)
         
         
@@ -93,7 +93,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         //设置按钮文字
         buttonlogin.setTitle("登录", forState:UIControlState.Normal)
         buttonlogin.tintColor = UIColor(red: 67/255, green: 67/255, blue: 67/255, alpha: 1)
-        buttonlogin.addTarget(self,action:#selector(tapped2(_:)),forControlEvents:.TouchUpInside)
+        buttonlogin.addTarget(self,action:Selector("tapped2:"),forControlEvents:.TouchUpInside)
         self.view.addSubview(buttonlogin)
         
         
@@ -105,7 +105,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         //设置按钮文字
         buttonVisitor.setTitle("游客模式", forState:UIControlState.Normal)
         buttonVisitor.tintColor = UIColor(red: 67/255, green: 67/255, blue: 67/255, alpha: 1)
-        buttonVisitor.addTarget(self,action:#selector(tapped3(_:)),forControlEvents:.TouchUpInside)
+        buttonVisitor.addTarget(self,action:Selector("tapped3:"),forControlEvents:.TouchUpInside)
         self.view.addSubview(buttonVisitor)
     
     
@@ -178,7 +178,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
 //
 //            if self.submitAuthCode(){
                 print("zhuce")
-                self.dataBase = DataBaseService.getDataBase()
+                self.dataBase = DataBaseService.sharedInstance.getDataBase()
                 self.dataBase.open()
                 let baseURL = NSURL(string: "http://10.1.43.56/")
                 let manager = AFHTTPSessionManager(baseURL: baseURL)
@@ -224,7 +224,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
     
     func tapped3(button:UIButton){
         
-        self.dataBase = DataBaseService.getDataBase()
+        self.dataBase = DataBaseService.sharedInstance.getDataBase()
         self.dataBase.open()
 
                         var sqlStr = "CREATE TABLE IF NOT EXISTS TASKFORvisitor(CONTENT TEXT,TIME TEXT,DDLDATE TEXT)"

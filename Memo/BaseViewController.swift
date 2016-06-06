@@ -8,10 +8,6 @@
 
 import UIKit
 
-protocol BaseViewControllerDelegate{
-    func switchState()
-}
-
 class BaseViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
 
     
@@ -40,12 +36,12 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //从数据库读入数据
     func loadData(){
-        let dataBase = DataBaseService.sharedInstance.getDataBase()
-        let dbQueue = DataBaseService.sharedInstance.getDataBaseQueue()
         
         //CGAffineTransformIdentity
         //MJRefresh
         
+        //该方法仅供测试
+        let dataBase = DataBaseService.sharedInstance.getDataBase()
         dataBase.open()
         var sqlStr = "DROP TABLE IF EXISTS data_\(UserVC.currentUser.md5)"
         dataBase.executeUpdate(sqlStr, withArgumentsInArray: [])
@@ -126,10 +122,10 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func handlePan(gesture:UIPanGestureRecognizer){
-        let touchPoint = gesture.locationInView(self.mainTableView)
-        let indexPath = self.mainTableView.indexPathForRowAtPoint(touchPoint)
-        let currentItem = self.dataArr[indexPath!.row]
-        print("touchPoint:\(touchPoint)")
+//        let touchPoint = gesture.locationInView(self.mainTableView)
+//        let indexPath = self.mainTableView.indexPathForRowAtPoint(touchPoint)
+//        let currentItem = self.dataArr[indexPath!.row]
+//        print("touchPoint:\(touchPoint)")
 //        switch gesture.state{
 ////        case .Began:
 //        case .Began:
@@ -291,7 +287,9 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.titleLabel.text = item.title
         cell.timeLabel.text = friendlyTime(item.lastEditTime)
         cell.selectionStyle = UITableViewCellSelectionStyle.None
-        cell.switchState()
+        cell.stateButton.setImage(UIImage(named: "finished"), forState: isFinished == true ? .Highlighted : .Normal)
+        cell.stateButton.setImage(UIImage(named: "unfinished"), forState: isFinished == false ? .Highlighted : .Normal)
+        cell.stateButton.addTarget(self, action: Selector("switchState:"), forControlEvents:.TouchUpInside)
         return cell
     }
     
@@ -300,30 +298,38 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if false{
-            var hudText = ""
-            let temp = self.dataArr[indexPath.row]
-            self.removeData(row: indexPath.row)
-            if (isFinished == true){
-                UnfinishedVC.insertData(temp, withAnimation: true)
-                hudText = "已恢复"
-            }
-            else{
-                FinishedVC.insertData(temp, withAnimation: true)
-                hudText = "已完成"
-            }
-            let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-            hud.mode = MBProgressHUDMode.Text
-            hud.label.text = hudText
-            hud.hideAnimated(true, afterDelay: 1.5)
-        }
-        else{
-            let editVC = EditViewController()
-            editVC.currentList = dataArr[indexPath.row]
-            editVC.hidesBottomBarWhenPushed = true
-            self.hidesBottomBarWhenPushed = true
-            self.navigationController?.pushViewController(editVC, animated: true)
-        }
+        let editVC = EditViewController()
+        editVC.currentList = dataArr[indexPath.row]
+        editVC.hidesBottomBarWhenPushed = true
+        self.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(editVC, animated: true)
+    }
+    
+    func switchState(button:UIButton){
+//        var hudText = ""
+//        var row = 0
+//        print(button.superview?.superview)
+//        print(button.targetForAction(Selector("switchState:"), withSender: self))
+//        let time = (button.targetForAction(Selector("switchState:"), withSender: button) as! ItemCell).createTime
+//        for i in self.dataArr{
+//            if i.createTime == time{
+//                break
+//            }
+//        }
+//        let temp = self.dataArr[row]
+//        self.removeData(row: row)
+//        if (isFinished == true){
+//            UnfinishedVC.insertData(temp, withAnimation: true)
+//            hudText = "已恢复"
+//        }
+//        else{
+//            FinishedVC.insertData(temp, withAnimation: true)
+//            hudText = "已完成"
+//        }
+//        let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+//        hud.mode = MBProgressHUDMode.Text
+//        hud.label.text = hudText
+//        hud.hideAnimated(true, afterDelay: 1.5)
     }
     
 }

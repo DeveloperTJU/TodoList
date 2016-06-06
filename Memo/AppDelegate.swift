@@ -22,9 +22,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let docsDir = dirParh[0] as NSString
         self.dataBasePath = docsDir.stringByAppendingPathComponent("task.db")
         
-        self.dataBase = DataBaseService.getDataBase()
+        self.dataBase = DataBaseService.sharedInstance.getDataBase()
         self.dataBase.open()
-        var sqlStr = "CREATE TABLE IF NOT EXISTS USER(UID TEXT, PHONENUMBER TEXT, NICKNAME TEXT, CURRENTUSER INT, PRIMARY KEY(UID))"
+        let sqlStr = "CREATE TABLE IF NOT EXISTS USER(UID TEXT, PHONENUMBER TEXT, NICKNAME TEXT, CURRENTUSER INT, PRIMARY KEY(UID))"
         if !self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: []) {
             print("Error:\(self.dataBase.lastErrorMessage())")
         }
@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        else {
 //            self.window?.rootViewController = LogInViewController()
 //        }
-        self.window?.rootViewController = LogInViewController()
+        self.window?.rootViewController = RootTabBarController()
         
         
         return true

@@ -8,20 +8,15 @@
 
 import UIKit
 
-class ItemCell: UITableViewCell, BaseViewControllerDelegate{
+class ItemCell: UITableViewCell{
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
-    @IBOutlet weak var stateImage: UIImageView!
     @IBOutlet weak var detailImage: UIImageView!
+    @IBOutlet weak var stateButton: UIButton!
     var createTime:String!
-    var delegate:BaseViewControllerDelegate!
 
 //    var currentFrameInfo:CellFrameInfo!
-    
-    func switchState() {
-        self.delegate.switchState()
-    }
     
     override func awakeFromNib() {
         super.awakeFromNib()

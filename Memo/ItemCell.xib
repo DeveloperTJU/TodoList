@@ -18,9 +18,6 @@
                     <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JvE-H8-uY5" customClass="MyRect" customModule="Memo" customModuleProvider="target">
                         <rect key="frame" x="8" y="4" width="359" height="42"/>
                         <subviews>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" image="finished" highlightedImage="finished_selected" translatesAutoresizingMaskIntoConstraints="NO" id="Oy7-uF-OhV" userLabel="StateImage">
-                                <rect key="frame" x="8" y="11" width="20" height="20"/>
-                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="5/18" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rUo-uG-eWv">
                                 <rect key="frame" x="292" y="13" width="43" height="16"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="13"/>
@@ -36,6 +33,10 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GGi-na-73c" userLabel="State Button">
+                                <rect key="frame" x="8" y="11" width="20" height="20"/>
+                                <state key="normal" title="Button" image="finished"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -53,7 +54,7 @@
             <gestureRecognizers/>
             <connections>
                 <outlet property="detailImage" destination="rZy-Na-HPM" id="CXi-4o-N6U"/>
-                <outlet property="stateImage" destination="Oy7-uF-OhV" id="fV3-bb-1LK"/>
+                <outlet property="stateButton" destination="GGi-na-73c" id="BdO-7e-f6M"/>
                 <outlet property="timeLabel" destination="rUo-uG-eWv" id="fvf-l0-Vxb"/>
                 <outlet property="titleLabel" destination="LRZ-tM-ORO" id="GZ2-Nj-3EW"/>
             </connections>
@@ -63,6 +64,5 @@
     <resources>
         <image name="detail" width="42" height="42"/>
         <image name="finished" width="57" height="57"/>
-        <image name="finished_selected" width="57" height="57"/>
     </resources>
 </document>
