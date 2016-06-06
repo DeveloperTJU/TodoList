@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A502F6A41D05159800C519E9 /* EditDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502F6A21D05159800C519E9 /* EditDetailViewController.swift */; };
+		A502F6A51D05159800C519E9 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502F6A31D05159800C519E9 /* EditViewController.swift */; };
 		A5046D871D0115230046B511 /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5046D7B1D0115220046B511 /* AFHTTPSessionManager.m */; };
 		A5046D881D0115230046B511 /* AFNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5046D7E1D0115220046B511 /* AFNetworkReachabilityManager.m */; };
 		A5046D891D0115230046B511 /* AFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = A5046D801D0115220046B511 /* AFSecurityPolicy.m */; };
@@ -16,8 +18,6 @@
 		A5046DE61D011D2F0046B511 /* MyRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5046DE51D011D2F0046B511 /* MyRect.swift */; };
 		A5046DE81D012CCC0046B511 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5046DE71D012CCC0046B511 /* Assets.xcassets */; };
 		A527006A1CF3E765003D88FB /* CellFrameInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52700691CF3E765003D88FB /* CellFrameInfo.swift */; };
-		A5796EC51D04D5930020BCCC /* EditDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5796EC31D04D5930020BCCC /* EditDetailViewController.swift */; };
-		A5796EC61D04D5930020BCCC /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5796EC41D04D5930020BCCC /* EditViewController.swift */; };
 		A592E0DD1CF5FF4A004762A8 /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A592E0DC1CF5FF4A004762A8 /* UserViewController.swift */; };
 		A599E43C1CF68C44005CDB8D /* DataBaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A599E43B1CF68C44005CDB8D /* DataBaseService.swift */; };
 		A599E4401CF68CA6005CDB8D /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = A599E43F1CF68CA6005CDB8D /* MBProgressHUD.m */; };
@@ -42,6 +42,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A502F6A21D05159800C519E9 /* EditDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditDetailViewController.swift; sourceTree = "<group>"; };
+		A502F6A31D05159800C519E9 /* EditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
 		A5046D7A1D0115220046B511 /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
 		A5046D7B1D0115220046B511 /* AFHTTPSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPSessionManager.m; sourceTree = "<group>"; };
 		A5046D7C1D0115220046B511 /* AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworking.h; sourceTree = "<group>"; };
@@ -59,8 +61,6 @@
 		A5046DE71D012CCC0046B511 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A52700691CF3E765003D88FB /* CellFrameInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellFrameInfo.swift; sourceTree = "<group>"; };
 		A548B9A51CF5892B00773A58 /* Memo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Memo-Bridging-Header.h"; sourceTree = "<group>"; };
-		A5796EC31D04D5930020BCCC /* EditDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditDetailViewController.swift; sourceTree = "<group>"; };
-		A5796EC41D04D5930020BCCC /* EditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
 		A592E0DC1CF5FF4A004762A8 /* UserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
 		A599E43B1CF68C44005CDB8D /* DataBaseService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataBaseService.swift; sourceTree = "<group>"; };
 		A599E43E1CF68CA6005CDB8D /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
@@ -212,8 +212,8 @@
 				A5A9A0F91CEBF806006BB3A1 /* RootTabBarController.swift */,
 				A5A9A0F71CEBF77F006BB3A1 /* BaseViewController.swift */,
 				A592E0DC1CF5FF4A004762A8 /* UserViewController.swift */,
-				A5796EC31D04D5930020BCCC /* EditDetailViewController.swift */,
-				A5796EC41D04D5930020BCCC /* EditViewController.swift */,
+				A502F6A21D05159800C519E9 /* EditDetailViewController.swift */,
+				A502F6A31D05159800C519E9 /* EditViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -377,18 +377,18 @@
 				A5046DE61D011D2F0046B511 /* MyRect.swift in Sources */,
 				A599E43C1CF68C44005CDB8D /* DataBaseService.swift in Sources */,
 				A5C5C4CD1CF688360078C4CF /* FMResultSet.m in Sources */,
+				A502F6A41D05159800C519E9 /* EditDetailViewController.swift in Sources */,
 				A5A9A0FC1CEBF862006BB3A1 /* CustomNavController.swift in Sources */,
 				A527006A1CF3E765003D88FB /* CellFrameInfo.swift in Sources */,
 				A5C5C4CA1CF688360078C4CF /* FMDatabaseAdditions.m in Sources */,
 				A5DAA8851CFFCFD9008B8CAC /* StringHelper.swift in Sources */,
-				A5796EC51D04D5930020BCCC /* EditDetailViewController.swift in Sources */,
 				A5A9A0FA1CEBF806006BB3A1 /* RootTabBarController.swift in Sources */,
-				A5796EC61D04D5930020BCCC /* EditViewController.swift in Sources */,
 				A5A9A1121CEC3761006BB3A1 /* ItemModel.swift in Sources */,
 				A5C5C4CB1CF688360078C4CF /* FMDatabasePool.m in Sources */,
 				A5A9A1001CEBF8B2006BB3A1 /* UnfinishedViewController.swift in Sources */,
 				A599E4401CF68CA6005CDB8D /* MBProgressHUD.m in Sources */,
 				A5046D8B1D0115230046B511 /* AFURLResponseSerialization.m in Sources */,
+				A502F6A51D05159800C519E9 /* EditViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
