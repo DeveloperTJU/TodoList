@@ -6,3 +6,6 @@
 #import "FMDatabaseQueue.h"
 #import "AFNetworking.h"
 #import <CommonCrypto/CommonDigest.h>
+#import <SMS_SDK/SMSSDK.h>
+#import <SMS_SDK/Extend/SMSSDKCountryAndAreaCode.h>
+#import <SMS_SDK/Extend/SMSSDKAddressBook.h>

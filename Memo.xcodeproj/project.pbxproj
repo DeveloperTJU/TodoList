@@ -39,6 +39,20 @@
 		A5C5C4CD1CF688360078C4CF /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = A5C5C4C71CF688360078C4CF /* FMResultSet.m */; };
 		A5C5C4CE1CF688360078C4CF /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A5C5C4C81CF688360078C4CF /* Info.plist */; };
 		A5DAA8851CFFCFD9008B8CAC /* StringHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DAA8841CFFCFD9008B8CAC /* StringHelper.swift */; };
+
+		A85783451D03F54E003D73D9 /* MOBFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A85783431D03F54E003D73D9 /* MOBFoundation.framework */; };
+		A85783461D03F54E003D73D9 /* SMS_SDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A85783441D03F54E003D73D9 /* SMS_SDK.framework */; };
+		A85783481D03F57B003D73D9 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A85783471D03F57B003D73D9 /* libz.tbd */; };
+		A857834A1D03F585003D73D9 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A85783491D03F585003D73D9 /* libicucore.tbd */; };
+		A857834C1D03F58F003D73D9 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A857834B1D03F58F003D73D9 /* MessageUI.framework */; };
+		A857834E1D03F598003D73D9 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A857834D1D03F598003D73D9 /* JavaScriptCore.framework */; };
+		A85783501D03F5A3003D73D9 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A857834F1D03F5A3003D73D9 /* libstdc++.tbd */; };
+		A85783581D03F7D5003D73D9 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85783561D03F7D5003D73D9 /* LogInViewController.swift */; };
+		A85783591D03F7D5003D73D9 /* PhoneNumberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85783571D03F7D5003D73D9 /* PhoneNumberViewController.swift */; };
+		A87690841D050EE700BAB593 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87690831D050EE700BAB593 /* ViewController.swift */; };
+		C336EB3B1D01591900563840 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C336EB3A1D01591900563840 /* EditViewController.swift */; };
+		C336EB3D1D01596000563840 /* EditDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C336EB3C1D01596000563840 /* EditDetailViewController.swift */; };
+
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -91,6 +105,19 @@
 		A5C5C4C71CF688360078C4CF /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
 		A5C5C4C81CF688360078C4CF /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A5DAA8841CFFCFD9008B8CAC /* StringHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringHelper.swift; sourceTree = "<group>"; };
+		A85783431D03F54E003D73D9 /* MOBFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MOBFoundation.framework; sourceTree = "<group>"; };
+		A85783441D03F54E003D73D9 /* SMS_SDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SMS_SDK.framework; sourceTree = "<group>"; };
+		A85783471D03F57B003D73D9 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		A85783491D03F585003D73D9 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
+		A857834B1D03F58F003D73D9 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		A857834D1D03F598003D73D9 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		A857834F1D03F5A3003D73D9 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
+		A85783561D03F7D5003D73D9 /* LogInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
+		A85783571D03F7D5003D73D9 /* PhoneNumberViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneNumberViewController.swift; sourceTree = "<group>"; };
+		A87690831D050EE700BAB593 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		C336EB3A1D01591900563840 /* EditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
+		C336EB3C1D01596000563840 /* EditDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditDetailViewController.swift; sourceTree = "<group>"; };
+
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +125,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A85783501D03F5A3003D73D9 /* libstdc++.tbd in Frameworks */,
+				A857834E1D03F598003D73D9 /* JavaScriptCore.framework in Frameworks */,
+				A857834C1D03F58F003D73D9 /* MessageUI.framework in Frameworks */,
+				A857834A1D03F585003D73D9 /* libicucore.tbd in Frameworks */,
+				A85783481D03F57B003D73D9 /* libz.tbd in Frameworks */,
+				A85783461D03F54E003D73D9 /* SMS_SDK.framework in Frameworks */,
+				A85783451D03F54E003D73D9 /* MOBFoundation.framework in Frameworks */,
 				A5C5C4BB1CF6870C0078C4CF /* libsqlite3.0.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -155,6 +189,8 @@
 		A5A9A0E41CEBF6C4006BB3A1 /* Memo */ = {
 			isa = PBXGroup;
 			children = (
+				A85783541D03F72A003D73D9 /* LogIn */,
+				C336EB3E1D01598400563840 /* Edit */,
 				A5A9A0E51CEBF6C4006BB3A1 /* AppDelegate.swift */,
 				A548B9A51CF5892B00773A58 /* Memo-Bridging-Header.h */,
 				A599E43B1CF68C44005CDB8D /* DataBaseService.swift */,
@@ -165,6 +201,7 @@
 				A5046DE71D012CCC0046B511 /* Assets.xcassets */,
 				A5A9A0EE1CEBF6C4006BB3A1 /* LaunchScreen.storyboard */,
 				A5A9A0F11CEBF6C4006BB3A1 /* Info.plist */,
+				A87690831D050EE700BAB593 /* ViewController.swift */,
 			);
 			path = Memo;
 			sourceTree = "<group>";
@@ -282,6 +319,12 @@
 		A5C5C4CF1CF689670078C4CF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A857834F1D03F5A3003D73D9 /* libstdc++.tbd */,
+				A857834D1D03F598003D73D9 /* JavaScriptCore.framework */,
+				A857834B1D03F58F003D73D9 /* MessageUI.framework */,
+				A85783491D03F585003D73D9 /* libicucore.tbd */,
+				A85783471D03F57B003D73D9 /* libz.tbd */,
+				A85783421D03F54E003D73D9 /* SMS_SDK */,
 				A5C5C4BA1CF6870C0078C4CF /* libsqlite3.0.tbd */,
 				A5046D791D0115220046B511 /* AFNetworking */,
 				A5C5C4BC1CF688360078C4CF /* FMDataBase */,
@@ -290,6 +333,42 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		A85783421D03F54E003D73D9 /* SMS_SDK */ = {
+			isa = PBXGroup;
+			children = (
+				A85783431D03F54E003D73D9 /* MOBFoundation.framework */,
+				A85783441D03F54E003D73D9 /* SMS_SDK.framework */,
+			);
+			path = SMS_SDK;
+			sourceTree = "<group>";
+		};
+		A85783541D03F72A003D73D9 /* LogIn */ = {
+			isa = PBXGroup;
+			children = (
+				A85783551D03F735003D73D9 /* Controller */,
+			);
+			name = LogIn;
+			sourceTree = "<group>";
+		};
+		A85783551D03F735003D73D9 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				A85783561D03F7D5003D73D9 /* LogInViewController.swift */,
+				A85783571D03F7D5003D73D9 /* PhoneNumberViewController.swift */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		C336EB3E1D01598400563840 /* Edit */ = {
+			isa = PBXGroup;
+			children = (
+				C336EB3A1D01591900563840 /* EditViewController.swift */,
+				C336EB3C1D01596000563840 /* EditDetailViewController.swift */,
+			);
+			name = Edit;
+			sourceTree = "<group>";
+		};
+
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -363,14 +442,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				A5A9A1151CEC3795006BB3A1 /* ItemCell.swift in Sources */,
+				A85783591D03F7D5003D73D9 /* PhoneNumberViewController.swift in Sources */,
 				A5046D871D0115230046B511 /* AFHTTPSessionManager.m in Sources */,
 				A5046D881D0115230046B511 /* AFNetworkReachabilityManager.m in Sources */,
 				A5A9A1021CEBF8BC006BB3A1 /* FinishedViewController.swift in Sources */,
 				A5A9A0E61CEBF6C4006BB3A1 /* AppDelegate.swift in Sources */,
 				A5C5C4C91CF688360078C4CF /* FMDatabase.m in Sources */,
 				A5A9A0F81CEBF77F006BB3A1 /* BaseViewController.swift in Sources */,
+				A87690841D050EE700BAB593 /* ViewController.swift in Sources */,
 				A5046D8A1D0115230046B511 /* AFURLRequestSerialization.m in Sources */,
 				A5046D891D0115230046B511 /* AFSecurityPolicy.m in Sources */,
+				A85783581D03F7D5003D73D9 /* LogInViewController.swift in Sources */,
 				A5046D8C1D0115230046B511 /* AFURLSessionManager.m in Sources */,
 				A592E0DD1CF5FF4A004762A8 /* UserViewController.swift in Sources */,
 				A5C5C4CC1CF688360078C4CF /* FMDatabaseQueue.m in Sources */,
@@ -492,7 +574,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = NO;
+
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SMS_SDK",
+				);
+
 				INFOPLIST_FILE = Memo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -508,7 +597,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_OBJC_REPEATED_USE_OF_WEAK = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/SMS_SDK",
+				);
 				INFOPLIST_FILE = Memo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
