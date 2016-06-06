@@ -13,19 +13,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var dataBasePath:String!
+    var dataBase:FMDatabase!
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        
+        SMSSDK.registerApp("13497b5a4a530", withSecret: "5d4aa8cc0c6a64db874b7db0ad428360")
         let dirParh = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
         let docsDir = dirParh[0] as NSString
         self.dataBasePath = docsDir.stringByAppendingPathComponent("task.db")
+        
+        self.dataBase = DataBaseService.getDataBase()
+        self.dataBase.open()
+        var sqlStr = "CREATE TABLE IF NOT EXISTS USER(UID TEXT, PHONENUMBER TEXT, NICKNAME TEXT, CURRENTUSER INT, PRIMARY KEY(UID))"
+        if !self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: []) {
+            print("Error:\(self.dataBase.lastErrorMessage())")
+        }
         
         let screenFrame = UIScreen.mainScreen().bounds
         self.window = UIWindow(frame: screenFrame)
         self.window?.backgroundColor = UIColor.whiteColor()
         self.window?.makeKeyAndVisible()
-        self.window?.rootViewController = RootTabBarController()
+//        sqlStr = "SELECT * FROM USER "
+//        let rs:FMResultSet = self.dataBase.executeQuery(sqlStr, withArgumentsInArray: [])
+//        if rs.next() {
+//            UserVC.currentUser = rs.stringForColumn("PHONENUMBER")
+//            self.window?.rootViewController = RootTabBarController()
+//            print("2222")
+//        }
+//        else {
+//            self.window?.rootViewController = LogInViewController()
+//        }
+        self.window?.rootViewController = LogInViewController()
+        
         
         return true
     }
