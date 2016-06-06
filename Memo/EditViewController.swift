@@ -54,13 +54,19 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         //        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:UIFont(name: "Zapfino", size: 24.0)!];
         
         //给导航增加item
-        let rightItem = UIBarButtonItem(title: "编辑", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("EditViewController.EditItem:"))
+        let rightItem = UIBarButtonItem(title: "编辑", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(EditViewController.EditItem(_:)))
         rightItem.title = "编辑"
         self.navigationItem.rightBarButtonItem = rightItem
         
+        //标题框
+        let TextField = UITextField(frame: CGRectMake(15, 20, self.view.frame.size.width - 30, 50))
+        TextField.backgroundColor=UIColor.whiteColor()
+        TextField.layer.cornerRadius = 10;
+        TextField.enabled=false
+        self.view.addSubview(TextField)
         
         //大边框
-        let TextView = UITextView(frame: CGRectMake(15, 80, self.view.frame.size.width - 30, self.view.frame.size.height - 150))
+        let TextView = UITextView(frame: CGRectMake(15, 80, self.view.frame.size.width - 30, self.view.frame.size.height-215))
         
         TextView.layer.borderColor = UIColor(red: 60/255, green: 40/255, blue: 129/255, alpha: 1).CGColor;
         //        TextView.layer.borderWidth = 0.5;
@@ -69,26 +75,40 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         self.view.addSubview(TextView)
         
         //添加对勾图片
-        let img = UIImage(named: "done1")
+        let img = UIImage(named: "finished_selected")
         let vImg = UIImageView(image: img)
-        vImg.frame = CGRect(x:30,y:100,width:20,height:20)
+        vImg.frame = CGRect(x:30,y:35,width:20,height:20)
         self.view.addSubview(vImg)
+        
+        //添加title
+        let titleLabel = UILabel()
+        titleLabel.text = currentList.title
+        titleLabel.frame = CGRectMake(60, 35, self.view.frame.size.width - 90, 20)
+        titleLabel.textColor = UIColor.grayColor()
+        self.view.addSubview(titleLabel)
         
         //添加detail
         let detailLabel = UILabel()
-        detailLabel.text = "lalllalallallalalallalllallallalalalalalallalalallallalalalalalalallala"
-        detailLabel.frame = CGRectMake(60, 85, self.view.frame.size.width - 90, 70)
+        detailLabel.text = currentList.content
+        detailLabel.frame = CGRectMake(30, 75, self.view.frame.size.width - 90, 70)
         detailLabel.numberOfLines = 0
         detailLabel.textColor = UIColor.grayColor()
         self.view.addSubview(detailLabel)
         
-        //提醒时间
+        //提醒时间语句
         let timeLabel = UILabel()
         timeLabel.text = "提醒时间："
-        timeLabel.frame = CGRectMake(40, self.view.frame.size.height - 105, (self.view.frame.size.width / 2 )-30, 20)
+        timeLabel.frame = CGRectMake(40, self.view.frame.size.height - 165, (self.view.frame.size.width / 2 )-30, 20)
         timeLabel.font = UIFont(name:"Zapfino", size:15)
         timeLabel.textColor = UIColor.grayColor()
         self.view.addSubview(timeLabel)
+        
+        //提醒时间
+        let timeLabel1 = UILabel()
+        timeLabel1.text = currentList.alertTime
+        timeLabel1.frame = CGRectMake(110, self.view.frame.size.height - 168, (self.view.frame.size.width / 2 )-30, 20)
+        timeLabel1.textColor = UIColor.grayColor()
+        self.view.addSubview(timeLabel1)
         
         //显示星级
         
@@ -96,17 +116,28 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         
         
         //分享按钮
+        let shareimg = UIImage(named: "share")
+        let vshareImg = UIImageView(image: shareimg)
+        vshareImg.frame = CGRect(x:90,y:self.view.frame.size.height - 105,width:25,height:25)
+        self.view.addSubview(vshareImg)
+        
+        
         let shareButton:UIButton = UIButton()
-        shareButton.frame=CGRectMake(0, self.view.frame.size.height - 60, self.view.frame.size.width / 2, 60)
-        shareButton.setTitle("分享", forState:UIControlState.Normal)
-        shareButton.backgroundColor=UIColor(red: 238/255, green: 64/255, blue: 86/255, alpha:1)
+        shareButton.frame=CGRectMake(0, self.view.frame.size.height - 123, self.view.frame.size.width / 2, 60)
+        //shareButton.setTitle("分享", forState:UIControlState.Normal)
+        //shareButton.backgroundColor=UIColor(red: 238/255, green: 64/255, blue: 86/255, alpha:1)
         self.view.addSubview(shareButton)
         
         //删除按钮
+        let deleteimg = UIImage(named: "delete")
+        let vdeleteImg = UIImageView(image: deleteimg)
+        vdeleteImg.frame = CGRect(x:self.view.frame.size.width / 2 + 90,y:self.view.frame.size.height - 105,width:25,height:25)
+        self.view.addSubview(vdeleteImg)
+        
         let deleteButton:UIButton = UIButton()
-        deleteButton.frame=CGRectMake(self.view.frame.size.width / 2, self.view.frame.size.height - 60, self.view.frame.size.width / 2, 60)
-        deleteButton.setTitle("删除", forState:UIControlState.Normal)
-        deleteButton.backgroundColor=UIColor(red: 200/255, green: 200/255, blue: 200/255, alpha:1)
+        deleteButton.frame=CGRectMake(self.view.frame.size.width / 2, self.view.frame.size.height - 123, self.view.frame.size.width / 2, 60)
+//        deleteButton.setTitle("删除", forState:UIControlState.Normal)
+//        deleteButton.backgroundColor=UIColor(red: 200/255, green: 200/255, blue: 200/255, alpha:1)
         self.view.addSubview(deleteButton)
         
         

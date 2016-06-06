@@ -15,7 +15,11 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        UIGraphicsBeginImageContext(self.view.frame.size)
+        UIImage(named: "background")!.drawInRect(CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height))
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        self.view.backgroundColor = UIColor(patternImage: image)
         
         //
         //        let textField = UITextField(frame: CGRectMake(30, 120, self.view.frame.size.width - 60, 50))
@@ -53,6 +57,15 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         rightItem.title = "完成"
         self.navigationItem.rightBarButtonItem = rightItem
         
+        //标题
+        let TextField = UITextField(frame: CGRectMake(15, 20, self.view.frame.size.width - 30, 50))
+        TextField.backgroundColor=UIColor.whiteColor()
+        TextField.layer.cornerRadius = 10;
+        TextField.text = currentList.title
+        self.view.addSubview(TextField)
+        
+        
+        
         //提醒时间边框
         let timeTV = UITextView(frame: CGRectMake(15, self.view.frame.size.height - 160, self.view.frame.size.width - 30, 80))
         timeTV.editable=false
@@ -70,10 +83,9 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         
         //显示提醒时间
         let Datebutt = UIButton()
-        Datebutt.frame = CGRectMake(self.view.frame.size.width - 150 , self.view.frame.size.height - 105, (self.view.frame.size.width / 2 )-30, 20)
-        Datebutt.setTitle("假装有时间", forState:UIControlState.Normal)
+        Datebutt.frame = CGRectMake(self.view.frame.size.width - 200 , self.view.frame.size.height - 107, (self.view.frame.size.width / 2 )-30, 20)
+        Datebutt.setTitle(currentList.alertTime, forState:UIControlState.Normal)
         Datebutt.setTitleColor(UIColor.blackColor(),forState: .Normal)
-        Datebutt.titleLabel?.font=UIFont(name:"Zapfino", size:15)
         Datebutt.addTarget(self, action: Selector("selectDate:"), forControlEvents: .TouchUpInside)
         self.view.addSubview(Datebutt)
         
@@ -98,14 +110,12 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         TextView.layer.borderColor = UIColor(red: 60/255, green: 40/255, blue: 129/255, alpha: 1).CGColor;
         TextView.layer.borderWidth = 0.4;
         TextView.layer.cornerRadius = 10;
-        //        TextView.font = UIFont(name:"Zapfino", size:15)
-        //        TextView.text = "啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦"
         
         let comment_message_style = NSMutableParagraphStyle()
         comment_message_style.firstLineHeadIndent = 24.0
         comment_message_style.headIndent = 10.0
         let comment_message_indent = NSMutableAttributedString(string:
-            "啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦")
+            currentList.content)
         comment_message_indent.addAttribute(NSParagraphStyleAttributeName,
                                             value: comment_message_style,
                                             range: NSMakeRange(0, comment_message_indent.length))
