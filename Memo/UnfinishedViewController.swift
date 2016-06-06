@@ -17,41 +17,19 @@ class UnfinishedViewController: BaseViewController{
     
     override func loadTableView() {
         let newItemFirstFrame = CGRectMake(0, 0, self.view.bounds.width - 16, 42)
-        let newItemFirstView = MyRect(frame: newItemFirstFrame, color: UIColor(red: 236/255, green: 206/255, blue: 74/255, alpha: 1.0))
-        let newItemFrame = CGRectMake(8, 8, self.view.bounds.width - 16, 100)
+        let newItemFirstView = MyRect(frame: newItemFirstFrame, color: UIColor(red: 254/255, green: 239/255, blue: 115/255, alpha: 1.0))
+        let newItemFrame = CGRectMake(8, 8, self.view.bounds.width - 16, 42)
         let newItemView = MyRect(frame: newItemFrame)
-        self.view.addSubview(newItemFirstView)
+        newItemView.addSubview(newItemFirstView)
         self.view.addSubview(newItemView)
         super.loadTableView()
-        let tableViewFrame = CGRectMake(0, 112, self.view.bounds.width, self.view.bounds.height - 112)
+        let tableViewFrame = CGRectMake(0, 54, self.view.bounds.width, self.view.bounds.height - 54)
         self.mainTableView.frame = tableViewFrame
     }
     
     override func viewDidLoad() {
         isFinished = false
         super.viewDidLoad()
-        let baseURL = NSURL(string: "http://10.1.43.56/")
-        let manager = AFHTTPSessionManager(baseURL: baseURL)
-        let paramDict:Dictionary = ["user_phoneNumber":"18222773726","user_psw":"worldhello"]
-        let url:String = "todolist/index.php/Home/User/Login"
-        //请求数据的序列化器
-        manager.requestSerializer = AFHTTPRequestSerializer()
-        //返回数据的序列化器
-        manager.responseSerializer = AFHTTPResponseSerializer()
-        let resSet = NSSet(array: ["text/html"])
-        manager.responseSerializer.acceptableContentTypes = resSet as? Set<String>
-        manager.POST(url, parameters: paramDict, success: { (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
-            //成功回调
-            print("success")
-            
-            let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
-            
-            print("请求结果：\(resultDict)")
-            
-            }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
-                //失败回调
-                print("网络调用失败:\(error)")        // Do any additional setup after loading the view.
-        }
     }
     
     //新建事件按钮

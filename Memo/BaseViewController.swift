@@ -40,9 +40,12 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     func loadData(){
         self.dataBase = DataBaseService.getDataBase()
         self.dbQueue = DataBaseService.getDataBaseQueue()
-
+        
+        //CGAffineTransformIdentity
+        //MJRefresh
+        
         self.dataBase.open()
-        var sqlStr = "DROP TABLE data_\(UserVC.currentUser.md5)"
+        var sqlStr = "DROP TABLE IF EXISTS data_\(UserVC.currentUser.md5)"
         self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [])
         sqlStr = "CREATE TABLE IF NOT EXISTS data_\(UserVC.currentUser.md5)(TITLE TEXT, CONTENT TEXT, CREATE_TIME TEXT, LAST_EDIT_TIME TEXT, ALERT_TIME TEXT, LEVEL INT, STATE INT, PRIMARY KEY(CREATE_TIME))"
         self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [])
@@ -314,6 +317,8 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
             hud.hideAnimated(true, afterDelay: 1.5)
         }
         else{
+            let editVC = EditViewController()
+            editVC
             self.presentViewController(EditViewController(), animated: true, completion: nil)
         }
     }
@@ -325,6 +330,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.dataBase.close()
         return succeed
     }
+    
     
     func deleteInDB(index:Int) -> Bool {
         self.dataBase.open()

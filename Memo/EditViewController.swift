@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EditViewController: BaseViewController, UITextFieldDelegate, UITextViewDelegate {
+class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     
     
     override func viewDidLoad() {
