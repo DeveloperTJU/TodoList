@@ -10,9 +10,11 @@ import UIKit
 
 class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     
+    var currentList:ItemModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
         
         //

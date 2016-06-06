@@ -318,8 +318,8 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         else{
             let editVC = EditViewController()
-            editVC
-            self.presentViewController(EditViewController(), animated: true, completion: nil)
+            editVC.currentList = dataArr[indexPath.row]
+            self.navigationController?.pushViewController(editVC, animated: true)
         }
     }
     
