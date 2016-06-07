@@ -10,12 +10,8 @@ import UIKit
 
 class UnfinishedViewController: BaseViewController{
     
-    override func loadData() {
-        super.loadData()
-        self.dataArr = DataBaseService.sharedInstance.selectAllInDB().0
-    }
-    
     override func loadTableView() {
+        self.dataArr = DataBaseService.sharedInstance.selectAllInDB().0
         let newItemFirstFrame = CGRectMake(0, 0, self.view.bounds.width - 16, 42)
         let newItemFirstView = MyRect(frame: newItemFirstFrame, color: UIColor(red: 254/255, green: 239/255, blue: 115/255, alpha: 1.0))
         let newItemFrame = CGRectMake(8, 8, self.view.bounds.width - 16, 42)
