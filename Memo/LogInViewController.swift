@@ -129,7 +129,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         }
         
         else {
-            let baseURL = NSURL(string: "http://10.1.43.56/")
+            let baseURL = NSURL(string: "http://172.26.209.192/")
             let manager = AFHTTPSessionManager(baseURL: baseURL)
             let paramDict:Dictionary = ["user_phoneNumber":txtUser.text!,"user_psw":txtPwd.text!.md5]
             let url:String = "todolist/index.php/Home/User/Login"
@@ -145,7 +145,61 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
                 
                 let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
                 
-                print("请求结果：\(resultDict)")
+                //print("请求结果：\(resultDict)")
+                let LoginSuccess = resultDict["isSuccess"] as! Int
+                //登陆成功
+                if LoginSuccess == 1 {
+                    UserVC.currentUser = self.txtUser.text!
+                    //同步数据
+                    let baseURL = NSURL(string: "http://172.26.209.192/")
+                    let manager = AFHTTPSessionManager(baseURL: baseURL)
+                    let paramDict:Dictionary = ["UID":UserVC.currentUser.md5,"TaskModel":""]
+                    let url:String = "todolist/index.php/Home/Task/SynchronizeTask"
+                    //请求数据的序列化器
+                    manager.requestSerializer = AFHTTPRequestSerializer()
+                    //返回数据的序列化器
+                    manager.responseSerializer = AFHTTPResponseSerializer()
+                    let resSet = NSSet(array: ["text/html"])
+                    manager.responseSerializer.acceptableContentTypes = resSet as? Set<String>
+                    manager.POST(url, parameters: paramDict, success: { (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
+                        //成功回调
+                        print("success")
+                        
+                        let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
+                        
+                        print("请求结果：\(resultDict)")
+                        let a = resultDict["taskModelArr"] as! NSArray
+                        self.dataBase = DataBaseService.sharedInstance.getDataBase()
+                        self.dataBase.open()
+                        var sqlStr = "CREATE TABLE IF NOT EXISTS data_\(UserVC.currentUser.md5)(TITLE TEXT, CONTENT TEXT, CREATE_TIME TEXT, LAST_EDIT_TIME TEXT, ALERT_TIME TEXT, LEVEL INT, STATE INT, PRIMARY KEY(CREATE_TIME))"
+                        self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [])
+                        sqlStr = "INSERT INTO data_\(UserVC.currentUser.md5) VALUES (?, ?, ?, ?, ?, ?, ?)"
+                        var i = 0
+                        while (i < a.count){
+                            self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [a[i]["title"] as! String, a[i]["content"] as! String, a[i]["createtime"] as! String, a[i]["lastedittime"] as! String, a[i]["alerttime"] as! String, Int(a[i]["level"] as! String)!, Int(a[i]["state"] as! String)!])
+                            i++
+                        }
+                        sqlStr = "INSERT INTO USER VALUES (?, ?, ?, ?)"
+                        self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [UserVC.currentUser.md5, UserVC.currentUser,resultDict["user_nickname"] as! String,1])
+                        let newView = RootTabBarController()
+                        self.presentViewController(newView, animated: true, completion: nil)
+//                        var level = a[0]["level"] as! String
+//                        print(Int(level)! )
+//                        print(a[0])
+//                        //            var isSuccess = resultDict["isSuccess"] as! Int
+//                        //            print(isSuccess == 1)
+//                        print(resultDict["user_nickname"])
+                        
+                        
+                    }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
+                        //失败回调
+                        print("网络调用失败:\(error)")
+                    }
+                    
+                }
+                else{
+                    self.alertWindow("错误", message: "用户名或密码错误")
+                }
                 
                 
             }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in

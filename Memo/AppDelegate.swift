@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         self.dataBase = DataBaseService.sharedInstance.getDataBase()
         self.dataBase.open()
-        let sqlStr = "CREATE TABLE IF NOT EXISTS USER(UID TEXT, PHONENUMBER TEXT, NICKNAME TEXT, CURRENTUSER INT, PRIMARY KEY(UID))"
+        var sqlStr = "CREATE TABLE IF NOT EXISTS USER(UID TEXT, PHONENUMBER TEXT, NICKNAME TEXT, CURRENTUSER INT, PRIMARY KEY(UID))"
         if !self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: []) {
             print("Error:\(self.dataBase.lastErrorMessage())")
         }
@@ -33,17 +33,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = UIWindow(frame: screenFrame)
         self.window?.backgroundColor = UIColor.whiteColor()
         self.window?.makeKeyAndVisible()
-//        sqlStr = "SELECT * FROM USER "
-//        let rs:FMResultSet = self.dataBase.executeQuery(sqlStr, withArgumentsInArray: [])
-//        if rs.next() {
-//            UserVC.currentUser = rs.stringForColumn("PHONENUMBER")
-//            self.window?.rootViewController = RootTabBarController()
-//            print("2222")
-//        }
-//        else {
-//            self.window?.rootViewController = LogInViewController()
-//        }
-        self.window?.rootViewController = RootTabBarController()
+        sqlStr = "SELECT * FROM USER "
+        let rs:FMResultSet = self.dataBase.executeQuery(sqlStr, withArgumentsInArray: [])
+        if rs.next() {
+            UserVC.currentUser = rs.stringForColumn("PHONENUMBER")
+            self.window?.rootViewController = RootTabBarController()
+            print("2222")
+        }
+        else {
+            self.window?.rootViewController = LogInViewController()
+        }
+        //self.window?.rootViewController = PhoneNumberViewController()
         
         
         return true

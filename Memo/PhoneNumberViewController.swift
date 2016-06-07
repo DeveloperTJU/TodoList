@@ -153,25 +153,25 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
     //13207620165
     func tapped1(button:UIButton){
         
-        let authCode = txtVerifyCode.text
-        let phoneNum = phoneText.text
-        var resultMessage = ""
-        SMSSDK.commitVerificationCode(authCode, phoneNumber: phoneNum, zone: "86" ,
-                                      result:{ (error: NSError!) -> Void in
-                                        if(error == nil){
-                                            resultMessage = "恭喜您，验证成功！123"
-                                            NSLog("验证成功")
-                                            self.VerifyCodeRight = true
-                                            
-                                        }else{
-                                            resultMessage = "很抱歉，验证失败！456"
-                                            NSLog("验证失败！" , error)
-                                            self.VerifyCodeRight = false
-                                            
-                                        }
-                                        self.alertWindow("验证结果789", message: resultMessage)
-        })
-        print(self.VerifyCodeRight)
+//        let authCode = txtVerifyCode.text
+//        let phoneNum = phoneText.text
+//        var resultMessage = ""
+//        SMSSDK.commitVerificationCode(authCode, phoneNumber: phoneNum, zone: "86" ,
+//                                      result:{ (error: NSError!) -> Void in
+//                                        if(error == nil){
+//                                            resultMessage = "恭喜您，验证成功！123"
+//                                            NSLog("验证成功")
+//                                            self.VerifyCodeRight = true
+//                                            
+//                                        }else{
+//                                            resultMessage = "很抱歉，验证失败！456"
+//                                            NSLog("验证失败！" , error)
+//                                            self.VerifyCodeRight = false
+//                                            
+//                                        }
+//                                        self.alertWindow("验证结果789", message: resultMessage)
+//        })
+//        print(self.VerifyCodeRight)
         
         
 //        if self.checkPassword(){
@@ -180,7 +180,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
                 print("zhuce")
                 self.dataBase = DataBaseService.sharedInstance.getDataBase()
                 self.dataBase.open()
-                let baseURL = NSURL(string: "http://10.1.43.56/")
+                let baseURL = NSURL(string: "http://172.26.209.192/")
                 let manager = AFHTTPSessionManager(baseURL: baseURL)
                 let paramDict:Dictionary = ["user_phoneNumber": phoneText.text!,"user_psw":txtPwd.text!.md5,"user_nickname":txtNickname.text!]
                 let url:String = "todolist/index.php/Home/User/SignUp"
@@ -197,7 +197,14 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
                     let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
                     
                     print("请求结果：\(resultDict)")
-                    self.alertWindow("Success", message: "Register Successfully!")
+                    let LoginSuccess = resultDict["isSuccess"] as! Int
+                    //登陆成功
+                    if LoginSuccess == 1{
+                    self.alertWindow("成功", message: "注册成功!")
+                    }
+                    else{
+                        self.alertWindow("错误", message: "注册失败!")
+                    }
                     
                 }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
                     //失败回调
