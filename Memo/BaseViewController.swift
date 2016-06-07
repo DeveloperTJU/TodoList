@@ -113,7 +113,9 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func userInfo(sender: UIButton){
-        
+        let vc = PersonalCenterController()
+        vc.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func refreshManually(){

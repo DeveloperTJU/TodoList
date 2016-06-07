@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5B1C650E1D06C8BD00EEAA8B /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1C65061D06C8BD00EEAA8B /* Reachability.swift */; };
+		5B1C650F1D06C8BD00EEAA8B /* ChangePaswordController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1C65071D06C8BD00EEAA8B /* ChangePaswordController.swift */; };
+		5B1C65101D06C8BD00EEAA8B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1C65081D06C8BD00EEAA8B /* User.swift */; };
+		5B1C65111D06C8BD00EEAA8B /* PersonalCenterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1C65091D06C8BD00EEAA8B /* PersonalCenterController.swift */; };
+		5B1C65121D06C8BD00EEAA8B /* ChangePasswodCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1C650A1D06C8BD00EEAA8B /* ChangePasswodCell.swift */; };
+		5B1C65131D06C8BD00EEAA8B /* ChangePasswodCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B1C650B1D06C8BD00EEAA8B /* ChangePasswodCell.xib */; };
+		5B1C65141D06C8BD00EEAA8B /* ChangeNickNameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1C650C1D06C8BD00EEAA8B /* ChangeNickNameController.swift */; };
 		A502F6A41D05159800C519E9 /* EditDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502F6A21D05159800C519E9 /* EditDetailViewController.swift */; };
 		A502F6A51D05159800C519E9 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502F6A31D05159800C519E9 /* EditViewController.swift */; };
 		A5046D871D0115230046B511 /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5046D7B1D0115220046B511 /* AFHTTPSessionManager.m */; };
@@ -52,6 +59,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5B1C65061D06C8BD00EEAA8B /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		5B1C65071D06C8BD00EEAA8B /* ChangePaswordController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangePaswordController.swift; sourceTree = "<group>"; };
+		5B1C65081D06C8BD00EEAA8B /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		5B1C65091D06C8BD00EEAA8B /* PersonalCenterController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonalCenterController.swift; sourceTree = "<group>"; };
+		5B1C650A1D06C8BD00EEAA8B /* ChangePasswodCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangePasswodCell.swift; sourceTree = "<group>"; };
+		5B1C650B1D06C8BD00EEAA8B /* ChangePasswodCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChangePasswodCell.xib; sourceTree = "<group>"; };
+		5B1C650C1D06C8BD00EEAA8B /* ChangeNickNameController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeNickNameController.swift; sourceTree = "<group>"; };
 		A502F6A21D05159800C519E9 /* EditDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditDetailViewController.swift; sourceTree = "<group>"; };
 		A502F6A31D05159800C519E9 /* EditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
 		A5046D7A1D0115220046B511 /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
@@ -132,6 +146,45 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5B1C650D1D06C8BD00EEAA8B /* PersonalCenter */ = {
+			isa = PBXGroup;
+			children = (
+				5B1C65171D06CA8E00EEAA8B /* Controller */,
+				5B1C65161D06CA8900EEAA8B /* View */,
+				5B1C65151D06CA8100EEAA8B /* Model */,
+			);
+			name = PersonalCenter;
+			path = "../../Desktop/TodoList-master/Memo";
+			sourceTree = "<group>";
+		};
+		5B1C65151D06CA8100EEAA8B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				5B1C65081D06C8BD00EEAA8B /* User.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		5B1C65161D06CA8900EEAA8B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				5B1C650B1D06C8BD00EEAA8B /* ChangePasswodCell.xib */,
+				5B1C650A1D06C8BD00EEAA8B /* ChangePasswodCell.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		5B1C65171D06CA8E00EEAA8B /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				5B1C650C1D06C8BD00EEAA8B /* ChangeNickNameController.swift */,
+				5B1C65091D06C8BD00EEAA8B /* PersonalCenterController.swift */,
+				5B1C65071D06C8BD00EEAA8B /* ChangePaswordController.swift */,
+				5B1C65061D06C8BD00EEAA8B /* Reachability.swift */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
 		A5046D791D0115220046B511 /* AFNetworking */ = {
 			isa = PBXGroup;
 			children = (
@@ -190,6 +243,7 @@
 				A5A9A1061CEBF95A006BB3A1 /* Base */,
 				A5A9A1041CEBF8E1006BB3A1 /* Unfinished */,
 				A5A9A1031CEBF8D8006BB3A1 /* Finished */,
+				5B1C650D1D06C8BD00EEAA8B /* PersonalCenter */,
 				A5046DE71D012CCC0046B511 /* Assets.xcassets */,
 				A5A9A0EE1CEBF6C4006BB3A1 /* LaunchScreen.storyboard */,
 				A5A9A0F11CEBF6C4006BB3A1 /* Info.plist */,
@@ -409,6 +463,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B1C65131D06C8BD00EEAA8B /* ChangePasswodCell.xib in Resources */,
 				A5C5C4CE1CF688360078C4CF /* Info.plist in Resources */,
 				A5A9A0F01CEBF6C4006BB3A1 /* LaunchScreen.storyboard in Resources */,
 				A5046DE81D012CCC0046B511 /* Assets.xcassets in Resources */,
@@ -425,6 +480,7 @@
 			files = (
 				A5A9A1151CEC3795006BB3A1 /* ItemCell.swift in Sources */,
 				A85783591D03F7D5003D73D9 /* PhoneNumberViewController.swift in Sources */,
+				5B1C650F1D06C8BD00EEAA8B /* ChangePaswordController.swift in Sources */,
 				A5046D871D0115230046B511 /* AFHTTPSessionManager.m in Sources */,
 				A5046D881D0115230046B511 /* AFNetworkReachabilityManager.m in Sources */,
 				A5A9A1021CEBF8BC006BB3A1 /* FinishedViewController.swift in Sources */,
@@ -435,12 +491,15 @@
 				A5046D8A1D0115230046B511 /* AFURLRequestSerialization.m in Sources */,
 				A5046D891D0115230046B511 /* AFSecurityPolicy.m in Sources */,
 				A85783581D03F7D5003D73D9 /* LogInViewController.swift in Sources */,
+				5B1C65141D06C8BD00EEAA8B /* ChangeNickNameController.swift in Sources */,
 				A5046D8C1D0115230046B511 /* AFURLSessionManager.m in Sources */,
 				A592E0DD1CF5FF4A004762A8 /* UserViewController.swift in Sources */,
 				A5C5C4CC1CF688360078C4CF /* FMDatabaseQueue.m in Sources */,
+				5B1C65111D06C8BD00EEAA8B /* PersonalCenterController.swift in Sources */,
 				A5046DE61D011D2F0046B511 /* MyRect.swift in Sources */,
 				A599E43C1CF68C44005CDB8D /* DataBaseService.swift in Sources */,
 				A5C5C4CD1CF688360078C4CF /* FMResultSet.m in Sources */,
+				5B1C650E1D06C8BD00EEAA8B /* Reachability.swift in Sources */,
 				A502F6A41D05159800C519E9 /* EditDetailViewController.swift in Sources */,
 				A5A9A0FC1CEBF862006BB3A1 /* CustomNavController.swift in Sources */,
 				A527006A1CF3E765003D88FB /* CellFrameInfo.swift in Sources */,
@@ -449,10 +508,12 @@
 				A5A9A0FA1CEBF806006BB3A1 /* RootTabBarController.swift in Sources */,
 				A5A9A1121CEC3761006BB3A1 /* ItemModel.swift in Sources */,
 				A5C5C4CB1CF688360078C4CF /* FMDatabasePool.m in Sources */,
+				5B1C65121D06C8BD00EEAA8B /* ChangePasswodCell.swift in Sources */,
 				A5A9A1001CEBF8B2006BB3A1 /* UnfinishedViewController.swift in Sources */,
 				A599E4401CF68CA6005CDB8D /* MBProgressHUD.m in Sources */,
 				A5046D8B1D0115230046B511 /* AFURLResponseSerialization.m in Sources */,
 				A502F6A51D05159800C519E9 /* EditViewController.swift in Sources */,
+				5B1C65101D06C8BD00EEAA8B /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
