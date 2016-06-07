@@ -12,19 +12,16 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     let cellIdentifier:String = "ItemCell"
     var mainTableView:UITableView!
-    private var originConstant: CGFloat = 0
-    var dataArr:[ItemModel]!
-    var isFinished:Bool!    //表示当前标签页是"已完成"还是"未完成"。
+    var dataArr:[ItemModel]!                //数据源
+    var isFinished:Bool!                    //表示当前标签页是"已完成"还是"未完成"。
     
     init(){
         super.init(nibName: nil, bundle: nil)
-        self.loadData()
         self.loadTableView()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.loadData()
         self.loadTableView()
     }
     
@@ -33,8 +30,8 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.title = title
     }
     
-    //从数据库读入数据
-    func loadData(){
+    //初始化数据库并存入测试数据
+    func initTestData(){
         
         //CGAffineTransformIdentity
         //MJRefresh
@@ -58,6 +55,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //在初始化时添加TableView以在尚未加载视图时存取dataArr数据。
     func loadTableView() {
+//        self.initTestData()
         let tableViewFrame:CGRect = self.view.bounds
         self.mainTableView = UITableView(frame: tableViewFrame, style: UITableViewStyle.Plain)
         self.mainTableView.backgroundColor = UIColor.whiteColor()
@@ -67,17 +65,14 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.mainTableView.registerNib(cellNib, forCellReuseIdentifier: cellIdentifier)
         self.mainTableView.tableFooterView = UIView()
         self.view.addSubview(self.mainTableView)
-        UIGraphicsBeginImageContext(self.view.frame.size)
-        UIImage(named: "background")!.drawInRect(CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height))
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        self.view.backgroundColor = UIColor(patternImage: image)
+        self.view.backgroundColor = UIColor(patternImage: RootTabBarController.compressImage(image: UIImage(named: "background")!, toSize: self.view.frame.size))
         self.mainTableView.backgroundColor = UIColor.clearColor()
         self.mainTableView.separatorStyle = .None
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //添加导航栏按钮
         let refreshButton = UIBarButtonItem(image: RootTabBarController.compressImage(image: UIImage(named: "refresh")!, toSize: CGSizeMake(20, 20)), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("refreshManually"))
         let searchButton = UIBarButtonItem(image: RootTabBarController.compressImage(image: UIImage(named: "search")!, toSize: CGSizeMake(20, 20)), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("search"))
         let button = UIButton(type: .System)
@@ -106,81 +101,22 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         
     }
     
+    //搜索页
     func search(){
 //        let nav = SearchViewController()
 //        nav.hidesBottomBarWhenPushed = true
 //        self.navigationController!.pushViewController(nav,animated:true);
     }
     
+    //个人中心页
     func userInfo(sender: UIButton){
         
     }
     
+    //手动同步
     func refreshManually(){
         
     }
-    
-    func handlePan(gesture:UIPanGestureRecognizer){
-//        let touchPoint = gesture.locationInView(self.mainTableView)
-//        let indexPath = self.mainTableView.indexPathForRowAtPoint(touchPoint)
-//        let currentItem = self.dataArr[indexPath!.row]
-//        print("touchPoint:\(touchPoint)")
-//        switch gesture.state{
-////        case .Began:
-//        case .Began:
-//            originConstant = self.mainTableView.cellForRowAtIndexPath(indexPath!)
-//        case .Changed:
-//            let translation = gesture.translationInView(self.mainTableView)
-//            self.mainTableView.cellForRowAtIndexPath(indexPath!).constant = translation.x
-//            
-//            // 划动移动1/3宽度为有效划动
-//            let finished = fabs(translation.x) > CGRectGetWidth(bounds) / 3
-//            if translation.x < originConstant { // 右划
-//                if finished {
-//                    deleteOnDragRelease = true
-//                    rightLabel.textColor = UIColor.redColor()
-//                } else {
-//                    deleteOnDragRelease = false
-//                    rightLabel.textColor = UIColor.whiteColor()
-//                }
-//            } else { // 左划
-//                if finished {
-//                    completeOnDragRelease = true
-//                    leftLabel.textColor = UIColor.greenColor()
-//                } else {
-//                    completeOnDragRelease = false
-//                    leftLabel.textColor = UIColor.whiteColor()
-//                }
-//            }
-//        case .Ended:
-//            centerConstraint.constant = originConstant
-//            
-//            if deleteOnDragRelease {
-//                deleteOnDragRelease = false
-//                if let onDelete = onDelete {
-//                    onDelete(self)
-//                }
-//            }
-//            
-//            if completeOnDragRelease {
-//                completeOnDragRelease = false
-//                if let onComplete = onComplete {
-//                    onComplete(self)
-//                }
-//            }
-//        default:
-//            break
-//        }
-    }
-    
-//    func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
-//        return true
-//        if let panGesture = gestureRecognizer as? UIPanGestureRecognizer {
-//            let translation = panGesture.translationInView(self.mainTableView)
-//            return fabs(translation.x) > fabs(translation.y)
-//        }
-//        return true
-//    }
     
     //显示友好时间戳，参考自http://blog.csdn.net/zhyl8157121/article/details/42155921
     func friendlyTime(dateTime: String) -> String {
@@ -280,6 +216,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         return self.dataArr.count
     }
     
+    //设置Cell属性
     func tableView(tableView:UITableView, cellForRowAtIndexPath indexPath:NSIndexPath) ->UITableViewCell{
         let cell:ItemCell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! ItemCell
         let item = self.dataArr[indexPath.row]
@@ -293,10 +230,12 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         return cell
     }
     
+    //Cell高度固定50
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 50
     }
     
+    //点击Cell打开详情页
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let editVC = EditViewController()
         editVC.currentList = dataArr[indexPath.row]
@@ -319,6 +258,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         return [deleteButton]
     }
     
+    //切换已完成/未完成状态
     func switchState(button:UIButton, createTime:String){
         var hudText = ""
         var row = 0
