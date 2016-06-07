@@ -53,7 +53,7 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
 //        //        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:UIFont(name: "Zapfino", size: 24.0)!];
         
         //给导航增加item
-        let rightItem = UIBarButtonItem(title: "完成", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(EditDetailViewController.FinishItem(_:)))
+        let rightItem = UIBarButtonItem(title: "完成", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("FinishItem:"))
         rightItem.title = "完成"
         self.navigationItem.rightBarButtonItem = rightItem
         

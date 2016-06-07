@@ -10,26 +10,34 @@ import UIKit
 
 class UnfinishedViewController: BaseViewController{
     
+    struct NewItem{
+        var newItemFirstFrame:CGRect!
+        var newItemFirstView:MyRect!
+        var newItemFrame:CGRect!
+        var newItemView:MyRect!
+        let addButton = UIButton()
+        let menuButton = UIButton()
+        let addTextField = UITextField()
+    }
+    var newItem = NewItem()
+    
     override func loadTableView() {
         self.dataArr = DataBaseService.sharedInstance.selectAllInDB().0
-        let newItemFirstFrame = CGRectMake(0, 0, self.view.bounds.width - 16, 42)
-        let newItemFirstView = MyRect(frame: newItemFirstFrame, color: UIColor(red: 254/255, green: 239/255, blue: 115/255, alpha: 1.0))
-        let newItemFrame = CGRectMake(8, 8, self.view.bounds.width - 16, 42)
-        let newItemView = MyRect(frame: newItemFrame)
-        newItemView.addSubview(newItemFirstView)
-        let addButton = UIButton()
-        addButton.setImage(UIImage(named: "new"), forState: .Normal)
-        addButton.frame = CGRectMake(11, 11, 20, 20)
-        let menuButton = UIButton()
-        menuButton.setImage(UIImage(named: "menu"), forState: .Normal)
-        menuButton.frame = CGRectMake(newItemFirstFrame.width-31, 11, 20, 20)
-        let addTextField = UITextField()
-        addTextField.frame = CGRectMake(42, 11, newItemFirstFrame.width-84, 20)
-        
-        newItemFirstView.addSubview(addButton)
-        newItemFirstView.addSubview(addTextField)
-        newItemFirstView.addSubview(menuButton)
-        self.view.addSubview(newItemView)
+        newItem.newItemFirstFrame = CGRectMake(0, 0, self.view.bounds.width - 16, 42)
+        newItem.newItemFirstView = MyRect(frame: newItem.newItemFirstFrame, color: UIColor(red: 254/255, green: 239/255, blue: 115/255, alpha: 1.0))
+        newItem.newItemFrame = CGRectMake(8, 8, self.view.bounds.width - 16, 42)
+        newItem.newItemView = MyRect(frame: newItem.newItemFrame)
+        newItem.newItemView.addSubview(newItem.newItemFirstView)
+        newItem.addButton.setImage(UIImage(named: "new"), forState: .Normal)
+        newItem.addButton.frame = CGRectMake(11, 11, 20, 20)
+//        newItem.addButton.addTarget(self, action: <#T##Selector#>, forControlEvents: .TouchUpInside)
+        newItem.menuButton.setImage(UIImage(named: "menu"), forState: .Normal)
+        newItem.menuButton.frame = CGRectMake(newItem.newItemFirstFrame.width-31, 11, 20, 20)
+        newItem.addTextField.frame = CGRectMake(42, 11, newItem.newItemFirstFrame.width-84, 20)
+        newItem.newItemFirstView.addSubview(newItem.addButton)
+        newItem.newItemFirstView.addSubview(newItem.addTextField)
+        newItem.newItemFirstView.addSubview(newItem.menuButton)
+        self.view.addSubview(newItem.newItemView)
         super.loadTableView()
         let tableViewFrame = CGRectMake(0, 54, self.view.bounds.width, self.view.bounds.height - 54)
         self.mainTableView.frame = tableViewFrame
@@ -40,7 +48,7 @@ class UnfinishedViewController: BaseViewController{
         super.viewDidLoad()
     }
     
-    //新建事件按钮
+    //新建事件按钮（旧版）
     func handleNewItem(){
         let alert = UIAlertController(title: "创建任务", message: "", preferredStyle: UIAlertControllerStyle.Alert)
         alert.addTextFieldWithConfigurationHandler { (textField : UITextField!) -> Void in
