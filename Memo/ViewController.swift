@@ -17,7 +17,7 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         let baseURL = NSURL(string: "http://172.26.209.192/")
         let manager = AFHTTPSessionManager(baseURL: baseURL)
-        let paramDict:Dictionary = ["UID":"700a0d94dd539543bad0d3a237ae53b5","TaskModel":""]
+        let paramDict:Dictionary = ["UID":"76363ece3d879620e4e101ef74c65050","TaskModel":""]
         let url:String = "todolist/index.php/Home/Task/SynchronizeTask"
         //请求数据的序列化器
         manager.requestSerializer = AFHTTPRequestSerializer()
@@ -33,22 +33,23 @@ class ViewController: UIViewController {
  
             print("请求结果：\(resultDict)")
             let a = resultDict["taskModelArr"] as! NSArray
-            self.dataBase = DataBaseService.sharedInstance.getDataBase()
-            self.dataBase.open()
-            var sqlStr = "CREATE TABLE IF NOT EXISTS data_test(TITLE TEXT, CONTENT TEXT, CREATE_TIME TEXT, LAST_EDIT_TIME TEXT, ALERT_TIME TEXT, LEVEL INT, STATE INT, PRIMARY KEY(CREATE_TIME))"
-            self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [])
-             sqlStr = "INSERT INTO data_test VALUES (?, ?, ?, ?, ?, ?, ?)"
-            var i = 0
-            while (i < a.count){
-            self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [a[i]["title"] as! String, a[i]["content"] as! String, a[i]["createtime"] as! String, a[i]["lastedittime"] as! String, a[i]["alerttime"] as! String, Int(a[i]["level"] as! String)!, Int(a[i]["state"] as! String)!])
-                i++
-            }
-            var level = a[0]["level"] as! String
-            print(Int(level)! )
-            print(a[0])
-//            var isSuccess = resultDict["isSuccess"] as! Int
-//            print(isSuccess == 1)
-            print(resultDict["user_nickname"])
+            print(a.count)
+//            self.dataBase = DataBaseService.sharedInstance.getDataBase()
+//            self.dataBase.open()
+//            var sqlStr = "CREATE TABLE IF NOT EXISTS data_test(TITLE TEXT, CONTENT TEXT, CREATE_TIME TEXT, LAST_EDIT_TIME TEXT, ALERT_TIME TEXT, LEVEL INT, STATE INT, PRIMARY KEY(CREATE_TIME))"
+//            self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [])
+//             sqlStr = "INSERT INTO data_test VALUES (?, ?, ?, ?, ?, ?, ?)"
+//            var i = 0
+//            while (i < a.count){
+//            self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [a[i]["title"] as! String, a[i]["content"] as! String, a[i]["createtime"] as! String, a[i]["lastedittime"] as! String, a[i]["alerttime"] as! String, Int(a[i]["level"] as! String)!, Int(a[i]["state"] as! String)!])
+//                i++
+//            }
+//            var level = a[0]["level"] as! String
+//            print(Int(level)! )
+//            print(a[0])
+////            var isSuccess = resultDict["isSuccess"] as! Int
+////            print(isSuccess == 1)
+//            print(resultDict["user_nickname"])
             
             }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
                 //失败回调

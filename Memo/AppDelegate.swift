@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         else {
             self.window?.rootViewController = LogInViewController()
         }
-        //self.window?.rootViewController = PhoneNumberViewController()
+        //self.window?.rootViewController = LogInViewController()
         
         
         return true

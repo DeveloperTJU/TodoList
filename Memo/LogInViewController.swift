@@ -153,7 +153,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
                     //同步数据
                     let baseURL = NSURL(string: "http://172.26.209.192/")
                     let manager = AFHTTPSessionManager(baseURL: baseURL)
-                    let paramDict:Dictionary = ["UID":UserVC.currentUser.md5,"TaskModel":""]
+                    let paramDict:Dictionary = ["UID":resultDict["UID"] as! String,"TaskModel":""]
                     let url:String = "todolist/index.php/Home/Task/SynchronizeTask"
                     //请求数据的序列化器
                     manager.requestSerializer = AFHTTPRequestSerializer()
@@ -169,6 +169,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
                         
                         print("请求结果：\(resultDict)")
                         let a = resultDict["taskModelArr"] as! NSArray
+                        
                         self.dataBase = DataBaseService.sharedInstance.getDataBase()
                         self.dataBase.open()
                         var sqlStr = "CREATE TABLE IF NOT EXISTS data_\(UserVC.currentUser.md5)(TITLE TEXT, CONTENT TEXT, CREATE_TIME TEXT, LAST_EDIT_TIME TEXT, ALERT_TIME TEXT, LEVEL INT, STATE INT, PRIMARY KEY(CREATE_TIME))"
@@ -183,14 +184,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
                         self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [UserVC.currentUser.md5, UserVC.currentUser,resultDict["user_nickname"] as! String,1])
                         let newView = RootTabBarController()
                         self.presentViewController(newView, animated: true, completion: nil)
-//                        var level = a[0]["level"] as! String
-//                        print(Int(level)! )
-//                        print(a[0])
-//                        //            var isSuccess = resultDict["isSuccess"] as! Int
-//                        //            print(isSuccess == 1)
-//                        print(resultDict["user_nickname"])
-                        
-                        
+
                     }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
                         //失败回调
                         print("网络调用失败:\(error)")
