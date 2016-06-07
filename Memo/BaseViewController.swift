@@ -110,7 +110,9 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //个人中心页
     func userInfo(sender: UIButton){
-        
+        let vc = PersonalCenterController()
+        vc.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     //手动同步
