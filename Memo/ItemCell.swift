@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol ItemCellDelegate{
+    func switchState(button:UIButton, createTime:String)
+}
+
 class ItemCell: UITableViewCell{
 
     @IBOutlet weak var titleLabel: UILabel!
@@ -15,13 +19,20 @@ class ItemCell: UITableViewCell{
     @IBOutlet weak var detailImage: UIImageView!
     @IBOutlet weak var stateButton: UIButton!
     var createTime:String!
-
+    var delegate:ItemCellDelegate?
+    
+    
 //    var currentFrameInfo:CellFrameInfo!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         self.contentView.backgroundColor = UIColor.clearColor()
         self.backgroundColor = UIColor.clearColor()
+        stateButton.addTarget(self, action: Selector("handleButtonClick:"), forControlEvents: .TouchUpInside)
+    }
+    
+    func handleButtonClick(button:UIButton){
+        self.delegate?.switchState(button, createTime: self.createTime)
     }
     
     

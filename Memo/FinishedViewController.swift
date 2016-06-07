@@ -21,11 +21,17 @@ class FinishedViewController: BaseViewController {
     }
     
     //侧滑删除
-    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
-        return [UITableViewRowAction(style: UITableViewRowActionStyle.Destructive, title: "删除") {
-            action, index in
-            self.removeData(row: indexPath.row)
-        }]
-    }
+//    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+//        let deleteButton = UITableViewRowAction(style: UITableViewRowActionStyle.Destructive, title: "") {
+//            action, index in
+//            self.removeData(row: indexPath.row)
+//        }
+//        UIGraphicsBeginImageContext(CGSize(width: 50, height: 50))
+//        UIImage(named: "垃圾箱")!.drawInRect(CGRect(x: 15, y: 10, width: 30, height: 30))
+//        let image = UIGraphicsGetImageFromCurrentImageContext()
+//        UIGraphicsEndImageContext()
+//        deleteButton.backgroundColor = UIColor(patternImage: image)
+//        return [deleteButton]
+//    }
     
 }

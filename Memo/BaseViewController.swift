@@ -8,8 +8,7 @@
 
 import UIKit
 
-class BaseViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
-
+class BaseViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, ItemCellDelegate {
     
     let cellIdentifier:String = "ItemCell"
     var mainTableView:UITableView!
@@ -286,10 +285,11 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         let item = self.dataArr[indexPath.row]
         cell.titleLabel.text = item.title
         cell.timeLabel.text = friendlyTime(item.lastEditTime)
+        cell.createTime = item.createTime
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         cell.stateButton.setImage(UIImage(named: "finished"), forState: isFinished == true ? .Highlighted : .Normal)
-        cell.stateButton.setImage(UIImage(named: "unfinished"), forState: isFinished == false ? .Highlighted : .Normal)
-        cell.stateButton.addTarget(self, action: Selector("switchState:"), forControlEvents:.TouchUpInside)
+        cell.stateButton.setImage(UIImage(named: "finished_selected"), forState: isFinished == false ? .Highlighted : .Normal)
+        cell.delegate = self
         return cell
     }
     
@@ -305,31 +305,43 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.navigationController?.pushViewController(editVC, animated: true)
     }
     
-    func switchState(button:UIButton){
-//        var hudText = ""
-//        var row = 0
-//        print(button.superview?.superview)
-//        print(button.targetForAction(Selector("switchState:"), withSender: self))
-//        let time = (button.targetForAction(Selector("switchState:"), withSender: button) as! ItemCell).createTime
-//        for i in self.dataArr{
-//            if i.createTime == time{
-//                break
-//            }
-//        }
-//        let temp = self.dataArr[row]
-//        self.removeData(row: row)
-//        if (isFinished == true){
-//            UnfinishedVC.insertData(temp, withAnimation: true)
-//            hudText = "已恢复"
-//        }
-//        else{
-//            FinishedVC.insertData(temp, withAnimation: true)
-//            hudText = "已完成"
-//        }
-//        let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-//        hud.mode = MBProgressHUDMode.Text
-//        hud.label.text = hudText
-//        hud.hideAnimated(true, afterDelay: 1.5)
+    //侧滑删除
+    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+        let deleteButton = UITableViewRowAction(style: UITableViewRowActionStyle.Destructive, title: "    ") {
+            action, index in
+            self.removeData(row: indexPath.row)
+        }
+        UIGraphicsBeginImageContext(CGSize(width: 50, height: 50))
+        UIImage(named: "垃圾箱")!.drawInRect(CGRect(x: 5, y: 15, width: 20, height: 20))
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        deleteButton.backgroundColor = UIColor(patternImage: image)
+        return [deleteButton]
+    }
+    
+    func switchState(button:UIButton, createTime:String){
+        var hudText = ""
+        var row = 0
+        for i in self.dataArr{
+            if i.createTime == createTime{
+                break
+            }
+            row += 1
+        }
+        let temp = self.dataArr[row]
+        self.removeData(row: row)
+        if (isFinished == true){
+            UnfinishedVC.insertData(temp, withAnimation: true)
+            hudText = "已恢复"
+        }
+        else{
+            FinishedVC.insertData(temp, withAnimation: true)
+            hudText = "已完成"
+        }
+        let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        hud.mode = MBProgressHUDMode.Text
+        hud.label.text = hudText
+        hud.hideAnimated(true, afterDelay: 1.5)
     }
     
 }

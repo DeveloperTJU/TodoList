@@ -82,32 +82,32 @@ class UnfinishedViewController: BaseViewController{
     }
 
     //左滑更改level
-    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
-        var levelArr:[UITableViewRowAction] = [UITableViewRowAction]()
-        for i in 0 ..< 4{
-            let level = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "") {
-                action, index in
-                self.dataArr[indexPath.row].level = i
-                let data:ItemModel = self.dataArr[indexPath.row]
-                self.removeData(row: indexPath.row)
-                self.insertData(data, withAnimation: true)
-            }
-            switch i{
-            case 0:
-                level.backgroundColor = UIColor(red: 254/255, green: 98/255, blue: 4/255, alpha: 1.0)
-            case 1:
-                level.backgroundColor = UIColor(red: 254/255, green: 228/255, blue: 4/255, alpha: 1.0)
-            case 2:
-                level.backgroundColor = UIColor(red: 75/255, green: 207/255, blue: 45/255, alpha: 1.0)
-            case 3:
-                level.backgroundColor = UIColor(red: 4/255, green: 163/255, blue: 254/255, alpha: 1.0)
-            default:
-                break
-            }
-            levelArr.append(level)
-        }
-        return levelArr
-    }
+//    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+//        var levelArr:[UITableViewRowAction] = [UITableViewRowAction]()
+//        for i in 0 ..< 4{
+//            let level = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "") {
+//                action, index in
+//                self.dataArr[indexPath.row].level = i
+//                let data:ItemModel = self.dataArr[indexPath.row]
+//                self.removeData(row: indexPath.row)
+//                self.insertData(data, withAnimation: true)
+//            }
+//            switch i{
+//            case 0:
+//                level.backgroundColor = UIColor(red: 254/255, green: 98/255, blue: 4/255, alpha: 1.0)
+//            case 1:
+//                level.backgroundColor = UIColor(red: 254/255, green: 228/255, blue: 4/255, alpha: 1.0)
+//            case 2:
+//                level.backgroundColor = UIColor(red: 75/255, green: 207/255, blue: 45/255, alpha: 1.0)
+//            case 3:
+//                level.backgroundColor = UIColor(red: 4/255, green: 163/255, blue: 254/255, alpha: 1.0)
+//            default:
+//                break
+//            }
+//            levelArr.append(level)
+//        }
+//        return levelArr
+//    }
     
     //Cell点击事件，编辑事件。
 //    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
