@@ -46,14 +46,14 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         self.title = "查看"
 //        self.view.backgroundColor = UIColor.grayColor()
         
-        //导航栏颜色
-        let mainColor = UIColor(red: 255/255, green: 223/255, blue: 110/255, alpha: 1)
-        self.navigationController?.navigationBar.barTintColor = mainColor
-        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
-        //        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:UIFont(name: "Zapfino", size: 24.0)!];
+//        //导航栏颜色
+//        let mainColor = UIColor(red: 255/255, green: 223/255, blue: 110/255, alpha: 1)
+//        self.navigationController?.navigationBar.barTintColor = mainColor
+//        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
+//        //        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:UIFont(name: "Zapfino", size: 24.0)!];
         
         //给导航增加item
-        let rightItem = UIBarButtonItem(title: "完成", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("EditDetailViewController.FinishItem:"))
+        let rightItem = UIBarButtonItem(title: "完成", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(EditDetailViewController.FinishItem(_:)))
         rightItem.title = "完成"
         self.navigationItem.rightBarButtonItem = rightItem
         
@@ -62,6 +62,8 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         TextField.backgroundColor=UIColor.whiteColor()
         TextField.layer.cornerRadius = 10;
         TextField.text = currentList.title
+        TextField.delegate = self
+        textFieldShouldReturn(TextField)
         self.view.addSubview(TextField)
         
         
@@ -171,7 +173,11 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
     
     func FinishItem(right:UIBarButtonItem)
     {
-        
+        let UnfinishVC = UnfinishedViewController()
+        DataBaseService.sharedInstance.updateInDB(currentList)
+        UnfinishedVC.mainTableView.reloadData()
+        self.hidesBottomBarWhenPushed = false;
+        self.navigationController?.pushViewController(UnfinishVC, animated: true)
         
     }
     
@@ -185,7 +191,9 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         alertController.addAction(UIAlertAction(title: "确定", style: UIAlertActionStyle.Default){
             (alertAction)->Void in
             print("date select: \(datePicker.date.description)")
-            //            self.Datebutt.thedate=datePicker.date
+            self.currentList.alertTime=datePicker.date.description
+            //刷新表面数据
+            
             //            self.Datebutt.setNeedsDisplay()
             })
         alertController.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.Cancel,handler:nil))
@@ -194,5 +202,12 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         
         self.presentViewController(alertController, animated: true, completion: nil)
     }
+    
+    func textFieldShouldReturn(TextField: UITextField) -> Bool
+    {
+        TextField.resignFirstResponder()
+        return true;
+    }
+    
     
 }
