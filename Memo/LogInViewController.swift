@@ -218,6 +218,8 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
     func tapped2(button:UIButton){
         
         UserVC.currentUser = "Visitor"
+        UnfinishedVC = UnfinishedViewController(title: "待办")
+        FinishedVC = FinishedViewController(title: "完成")
         let rootVC = RootTabBarController()
         self.presentViewController(rootVC, animated: true, completion: nil)
     }

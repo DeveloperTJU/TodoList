@@ -231,23 +231,10 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
     
     func tapped3(button:UIButton){
         
-        self.dataBase = DataBaseService.sharedInstance.getDataBase()
-        self.dataBase.open()
-
-                        var sqlStr = "CREATE TABLE IF NOT EXISTS TASKFORvisitor(CONTENT TEXT,TIME TEXT,DDLDATE TEXT)"
-                        var isSuccess = self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [])
         
-                        if !isSuccess {
-                            print("Error:\(self.dataBase.lastErrorMessage())")
-                        }
-                        sqlStr = "CREATE TABLE IF NOT EXISTS COMPLETETASKFORvisitor(CONTENT TEXT,TIME TEXT,DDLDATE TEXT)"
-                        isSuccess = self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [])
-        
-                        if !isSuccess {
-                            print("Error:\(self.dataBase.lastErrorMessage())")
-                        }
-                        self.dataBase.close()
         let rootVC = RootTabBarController()
+        UnfinishedVC = UnfinishedViewController(title: "待办")
+        FinishedVC = FinishedViewController(title: "完成")
         self.presentViewController(rootVC, animated: true, completion: nil)
         
     }
