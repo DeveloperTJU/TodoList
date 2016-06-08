@@ -103,9 +103,9 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //搜索页
     func search(){
-//        let nav = SearchViewController()
-//        nav.hidesBottomBarWhenPushed = true
-//        self.navigationController!.pushViewController(nav,animated:true);
+        let searchVC = SearchViewController()
+        searchVC.hidesBottomBarWhenPushed = true
+        self.navigationController!.pushViewController(searchVC,animated:true);
     }
     
     //个人中心页

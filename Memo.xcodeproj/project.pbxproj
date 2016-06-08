@@ -25,6 +25,7 @@
 		A53A92F41D07A19F00144FE6 /* ChangePasswodCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A53A92F31D07A19F00144FE6 /* ChangePasswodCell.xib */; };
 		A53A92F61D07A1B000144FE6 /* ChangePasswodCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53A92F51D07A1B000144FE6 /* ChangePasswodCell.swift */; };
 		A53A92F81D07A1B500144FE6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53A92F71D07A1B500144FE6 /* User.swift */; };
+		A53A92FA1D07A8EA00144FE6 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53A92F91D07A8EA00144FE6 /* SearchViewController.swift */; };
 		A592E0DD1CF5FF4A004762A8 /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A592E0DC1CF5FF4A004762A8 /* UserViewController.swift */; };
 		A599E43C1CF68C44005CDB8D /* DataBaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A599E43B1CF68C44005CDB8D /* DataBaseService.swift */; };
 		A599E4401CF68CA6005CDB8D /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = A599E43F1CF68CA6005CDB8D /* MBProgressHUD.m */; };
@@ -84,6 +85,7 @@
 		A53A92F31D07A19F00144FE6 /* ChangePasswodCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ChangePasswodCell.xib; path = Memo/ChangePasswodCell.xib; sourceTree = SOURCE_ROOT; };
 		A53A92F51D07A1B000144FE6 /* ChangePasswodCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChangePasswodCell.swift; path = Memo/ChangePasswodCell.swift; sourceTree = SOURCE_ROOT; };
 		A53A92F71D07A1B500144FE6 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = User.swift; path = Memo/User.swift; sourceTree = SOURCE_ROOT; };
+		A53A92F91D07A8EA00144FE6 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		A548B9A51CF5892B00773A58 /* Memo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Memo-Bridging-Header.h"; sourceTree = "<group>"; };
 		A592E0DC1CF5FF4A004762A8 /* UserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
 		A599E43B1CF68C44005CDB8D /* DataBaseService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataBaseService.swift; sourceTree = "<group>"; };
@@ -297,6 +299,7 @@
 				A592E0DC1CF5FF4A004762A8 /* UserViewController.swift */,
 				A502F6A21D05159800C519E9 /* EditDetailViewController.swift */,
 				A502F6A31D05159800C519E9 /* EditViewController.swift */,
+				A53A92F91D07A8EA00144FE6 /* SearchViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -504,6 +507,7 @@
 				A5A9A0FC1CEBF862006BB3A1 /* CustomNavController.swift in Sources */,
 				A527006A1CF3E765003D88FB /* CellFrameInfo.swift in Sources */,
 				A53A92F21D07A19200144FE6 /* PersonalCenterController.swift in Sources */,
+				A53A92FA1D07A8EA00144FE6 /* SearchViewController.swift in Sources */,
 				A5C5C4CA1CF688360078C4CF /* FMDatabaseAdditions.m in Sources */,
 				A5DAA8851CFFCFD9008B8CAC /* StringHelper.swift in Sources */,
 				A53A92F61D07A1B000144FE6 /* ChangePasswodCell.swift in Sources */,
