@@ -17,6 +17,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     init(){
         super.init(nibName: nil, bundle: nil)
+//        self.initTestData()                 //取消注释该行以初始化测试数据
         self.loadTableView()
     }
     
@@ -44,18 +45,17 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         sqlStr = "CREATE TABLE IF NOT EXISTS data_\(UserVC.currentUser.md5)(TITLE TEXT, CONTENT TEXT, CREATE_TIME TEXT, LAST_EDIT_TIME TEXT, ALERT_TIME TEXT, LEVEL INT, STATE INT, PRIMARY KEY(CREATE_TIME))"
         dataBase.executeUpdate(sqlStr, withArgumentsInArray: [])
         sqlStr = "INSERT INTO data_\(UserVC.currentUser.md5) VALUES (?, ?, ?, ?, ?, ?, ?)"
-        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task1", "no content1", "2016-05-27 12:01:00", "2016-05-27 12:01:00", "2017-05-27 12:01:00", 1, 4])
-        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task2", "no content2", "2016-05-27 12:02:01", "2016-05-27 12:02:01", "2017-05-27 12:02:01", 1, 4])
+        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task1", "no content1", "2016-05-27 12:01:00", "2016-05-27 12:01:00", "2017-05-27 12:01:00", 1, 2])
+        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task2", "no content2", "2016-05-27 12:02:01", "2016-05-27 12:02:01", "2017-05-27 12:02:01", 1, 2])
         dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task3", "no content3", "2016-05-27 12:03:02", "2016-05-27 12:03:02", "2017-05-27 12:03:02", 1, 0])
         dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task4", "no content4", "2016-05-27 12:04:03", "2016-05-27 12:04:03", "2017-05-27 12:04:03", 1, 0])
-        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task5", "no content5", "2016-05-27 12:05:02", "2016-05-27 12:05:02", "2017-05-27 12:05:02", 1, 1])
-        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task6", "no content6", "2016-05-27 12:06:00", "2016-05-27 12:06:00", "2017-05-27 12:06:00", 1, 1])
+        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task5", "no content5", "2016-05-27 12:05:02", "2016-05-27 12:05:02", "2017-05-27 12:05:02", 1, 0])
+        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task6", "no content6", "2016-05-27 12:06:00", "2016-05-27 12:06:00", "2017-05-27 12:06:00", 1, 0])
         dataBase.close()
     }
     
     //在初始化时添加TableView以在尚未加载视图时存取dataArr数据。
     func loadTableView() {
-//        self.initTestData()
         let tableViewFrame:CGRect = self.view.bounds
         self.mainTableView = UITableView(frame: tableViewFrame, style: UITableViewStyle.Plain)
         self.mainTableView.backgroundColor = UIColor.whiteColor()
@@ -110,7 +110,9 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //个人中心页
     func userInfo(sender: UIButton){
-        
+        let vc = PersonalCenterController()
+        vc.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     //手动同步
@@ -167,21 +169,39 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         return ""
     }
     
-    //使用插入排序的方式插入数据，使得cell按照优先级与最后编辑时间排序。
-    func insertData(data:ItemModel, withAnimation hasAnimation:Bool){
+    //通过创建时间找到索引，无则返回-1。
+    internal func findIndex(createTime:String) -> Int{
+        var row = 0
+        for i in self.dataArr{
+            if i.createTime == createTime{
+                return row
+            }
+            row += 1
+        }
+        return -1
+    }
+    
+    //返回给定任务的索引，插入数据时调用。
+    internal func rank(level:Int, lastEditTime:String) -> Int {
         var index:Int = 0
-        for item in dataArr{
-            if data.level > item.level{
+        for item in self.dataArr{
+            if level > item.level{
                 index += 1
             }
-            else if data.level == item.level && data.lastEditTime < item.lastEditTime{
+            else if level == item.level && lastEditTime < item.lastEditTime{
                 index += 1
             }
             else{
                 break
             }
         }
-        data.state = data.state % 2 + (isFinished == true ? 2 : 0)
+        return index
+    }
+    
+    //使用插入排序的方式插入数据，使得cell按照优先级与最后编辑时间排序。
+    func insertData(data:ItemModel, withAnimation hasAnimation:Bool){
+        let index = rank(data.level, lastEditTime: data.lastEditTime)
+        data.state = (isFinished! ? 2 : 0)
         if DataBaseService.sharedInstance.insertInDB(data){
             dataArr.insert(data, atIndex: index)
             self.mainTableView.beginUpdates()
@@ -192,13 +212,14 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
             let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
             hud.mode = MBProgressHUDMode.Text
             hud.label.text = "数据库操作失败"
-            hud.hideAnimated(true, afterDelay: 1.5)
+            hud.hideAnimated(true, afterDelay: 0.5)
         }
     }
     
     //删除指定位置的数据，单刷视图。
     func removeData(row index:Int){
-        if DataBaseService.sharedInstance.deleteInDB(self.dataArr[index].createTime){
+        self.dataArr[index].state += 1
+        if DataBaseService.sharedInstance.updateInDB(self.dataArr[index]){
             dataArr.removeAtIndex(index)
             self.mainTableView.beginUpdates()
             self.mainTableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .None)
@@ -208,7 +229,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
             let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
             hud.mode = MBProgressHUDMode.Text
             hud.label.text = "数据库操作失败"
-            hud.hideAnimated(true, afterDelay: 1.5)
+            hud.hideAnimated(true, afterDelay: 0.5)
         }
     }
     
@@ -224,8 +245,8 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.timeLabel.text = friendlyTime(item.lastEditTime)
         cell.createTime = item.createTime
         cell.selectionStyle = UITableViewCellSelectionStyle.None
-        cell.stateButton.setImage(UIImage(named: "finished"), forState: isFinished == true ? .Highlighted : .Normal)
-        cell.stateButton.setImage(UIImage(named: "finished_selected"), forState: isFinished == false ? .Highlighted : .Normal)
+        cell.stateButton.setImage(UIImage(named: "finished"), forState: isFinished! ? .Highlighted : .Normal)
+        cell.stateButton.setImage(UIImage(named: "finished_selected"), forState: isFinished! ? .Normal : .Highlighted)
         cell.delegate = self
         return cell
     }
@@ -260,28 +281,29 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //切换已完成/未完成状态
     func switchState(button:UIButton, createTime:String){
-        var hudText = ""
-        var row = 0
-        for i in self.dataArr{
-            if i.createTime == createTime{
-                break
-            }
-            row += 1
-        }
-        let temp = self.dataArr[row]
-        self.removeData(row: row)
-        if (isFinished == true){
-            UnfinishedVC.insertData(temp, withAnimation: true)
-            hudText = "已恢复"
+        var row = findIndex(createTime)
+        let data = self.dataArr[row]
+        let another = (isFinished! ? UnfinishedVC : FinishedVC)
+        var message = (isFinished! ? "已恢复" : "已完成")
+        data.state = (isFinished! ? 0 : 2)
+        if DataBaseService.sharedInstance.updateInDB(data){
+            self.dataArr.removeAtIndex(row)
+            self.mainTableView.beginUpdates()
+            self.mainTableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: row, inSection: 0)], withRowAnimation: .Automatic)
+            self.mainTableView.endUpdates()
+            row = another.rank(data.level, lastEditTime: data.lastEditTime)
+            another.dataArr.insert(data, atIndex: row)
+            another.mainTableView.beginUpdates()
+            another.mainTableView.insertRowsAtIndexPaths([NSIndexPath(forRow: row, inSection: 0)], withRowAnimation: .None)
+            another.mainTableView.endUpdates()
         }
         else{
-            FinishedVC.insertData(temp, withAnimation: true)
-            hudText = "已完成"
+            message = "数据库操作失败"
         }
         let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         hud.mode = MBProgressHUDMode.Text
-        hud.label.text = hudText
-        hud.hideAnimated(true, afterDelay: 1.5)
+        hud.label.text = message
+        hud.hideAnimated(true, afterDelay: 0.5)
     }
     
 }

@@ -75,8 +75,8 @@ class DataBaseService: NSObject {
     //将修改后的data作为参数，createTime是主键不允许修改。
     func updateInDB(data:ItemModel) -> Bool {
         self.dataBase.open()
-        let sqlStr = "UPDATE data_\(UserVC.currentUser.md5) set TITLE=?, CONTENT=?, LAST_EDIT_TIME=?, ALERT_TIME=?, LEVEL=?, STATE=? WHERE CREATE_TIME=?"
-        let succeed = self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [data.title, data.content, data.createTime, data.lastEditTime, data.alertTime, data.level, data.state, data.createTime])
+        let sqlStr = "UPDATE data_\(UserVC.currentUser.md5) SET TITLE=?, CONTENT=?, LAST_EDIT_TIME=?, ALERT_TIME=?, LEVEL=?, STATE=? WHERE CREATE_TIME=?"
+        let succeed = self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [data.title, data.content, data.lastEditTime, data.alertTime, data.level, data.state, data.createTime])
         self.dataBase.close()
         return succeed
     }
@@ -91,8 +91,8 @@ class DataBaseService: NSObject {
         while rs.next(){
             let state = rs.longForColumn("STATE")
             let data = ItemModel(title: rs.stringForColumn("TITLE"), content: rs.stringForColumn("CONTENT"), createTime: rs.stringForColumn("CREATE_TIME"), lastEditTime: rs.stringForColumn("LAST_EDIT_TIME"), alertTime: rs.stringForColumn("ALERT_TIME"), level: rs.longForColumn("LEVEL"), state: state)
-            if state & 2 == 0{  //未删除
-                if rs.longForColumn("state") >= 4{
+            if state & 1 == 0{  //未删除
+                if rs.longForColumn("state") & 2 == 2{ //已完成
                     finished.append(data)
                 }
                 else{

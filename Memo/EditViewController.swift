@@ -45,13 +45,13 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         
         
         self.title = "查看"
-//        self.view.backgroundColor = UIColor.grayColor()
+        //        self.view.backgroundColor = UIColor.grayColor()
         
-//        //导航栏颜色
-//        let mainColor = UIColor(red: 255/255, green: 223/255, blue: 110/255, alpha: 1)
-//        self.navigationController?.navigationBar.barTintColor = mainColor
-//        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
-//        //        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:UIFont(name: "Zapfino", size: 24.0)!];
+        //        //导航栏颜色
+        //        let mainColor = UIColor(red: 255/255, green: 223/255, blue: 110/255, alpha: 1)
+        //        self.navigationController?.navigationBar.barTintColor = mainColor
+        //        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
+        //        //        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:UIFont(name: "Zapfino", size: 24.0)!];
         
         //给导航增加item
         let rightItem = UIBarButtonItem(title: "编辑", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(EditViewController.EditItem(_:)))
@@ -141,8 +141,8 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         
         let deleteButton:UIButton = UIButton()
         deleteButton.frame=CGRectMake(self.view.frame.size.width / 2, self.view.frame.size.height - 123, self.view.frame.size.width / 2, 60)
-//        deleteButton.setTitle("删除", forState:UIControlState.Normal)
-//        deleteButton.backgroundColor=UIColor(red: 200/255, green: 200/255, blue: 200/255, alpha:1)
+        //        deleteButton.setTitle("删除", forState:UIControlState.Normal)
+        //        deleteButton.backgroundColor=UIColor(red: 200/255, green: 200/255, blue: 200/255, alpha:1)
         deleteButton.addTarget(self, action: #selector(EditViewController.deleteButtonAction(_:)), forControlEvents: UIControlEvents.TouchDown)
         self.view.addSubview(deleteButton)
         
@@ -172,18 +172,35 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         editDetailVC.currentList = currentList
         self.hidesBottomBarWhenPushed = true;
         self.navigationController?.pushViewController(editDetailVC, animated: true)
-
+        
         
     }
     
-
+    
     func deleteButtonAction(sender:UIButton){
-        let UnfinishVC = UnfinishedViewController()
-        DataBaseService.sharedInstance.deleteInDB(currentList.createTime)
-        UnfinishedVC.mainTableView.reloadData()
+        let UnfinishedVC = UnfinishedViewController()
+        //        DataBaseService.sharedInstance.deleteInDB(currentList.createTime)
+        //        FinishedVC.mainTableView.reloadData()
+        var row1 = 0
+        for i in UnfinishedVC.dataArr{
+            if i.createTime == currentList.createTime{
+                break
+            }
+            row1 += 1
+        }
+        UnfinishedVC.removeData(row: row1)
         FinishedVC.mainTableView.reloadData()
+        //        var row2 = 0
+        //        for i in FinishedVC.dataArr{
+        //            if i.createTime == currentList.createTime{
+        //                break
+        //            }
+        //            row2 += 1
+        //        }
+        //        FinishedVC.removeData(row: row2)
+        //        FinishedVC.mainTableView.reloadData()
         self.hidesBottomBarWhenPushed = false;
-        self.navigationController?.pushViewController(UnfinishVC, animated: true)
+        self.navigationController?.pushViewController(UnfinishedVC, animated: true)
     }
     
 }
