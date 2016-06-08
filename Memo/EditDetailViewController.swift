@@ -14,6 +14,7 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
     var titleTextField:UITextField!
     var contentTextView:UITextView!
     var timeButton:UIButton!
+    var tapGuesture:UITapGestureRecognizer!
     
     
     
@@ -68,7 +69,6 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         self.titleTextField.layer.cornerRadius = 10;
         self.titleTextField.text = currentList.title
         self.titleTextField.delegate = self
-        textFieldShouldReturn(self.titleTextField)
         self.view.addSubview(self.titleTextField)
         
         
@@ -117,6 +117,7 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         self.contentTextView.layer.borderColor = UIColor(red: 60/255, green: 40/255, blue: 129/255, alpha: 1).CGColor;
         self.contentTextView.layer.borderWidth = 0.4;
         self.contentTextView.layer.cornerRadius = 10;
+        self.contentTextView.delegate = self
         
         let comment_message_style = NSMutableParagraphStyle()
         comment_message_style.firstLineHeadIndent = 24.0
@@ -125,6 +126,9 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
             currentList.content)
         comment_message_indent.addAttribute(NSParagraphStyleAttributeName,
                                             value: comment_message_style,
+                                            range: NSMakeRange(0, comment_message_indent.length))
+        comment_message_indent.addAttribute(NSFontAttributeName,
+                                            value: UIFont.systemFontOfSize(20),
                                             range: NSMakeRange(0, comment_message_indent.length))
         self.contentTextView.attributedText = comment_message_indent
         
@@ -167,8 +171,14 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         //
         //        button.addTarget(self,action:#selector(EditViewController.tapped(_:)),forControlEvents:UIControlEvents.TouchUpInside)
         
+        self.tapGuesture = UITapGestureRecognizer(target: self, action: #selector(EditDetailViewController.hideKeyBoard))
+        self.view.addGestureRecognizer(self.tapGuesture)
         
-        
+    }
+    
+    func hideKeyBoard() -> Void {
+        self.contentTextView.resignFirstResponder()
+        self.titleTextField.resignFirstResponder()
     }
     
     override func didReceiveMemoryWarning() {
@@ -199,7 +209,13 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         alertController.addAction(UIAlertAction(title: "确定", style: UIAlertActionStyle.Default){
             (alertAction)->Void in
             print("date select: \(datePicker.date.description)")
-            self.currentList.alertTime=datePicker.date.description
+            
+            let formatter = NSDateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            
+            
+            self.currentList.alertTime = formatter.stringFromDate(datePicker.date)
+                
             //刷新表面数据
             self.timeButton.setTitle(self.currentList.alertTime, forState:UIControlState.Normal)
             
@@ -214,7 +230,7 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
     
     func textFieldShouldReturn(TextField: UITextField) -> Bool
     {
-        TextField.resignFirstResponder()
+        self.titleTextField.resignFirstResponder()
         return true;
     }
     
