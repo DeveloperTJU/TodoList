@@ -62,7 +62,7 @@ class UnfinishedViewController: BaseViewController{
                 let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
                 hud.mode = MBProgressHUDMode.Text
                 hud.label.text = "请输入标题"
-                hud.hideAnimated(true, afterDelay: 1.5)
+                hud.hideAnimated(true, afterDelay: 0.5)
             }
             else{
                 let formatter:NSDateFormatter = NSDateFormatter()
@@ -73,14 +73,14 @@ class UnfinishedViewController: BaseViewController{
                 let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
                 hud.mode = MBProgressHUDMode.Text
                 hud.label.text = "完成"
-                hud.hideAnimated(true, afterDelay: 1.5)
+                hud.hideAnimated(true, afterDelay: 0.5)
             }
         }))
         alert.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.Default, handler: {(UIAlertAction) in
             let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
             hud.mode = MBProgressHUDMode.Text
             hud.label.text = "已取消"
-            hud.hideAnimated(true, afterDelay: 1.5)
+            hud.hideAnimated(true, afterDelay: 0.5)
         }))
         self.presentViewController(alert, animated: true, completion: nil)
     }
@@ -129,7 +129,7 @@ class UnfinishedViewController: BaseViewController{
 //                let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
 //                hud.mode = MBProgressHUDMode.Text
 //                hud.label.text = "请输入标题"
-//                hud.hideAnimated(true, afterDelay: 1.5)
+//                hud.hideAnimated(true, afterDelay: 0.5)
 //            }
 //            else{
 //                let formatter:NSDateFormatter = NSDateFormatter()
@@ -140,14 +140,14 @@ class UnfinishedViewController: BaseViewController{
 //                let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
 //                hud.mode = MBProgressHUDMode.Text
 //                hud.label.text = "完成"
-//                hud.hideAnimated(true, afterDelay: 1.5)
+//                hud.hideAnimated(true, afterDelay: 0.5)
 //            }
 //        }))
 //        alert.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.Default, handler: {(UIAlertAction) in
 //            let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
 //            hud.mode = MBProgressHUDMode.Text
 //            hud.label.text = "已取消"
-//            hud.hideAnimated(true, afterDelay: 1.5)
+//            hud.hideAnimated(true, afterDelay: 0.5)
 //        }))
 //        self.presentViewController(alert, animated: true, completion: nil)
 //    }

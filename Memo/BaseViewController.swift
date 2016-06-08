@@ -45,12 +45,12 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         sqlStr = "CREATE TABLE IF NOT EXISTS data_\(UserVC.currentUser.md5)(TITLE TEXT, CONTENT TEXT, CREATE_TIME TEXT, LAST_EDIT_TIME TEXT, ALERT_TIME TEXT, LEVEL INT, STATE INT, PRIMARY KEY(CREATE_TIME))"
         dataBase.executeUpdate(sqlStr, withArgumentsInArray: [])
         sqlStr = "INSERT INTO data_\(UserVC.currentUser.md5) VALUES (?, ?, ?, ?, ?, ?, ?)"
-        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task1", "no content1", "2016-05-27 12:01:00", "2016-05-27 12:01:00", "2017-05-27 12:01:00", 1, 3])
-        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task2", "no content2", "2016-05-27 12:02:01", "2016-05-27 12:02:01", "2017-05-27 12:02:01", 1, 3])
-        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task3", "no content3", "2016-05-27 12:03:02", "2016-05-27 12:03:02", "2017-05-27 12:03:02", 1, 1])
-        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task4", "no content4", "2016-05-27 12:04:03", "2016-05-27 12:04:03", "2017-05-27 12:04:03", 1, 1])
-        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task5", "no content5", "2016-05-27 12:05:02", "2016-05-27 12:05:02", "2017-05-27 12:05:02", 1, 1])
-        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task6", "no content6", "2016-05-27 12:06:00", "2016-05-27 12:06:00", "2017-05-27 12:06:00", 1, 1])
+        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task1", "no content1", "2016-05-27 12:01:00", "2016-05-27 12:01:00", "2017-05-27 12:01:00", 1, 2])
+        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task2", "no content2", "2016-05-27 12:02:01", "2016-05-27 12:02:01", "2017-05-27 12:02:01", 1, 2])
+        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task3", "no content3", "2016-05-27 12:03:02", "2016-05-27 12:03:02", "2017-05-27 12:03:02", 1, 0])
+        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task4", "no content4", "2016-05-27 12:04:03", "2016-05-27 12:04:03", "2017-05-27 12:04:03", 1, 0])
+        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task5", "no content5", "2016-05-27 12:05:02", "2016-05-27 12:05:02", "2017-05-27 12:05:02", 1, 0])
+        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task6", "no content6", "2016-05-27 12:06:00", "2016-05-27 12:06:00", "2017-05-27 12:06:00", 1, 0])
         dataBase.close()
     }
     
@@ -212,13 +212,13 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
             let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
             hud.mode = MBProgressHUDMode.Text
             hud.label.text = "数据库操作失败"
-            hud.hideAnimated(true, afterDelay: 1.5)
+            hud.hideAnimated(true, afterDelay: 0.5)
         }
     }
     
     //删除指定位置的数据，单刷视图。
     func removeData(row index:Int){
-        self.dataArr[index].state -= 1
+        self.dataArr[index].state += 1
         if DataBaseService.sharedInstance.updateInDB(self.dataArr[index]){
             dataArr.removeAtIndex(index)
             self.mainTableView.beginUpdates()
@@ -229,7 +229,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
             let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
             hud.mode = MBProgressHUDMode.Text
             hud.label.text = "数据库操作失败"
-            hud.hideAnimated(true, afterDelay: 1.5)
+            hud.hideAnimated(true, afterDelay: 0.5)
         }
     }
     
@@ -285,7 +285,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         let data = self.dataArr[row]
         let another = (isFinished! ? UnfinishedVC : FinishedVC)
         var message = (isFinished! ? "已恢复" : "已完成")
-        data.state = (isFinished! ? 1 : 3)
+        data.state = (isFinished! ? 0 : 2)
         if DataBaseService.sharedInstance.updateInDB(data){
             self.dataArr.removeAtIndex(row)
             self.mainTableView.beginUpdates()

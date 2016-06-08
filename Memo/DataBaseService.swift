@@ -91,7 +91,7 @@ class DataBaseService: NSObject {
         while rs.next(){
             let state = rs.longForColumn("STATE")
             let data = ItemModel(title: rs.stringForColumn("TITLE"), content: rs.stringForColumn("CONTENT"), createTime: rs.stringForColumn("CREATE_TIME"), lastEditTime: rs.stringForColumn("LAST_EDIT_TIME"), alertTime: rs.stringForColumn("ALERT_TIME"), level: rs.longForColumn("LEVEL"), state: state)
-            if state & 1 == 1{  //未删除
+            if state & 1 == 0{  //未删除
                 if rs.longForColumn("state") & 2 == 2{ //已完成
                     finished.append(data)
                 }
