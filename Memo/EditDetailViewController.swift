@@ -11,6 +11,11 @@ import UIKit
 class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     
     var currentList:ItemModel!
+    var titleTextField:UITextField!
+    var contentTextView:UITextView!
+    var timeButton:UIButton!
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,18 +58,18 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         //        //        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:UIFont(name: "Zapfino", size: 24.0)!];
         
         //给导航增加item
-        let rightItem = UIBarButtonItem(title: "完成", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("FinishItem:"))
+        let rightItem = UIBarButtonItem(title: "完成", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(EditDetailViewController.FinishItem(_:)))
         rightItem.title = "完成"
         self.navigationItem.rightBarButtonItem = rightItem
         
         //标题
-        let TextField = UITextField(frame: CGRectMake(15, 20, self.view.frame.size.width - 30, 50))
-        TextField.backgroundColor=UIColor.whiteColor()
-        TextField.layer.cornerRadius = 10;
-        TextField.text = currentList.title
-        TextField.delegate = self
-        textFieldShouldReturn(TextField)
-        self.view.addSubview(TextField)
+        self.titleTextField = UITextField(frame: CGRectMake(15, 20, self.view.frame.size.width - 30, 50))
+        self.titleTextField.backgroundColor=UIColor.whiteColor()
+        self.titleTextField.layer.cornerRadius = 10;
+        self.titleTextField.text = currentList.title
+        self.titleTextField.delegate = self
+        textFieldShouldReturn(self.titleTextField)
+        self.view.addSubview(self.titleTextField)
         
         
         
@@ -84,12 +89,12 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         self.view.addSubview(timeLabel)
         
         //显示提醒时间
-        let Datebutt = UIButton()
-        Datebutt.frame = CGRectMake(self.view.frame.size.width - 200 , self.view.frame.size.height - 107, (self.view.frame.size.width / 2 )-30, 20)
-        Datebutt.setTitle(currentList.alertTime, forState:UIControlState.Normal)
-        Datebutt.setTitleColor(UIColor.blackColor(),forState: .Normal)
-        Datebutt.addTarget(self, action: Selector("selectDate:"), forControlEvents: .TouchUpInside)
-        self.view.addSubview(Datebutt)
+        self.timeButton = UIButton()
+        self.timeButton.frame = CGRectMake(self.view.frame.size.width - 200 , self.view.frame.size.height - 107, (self.view.frame.size.width / 2 )-30, 20)
+        self.timeButton.setTitle(currentList.alertTime, forState:UIControlState.Normal)
+        self.timeButton.setTitleColor(UIColor.blackColor(),forState: .Normal)
+        self.timeButton.addTarget(self, action: #selector(EditDetailViewController.selectDate(_:)), forControlEvents: .TouchUpInside)
+        self.view.addSubview(self.timeButton)
         
         //添加星级边框
         let starTV = UITextView(frame: CGRectMake(15, self.view.frame.size.height - 195, self.view.frame.size.width - 30, 80))
@@ -107,11 +112,11 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         self.view.addSubview(starLabel)
         
         //大边框
-        let TextView = UITextView(frame: CGRectMake(15, 80, self.view.frame.size.width - 30, self.view.frame.size.height - 230))
+        self.contentTextView = UITextView(frame: CGRectMake(15, 80, self.view.frame.size.width - 30, self.view.frame.size.height - 230))
         
-        TextView.layer.borderColor = UIColor(red: 60/255, green: 40/255, blue: 129/255, alpha: 1).CGColor;
-        TextView.layer.borderWidth = 0.4;
-        TextView.layer.cornerRadius = 10;
+        self.contentTextView.layer.borderColor = UIColor(red: 60/255, green: 40/255, blue: 129/255, alpha: 1).CGColor;
+        self.contentTextView.layer.borderWidth = 0.4;
+        self.contentTextView.layer.cornerRadius = 10;
         
         let comment_message_style = NSMutableParagraphStyle()
         comment_message_style.firstLineHeadIndent = 24.0
@@ -121,9 +126,9 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         comment_message_indent.addAttribute(NSParagraphStyleAttributeName,
                                             value: comment_message_style,
                                             range: NSMakeRange(0, comment_message_indent.length))
-        TextView.attributedText = comment_message_indent
+        self.contentTextView.attributedText = comment_message_indent
         
-        self.view.addSubview(TextView)
+        self.view.addSubview(self.contentTextView)
         
         
         //添加detail
@@ -173,11 +178,14 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
     
     func FinishItem(right:UIBarButtonItem)
     {
-        let UnfinishedVC = UnfinishedViewController()
-        DataBaseService.sharedInstance.updateInDB(currentList)
-        UnfinishedVC.mainTableView.reloadData()
-        self.hidesBottomBarWhenPushed = false;
-        self.navigationController?.pushViewController(UnfinishedVC, animated: true)
+        currentList.title = self.titleTextField.text!
+        currentList.content = self.contentTextView.text!
+
+        UnfinishedVC.updateData(currentList)
+       
+        UnfinishedVC.hidesBottomBarWhenPushed = false;
+        self.navigationController?.popToRootViewControllerAnimated(true)
+//        self.navigationController?.pushViewController(UnfinishedVC, animated: true)
         
     }
     
@@ -193,6 +201,7 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
             print("date select: \(datePicker.date.description)")
             self.currentList.alertTime=datePicker.date.description
             //刷新表面数据
+            self.timeButton.setTitle(self.currentList.alertTime, forState:UIControlState.Normal)
             
             //            self.Datebutt.setNeedsDisplay()
             })
