@@ -14,10 +14,10 @@ struct UserInfoStruct {
     var phoneNumber:String!
 }
 
-let UnfinishedVC:UnfinishedViewController = UnfinishedViewController(title:"待办")
-let FinishedVC:FinishedViewController = FinishedViewController(title:"完成")
+var UnfinishedVC:UnfinishedViewController!
+var FinishedVC:FinishedViewController!
 let UserVC:UserViewController = UserViewController()
-let UserInfo = UserInfoStruct()
+var UserInfo = UserInfoStruct()
 
 class RootTabBarController: UITabBarController {
     

@@ -63,6 +63,8 @@ class DataBaseService: NSObject {
         return succeed
     }
     
+    
+    
     //参数为创建时间
     func deleteInDB(createTime:String) -> Bool {
         self.dataBase.open()

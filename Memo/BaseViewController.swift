@@ -17,7 +17,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     init(){
         super.init(nibName: nil, bundle: nil)
-//        self.initTestData()                 //取消注释该行以初始化测试数据
+        self.initTestData()                 //取消注释该行以初始化测试数据
         self.loadTableView()
     }
     
@@ -262,7 +262,6 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         let editVC = EditViewController()
         editVC.currentList = dataArr[indexPath.row]
         editVC.hidesBottomBarWhenPushed = true
-        self.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(editVC, animated: true)
     }
     

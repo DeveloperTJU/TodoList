@@ -56,8 +56,8 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         //给导航增加item
         let rightItem = UIBarButtonItem(title: "编辑", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("EditItem:"))
         rightItem.title = "编辑"
-        if currentList.state & 2 == 0{  //未删除
-            if currentList.state & 1 == 0{  //未完成
+        if currentList.state & 1 == 0{  //未删除
+            if currentList.state & 2 == 2{  // 以完成
                 rightItem.enabled = false
             }
         }
@@ -205,14 +205,21 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
 //        
 //    }
     func deleteButtonAction(sender:UIButton){
-        var row = 0
-        for i in UnfinishedVC.dataArr{
-            if i.createTime == currentList.createTime{
-                break
-            }
-            row += 1
+//        var row = 0
+//        for i in UnfinishedVC.dataArr{
+//            if i.createTime == currentList.createTime{
+//                break
+//            }
+//            row += 1
+//        }
+        if currentList.state & 2 == 2{  // 以完成
+            let row = FinishedVC.findIndex(currentList.createTime)
+            FinishedVC.removeData(row: row)
         }
-        UnfinishedVC.removeData(row: row)
+        else{
+            let row = UnfinishedVC.findIndex(currentList.createTime)
+            UnfinishedVC.removeData(row: row)
+        }
         self.navigationController?.popViewControllerAnimated(true)
     }
     

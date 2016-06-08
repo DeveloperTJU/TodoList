@@ -155,6 +155,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
                     let manager = AFHTTPSessionManager(baseURL: baseURL)
                     let paramDict:Dictionary = ["UID":resultDict["UID"] as! String,"TaskModel":""]
                     let url:String = "todolist/index.php/Home/Task/SynchronizeTask"
+                    let UID = resultDict["UID"] as! String
                     //请求数据的序列化器
                     manager.requestSerializer = AFHTTPRequestSerializer()
                     //返回数据的序列化器
@@ -182,6 +183,11 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
                         }
                         sqlStr = "INSERT INTO USER VALUES (?, ?, ?, ?)"
                         self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [UserVC.currentUser.md5, UserVC.currentUser,resultDict["user_nickname"] as! String,1])
+                        UserInfo.nickName = resultDict["user_nickname"] as! String
+                        UserInfo.phoneNumber = UserVC.currentUser
+                        UserInfo.UID = UID
+                        UnfinishedVC = UnfinishedViewController(title:"待办")
+                        FinishedVC = FinishedViewController(title:"完成")
                         let newView = RootTabBarController()
                         self.presentViewController(newView, animated: true, completion: nil)
 
