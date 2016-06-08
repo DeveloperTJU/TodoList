@@ -43,17 +43,17 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         //        self.view.addSubview(textview)
         
         
-        self.title = "查看"
-//        self.view.backgroundColor = UIColor.grayColor()
+        self.title = "编辑"
+        //        self.view.backgroundColor = UIColor.grayColor()
         
-//        //导航栏颜色
-//        let mainColor = UIColor(red: 255/255, green: 223/255, blue: 110/255, alpha: 1)
-//        self.navigationController?.navigationBar.barTintColor = mainColor
-//        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
-//        //        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:UIFont(name: "Zapfino", size: 24.0)!];
+        //        //导航栏颜色
+        //        let mainColor = UIColor(red: 255/255, green: 223/255, blue: 110/255, alpha: 1)
+        //        self.navigationController?.navigationBar.barTintColor = mainColor
+        //        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
+        //        //        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:UIFont(name: "Zapfino", size: 24.0)!];
         
         //给导航增加item
-        let rightItem = UIBarButtonItem(title: "完成", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("FinishItem:"))
+        let rightItem = UIBarButtonItem(title: "完成", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(EditDetailViewController.FinishItem(_:)))
         rightItem.title = "完成"
         self.navigationItem.rightBarButtonItem = rightItem
         
@@ -173,11 +173,11 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
     
     func FinishItem(right:UIBarButtonItem)
     {
-        let UnfinishVC = UnfinishedViewController()
+        let UnfinishedVC = UnfinishedViewController()
         DataBaseService.sharedInstance.updateInDB(currentList)
         UnfinishedVC.mainTableView.reloadData()
         self.hidesBottomBarWhenPushed = false;
-        self.navigationController?.pushViewController(UnfinishVC, animated: true)
+        self.navigationController?.pushViewController(UnfinishedVC, animated: true)
         
     }
     
