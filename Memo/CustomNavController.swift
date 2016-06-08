@@ -14,9 +14,15 @@ class CustomNavController: UINavigationController {
         super.viewDidLoad()
         self.navigationBar.barTintColor = UIColor(red: 254/255, green: 239/255, blue: 115/255, alpha: 1.0)
         self.navigationBar.translucent = false
-//        let attr: NSMutableDictionary! = [NSForegroundColorAttributeName: UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0)]
+
         self.navigationBar.tintColor = UIColor.blackColor()
 //        self.navigationBar.setValue(UIFont(name: "HelveticaNeue-Thin", size: 16.0), forKey: NSFontAttributeName)
+        
+        let attr = [NSFontAttributeName: UIFont(name: "HelveticaNeue-Thin", size: 16.0)!]
+        
+        self.navigationBar.titleTextAttributes = attr
+        
+        
     }
 
     override func didReceiveMemoryWarning() {

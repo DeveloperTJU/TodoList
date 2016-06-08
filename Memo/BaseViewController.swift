@@ -80,6 +80,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         button.setImage(RootTabBarController.compressImage(image: UIImage(named: "finished_selected")!, toSize: CGSizeMake(25, 25)), forState: .Normal)
         button.imageForState(.Highlighted)
         button.setTitle("Username", forState: .Normal)
+        button.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 13.0)!
         button.addTarget(self, action: Selector("userInfo:"), forControlEvents: .TouchUpInside)
         let userButton = UIBarButtonItem(customView: button)
         
