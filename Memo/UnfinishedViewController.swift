@@ -20,6 +20,7 @@ class UnfinishedViewController: BaseViewController{
         let addTextField = UITextField()
     }
     var newItem = NewItem()
+    var isFirstShow = true
     
     override func loadTableView() {
         self.dataArr = DataBaseService.sharedInstance.selectAllInDB().0
@@ -46,6 +47,12 @@ class UnfinishedViewController: BaseViewController{
     override func viewDidLoad() {
         isFinished = false
         super.viewDidLoad()
+    }
+    
+    
+    override func viewWillAppear(animated: Bool) {
+        self.dataArr = DataBaseService.sharedInstance.selectAllInDB().0
+         UnfinishedVC.mainTableView.reloadData()
     }
     
     //新建事件按钮（旧版）
@@ -83,6 +90,19 @@ class UnfinishedViewController: BaseViewController{
             hud.hideAnimated(true, afterDelay: 0.5)
         }))
         self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    
+    func updateData(data:ItemModel) -> Void {
+        DataBaseService.sharedInstance.updateInDB(data)
+        let index = findIndex(data.createTime)
+        let row = rank(data.level, lastEditTime: data.lastEditTime)
+        dataArr.removeAtIndex(index)
+        dataArr.insert(data, atIndex: row)
+        self.mainTableView.beginUpdates()
+        self.mainTableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .None)
+        self.mainTableView.insertRowsAtIndexPaths([NSIndexPath(forRow: row, inSection: 0)], withRowAnimation: .None)
+        self.mainTableView.endUpdates()
     }
 
     //左滑更改level

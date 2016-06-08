@@ -17,7 +17,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     init(){
         super.init(nibName: nil, bundle: nil)
-//        self.initTestData()                 //取消注释该行以初始化测试数据
+        self.initTestData()                 //取消注释该行以初始化测试数据
         self.loadTableView()
     }
     

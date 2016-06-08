@@ -57,7 +57,7 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         let rightItem = UIBarButtonItem(title: "编辑", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("EditItem:"))
         rightItem.title = "编辑"
         if currentList.state & 2 == 0{  //未删除
-            if currentList.state & 1 == 0{  //未完成
+            if currentList.state & 1 == 1{  //未完成
                 rightItem.enabled = false
             }
         }
