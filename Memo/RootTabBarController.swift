@@ -8,9 +8,16 @@
 
 import UIKit
 
+struct UserInfoStruct {
+    var nickName:String!
+    var UID:String!
+    var phoneNumber:String!
+}
+
 let UnfinishedVC:UnfinishedViewController = UnfinishedViewController(title:"待办")
 let FinishedVC:FinishedViewController = FinishedViewController(title:"完成")
 let UserVC:UserViewController = UserViewController()
+let UserInfo = UserInfoStruct()
 
 class RootTabBarController: UITabBarController {
     

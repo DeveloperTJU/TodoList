@@ -20,7 +20,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     override func viewDidLoad() {
         super.viewDidLoad()
         let image:UIImage = UIImage(imageLiteral: "finished")
-        self.currentUser = User(phoneNumber: "13672006807", avaterImage: image, nickName: "飞翔的企鹅",loginState:"1")
+        self.currentUser = User(phoneNumber: "13672006807", avaterImage: image, nickName: "\(UserVC.currentUser)",loginState:"1")
         self.currentUser.phoneNumber = userController.currentUser
         //初始化数据
         self.title = "个人中心"
