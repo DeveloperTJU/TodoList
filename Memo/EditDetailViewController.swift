@@ -59,7 +59,7 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         //        //        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:UIFont(name: "Zapfino", size: 24.0)!];
         
         //给导航增加item
-        let rightItem = UIBarButtonItem(title: "完成", style: UIBarButtonItemStyle.Plain, target: self, action: #selector(EditDetailViewController.FinishItem(_:)))
+        let rightItem = UIBarButtonItem(title: "完成", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("FinishItem:"))
         rightItem.title = "完成"
         self.navigationItem.rightBarButtonItem = rightItem
         
@@ -93,7 +93,7 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         self.timeButton.frame = CGRectMake(self.view.frame.size.width - 200 , self.view.frame.size.height - 107, (self.view.frame.size.width / 2 )-30, 20)
         self.timeButton.setTitle(currentList.alertTime, forState:UIControlState.Normal)
         self.timeButton.setTitleColor(UIColor.blackColor(),forState: .Normal)
-        self.timeButton.addTarget(self, action: #selector(EditDetailViewController.selectDate(_:)), forControlEvents: .TouchUpInside)
+        self.timeButton.addTarget(self, action: Selector("selectDate:"), forControlEvents: .TouchUpInside)
         self.view.addSubview(self.timeButton)
         
         //添加星级边框
@@ -128,7 +128,7 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
                                             value: comment_message_style,
                                             range: NSMakeRange(0, comment_message_indent.length))
         comment_message_indent.addAttribute(NSFontAttributeName,
-                                            value: UIFont.systemFontOfSize(20),
+                                            value: UIFont.systemFontOfSize(16),
                                             range: NSMakeRange(0, comment_message_indent.length))
         self.contentTextView.attributedText = comment_message_indent
         
@@ -171,7 +171,7 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         //
         //        button.addTarget(self,action:#selector(EditViewController.tapped(_:)),forControlEvents:UIControlEvents.TouchUpInside)
         
-        self.tapGuesture = UITapGestureRecognizer(target: self, action: #selector(EditDetailViewController.hideKeyBoard))
+        self.tapGuesture = UITapGestureRecognizer(target: self, action: Selector("hideKeyBoard"))
         self.view.addGestureRecognizer(self.tapGuesture)
         
     }
