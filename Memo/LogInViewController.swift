@@ -129,7 +129,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         }
         
         else {
-            let baseURL = NSURL(string: "http://172.26.209.192/")
+            let baseURL = NSURL(string: "http://10.1.45.102/")
             let manager = AFHTTPSessionManager(baseURL: baseURL)
             let paramDict:Dictionary = ["user_phoneNumber":txtUser.text!,"user_psw":txtPwd.text!.md5]
             let url:String = "todolist/index.php/Home/User/Login"
@@ -151,7 +151,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
                 if LoginSuccess == 1 {
                     UserVC.currentUser = self.txtUser.text!
                     //同步数据
-                    let baseURL = NSURL(string: "http://172.26.209.192/")
+                    let baseURL = NSURL(string: "http://10.1.45.102/")
                     let manager = AFHTTPSessionManager(baseURL: baseURL)
                     let paramDict:Dictionary = ["UID":resultDict["UID"] as! String,"TaskModel":""]
                     let url:String = "todolist/index.php/Home/Task/SynchronizeTask"

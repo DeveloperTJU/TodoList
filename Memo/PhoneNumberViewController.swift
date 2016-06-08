@@ -180,7 +180,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
                 print("zhuce")
                 self.dataBase = DataBaseService.sharedInstance.getDataBase()
                 self.dataBase.open()
-                let baseURL = NSURL(string: "http://172.26.209.192/")
+                let baseURL = NSURL(string: "http://10.1.45.102/")
                 let manager = AFHTTPSessionManager(baseURL: baseURL)
                 let paramDict:Dictionary = ["user_phoneNumber": phoneText.text!,"user_psw":txtPwd.text!.md5,"user_nickname":txtNickname.text!]
                 let url:String = "todolist/index.php/Home/User/SignUp"
