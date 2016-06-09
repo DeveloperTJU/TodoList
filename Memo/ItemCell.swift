@@ -21,23 +21,16 @@ class ItemCell: UITableViewCell{
     var createTime:String!
     var delegate:ItemCellDelegate?
     
-    
-//    var currentFrameInfo:CellFrameInfo!
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         self.contentView.backgroundColor = UIColor.clearColor()
         self.backgroundColor = UIColor.clearColor()
-        stateButton.addTarget(self, action: Selector("handleButtonClick:"), forControlEvents: .TouchUpInside)
+        self.detailImage.frame = CGRectMake(self.frame.width - 17, 15, 12, 12)
+        stateButton.addTarget(self, action: Selector("handleButtonClick:"), forControlEvents: .TouchDown)
     }
     
     func handleButtonClick(button:UIButton){
         self.delegate?.switchState(button, createTime: self.createTime)
     }
-    
-    
-//    override func layoutSubviews() {
-//        self.detailImage.frame = CGRectMake(342, 15, 12, 12)
-//    }
     
 }

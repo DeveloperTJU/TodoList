@@ -41,23 +41,14 @@ class RootTabBarController: UITabBarController {
     }
     
     func setUpTabBar(){
-        let images = ["unfinished", "finished"]
-        let imagesSelected = ["unfinished_selected", "finished_selected"]
+        let images = ["book", "完成"]
+        let imagesSelected = ["book选中", "完成选中"]
         for i in 0 ..< images.count{
             self.tabBar.backgroundColor = UIColor.whiteColor()
             self.tabBar.tintColor = UIColor(red: 236/255, green: 206/255, blue: 74/255, alpha: 1.0)
-            self.tabBar.items![i].image = RootTabBarController.compressImage(image: UIImage(named: images[i])!, toSize: CGSizeMake(20, 20))
-            self.tabBar.items![i].selectedImage = RootTabBarController.compressImage(image: UIImage(named: imagesSelected[i])!, toSize: CGSizeMake(20, 20))
-
+            self.tabBar.items![i].image = UIImage(named: images[i])
+            self.tabBar.items![i].selectedImage = UIImage(named: imagesSelected[i])
         }
-    }
-
-    static func compressImage(image image:UIImage, toSize size:CGSize)->UIImage{
-        UIGraphicsBeginImageContext(size)
-        image.drawInRect(CGRect(x: 0, y: 0, width: size.width, height: size.height))
-        let compressImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return compressImage
     }
 
 }

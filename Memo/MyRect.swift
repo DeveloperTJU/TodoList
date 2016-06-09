@@ -11,8 +11,9 @@ import UIKit
 class MyRect: UIView {
     
     var color = UIColor.whiteColor()
+    var withShadow = true
     
-    override init(frame: CGRect) {
+    override init(frame: CGRect) {      //默认圆角、白色、有阴影
         super.init(frame: frame)
         self.setShadow()
     }
@@ -23,16 +24,19 @@ class MyRect: UIView {
     }
     
     func setShadow() -> Void{
-        self.layer.shadowColor = UIColor.blackColor().CGColor
-        self.layer.shadowOffset = CGSizeMake(0, 0.4);
-        self.layer.shadowOpacity = 0.2;
-        self.layer.shadowRadius = 0.2;
-        self.backgroundColor = UIColor.clearColor()
+        if withShadow{
+            self.layer.shadowColor = UIColor.blackColor().CGColor
+            self.layer.shadowOffset = CGSizeMake(0, 0.4)
+            self.layer.shadowOpacity = 0.2
+            self.layer.shadowRadius = 0.2
+            self.backgroundColor = UIColor.clearColor()
+        }
     }
     
-    convenience init(frame:CGRect, color:UIColor){
+    convenience init(frame:CGRect, color:UIColor, withShadow:Bool){
         self.init(frame: frame)
         self.color = color
+        self.withShadow = withShadow
     }
     
     override func drawRect(rect: CGRect) {

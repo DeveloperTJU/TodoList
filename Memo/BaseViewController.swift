@@ -17,7 +17,6 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     init(){
         super.init(nibName: nil, bundle: nil)
-        self.initTestData()                 //取消注释该行以初始化测试数据
         self.loadTableView()
     }
     
@@ -31,28 +30,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.title = title
     }
     
-    //初始化数据库并存入测试数据
-    func initTestData(){
-        
-        //CGAffineTransformIdentity
-        //MJRefresh
-        
-        //该方法仅供测试
-        let dataBase = DataBaseService.sharedInstance.getDataBase()
-        dataBase.open()
-        var sqlStr = "DROP TABLE IF EXISTS data_\(UserVC.currentUser.md5)"
-        dataBase.executeUpdate(sqlStr, withArgumentsInArray: [])
-        sqlStr = "CREATE TABLE IF NOT EXISTS data_\(UserVC.currentUser.md5)(TITLE TEXT, CONTENT TEXT, CREATE_TIME TEXT, LAST_EDIT_TIME TEXT, ALERT_TIME TEXT, LEVEL INT, STATE INT, PRIMARY KEY(CREATE_TIME))"
-        dataBase.executeUpdate(sqlStr, withArgumentsInArray: [])
-        sqlStr = "INSERT INTO data_\(UserVC.currentUser.md5) VALUES (?, ?, ?, ?, ?, ?, ?)"
-        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task1", "no content1", "2016-05-27 12:01:00", "2016-05-27 12:01:00", "2017-05-27 12:01:00", 1, 2])
-        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task2", "no content2", "2016-05-27 12:02:01", "2016-05-27 12:02:01", "2017-05-27 12:02:01", 1, 2])
-        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task3", "no content3", "2016-05-27 12:03:02", "2016-05-27 12:03:02", "2017-05-27 12:03:02", 1, 0])
-        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task4", "no content4", "2016-05-27 12:04:03", "2016-05-27 12:04:03", "2017-05-27 12:04:03", 1, 0])
-        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task5", "no content5", "2016-05-27 12:05:02", "2016-05-27 12:05:02", "2017-05-27 12:05:02", 1, 0])
-        dataBase.executeUpdate(sqlStr, withArgumentsInArray: ["task6", "no content6", "2016-05-27 12:06:00", "2016-05-27 12:06:00", "2017-05-27 12:06:00", 1, 0])
-        dataBase.close()
-    }
+    //MJRefresh
     
     //在初始化时添加TableView以在尚未加载视图时存取dataArr数据。
     func loadTableView() {
@@ -65,7 +43,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.mainTableView.registerNib(cellNib, forCellReuseIdentifier: cellIdentifier)
         self.mainTableView.tableFooterView = UIView()
         self.view.addSubview(self.mainTableView)
-        self.view.backgroundColor = UIColor(patternImage: RootTabBarController.compressImage(image: UIImage(named: "background")!, toSize: self.view.frame.size))
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "木纹")!)
         self.mainTableView.backgroundColor = UIColor.clearColor()
         self.mainTableView.separatorStyle = .None
     }
@@ -73,40 +51,45 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidLoad() {
         super.viewDidLoad()
         //添加导航栏按钮
-        let refreshButton = UIBarButtonItem(image: RootTabBarController.compressImage(image: UIImage(named: "refresh")!, toSize: CGSizeMake(20, 20)), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("refreshManually"))
-        let searchButton = UIBarButtonItem(image: RootTabBarController.compressImage(image: UIImage(named: "search")!, toSize: CGSizeMake(20, 20)), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("search"))
+        let refreshButton = UIBarButtonItem(image: UIImage(named: "更新"), style: .Plain, target: self, action: Selector("refreshManually"))
+        let searchButton = UIBarButtonItem(image: UIImage(named: "搜索"), style: .Plain, target: self, action: Selector("search"))
         let button = UIButton(type: .System)
         button.frame = CGRectMake(0, 0, 120, 35)
-        button.setImage(RootTabBarController.compressImage(image: UIImage(named: "finished_selected")!, toSize: CGSizeMake(25, 25)), forState: .Normal)
-        button.imageForState(.Highlighted)
-        button.setTitle("Username", forState: .Normal)
+        button.setImage(UIImage(named: "完成选中"), forState: .Normal)
+        button.setTitle(" \(UserVC.currentUser)", forState: .Normal)
         button.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 13.0)!
-        button.addTarget(self, action: Selector("userInfo:"), forControlEvents: .TouchUpInside)
+        button.addTarget(self, action: Selector("userInfo:"), forControlEvents: .TouchDown)
         let userButton = UIBarButtonItem(customView: button)
         
-        //用于消除左边空隙，要不然按钮顶不到最前面
-        let spacer = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: nil,
+        //调节导航栏控件间隔
+        let spacer1 = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: nil,
             action: nil)
-        spacer.width = -20;
+        spacer1.width = -38
+        let spacer2 = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: nil,
+            action: nil)
+        spacer2.width = -5
+        let spacer3 = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: nil,
+            action: nil)
+        spacer3.width = -20
         
-        self.navigationItem.rightBarButtonItems = [refreshButton, searchButton]
-        self.navigationItem.leftBarButtonItems = [spacer, userButton]
-//        let baseURL = NSURL(string: "http://10.1.33.164")
-//        let manager = AFHTTPSessionManager(baseURL: baseURL)
-//        let paramDict = ["user_phoneNumber":"18222773726", "user_psw":"nihao"]
-//        manager.POST("todolist/index.php/Home/User/Login", parameters: paramDict, success: {(task:NSURLSessionDataTask, responseObject:AnyObject?) -> Void in
-//                print("Succeed")
-//            }, failure: {(task:NSURLSessionDataTask?, error:NSError?) -> Void in
-//                print("Failed:\(error)")
-//        })
-        
+        self.navigationItem.leftBarButtonItems = [spacer1, userButton]
+        self.navigationItem.rightBarButtonItems = [spacer2, refreshButton, spacer3, searchButton]
+    }
+    
+    //刷新上次编辑时间的友好显示
+    override func viewWillAppear(animated: Bool) {
+        for i in 0 ..< self.dataArr.count {
+            if let cell = self.mainTableView.cellForRowAtIndexPath(NSIndexPath(forRow: i, inSection: 0)) as? ItemCell {
+               cell.timeLabel.text = friendlyTime(dataArr[i].lastEditTime)
+            }
+        }
     }
     
     //搜索页
     func search(){
         let searchVC = SearchViewController()
         searchVC.hidesBottomBarWhenPushed = true
-        self.navigationController!.pushViewController(searchVC,animated:true);
+        self.navigationController!.pushViewController(searchVC,animated:true)
     }
     
     //个人中心页
@@ -186,7 +169,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     internal func rank(level:Int, lastEditTime:String) -> Int {
         var index:Int = 0
         for item in self.dataArr{
-            if level > item.level{
+            if level < item.level{
                 index += 1
             }
             else if level == item.level && lastEditTime < item.lastEditTime{
@@ -246,8 +229,8 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.timeLabel.text = friendlyTime(item.lastEditTime)
         cell.createTime = item.createTime
         cell.selectionStyle = UITableViewCellSelectionStyle.None
-        cell.stateButton.setImage(UIImage(named: "finished"), forState: isFinished! ? .Highlighted : .Normal)
-        cell.stateButton.setImage(UIImage(named: "finished_selected"), forState: isFinished! ? .Normal : .Highlighted)
+        cell.stateButton.setImage(UIImage(named: "完成"), forState: isFinished! ? .Highlighted : .Normal)
+        cell.stateButton.setImage(UIImage(named: "完成选中"), forState: isFinished! ? .Normal : .Highlighted)
         cell.delegate = self
         return cell
     }
@@ -271,11 +254,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
             action, index in
             self.removeData(row: indexPath.row)
         }
-        UIGraphicsBeginImageContext(CGSize(width: 50, height: 50))
-        UIImage(named: "垃圾箱")!.drawInRect(CGRect(x: 5, y: 15, width: 20, height: 20))
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        deleteButton.backgroundColor = UIColor(patternImage: image)
+        deleteButton.backgroundColor = UIColor(patternImage: UIImage(named: "垃圾箱")!)
         return [deleteButton]
     }
     
