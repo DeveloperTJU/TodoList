@@ -16,7 +16,6 @@ struct UserInfoStruct {
 
 var UnfinishedVC:UnfinishedViewController!
 var FinishedVC:FinishedViewController!
-let UserVC:UserViewController = UserViewController()
 var UserInfo = UserInfoStruct()
 
 class RootTabBarController: UITabBarController {

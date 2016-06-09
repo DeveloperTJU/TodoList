@@ -69,7 +69,7 @@ class DataBaseService: NSObject {
     
     func insertInDB(data:ItemModel) -> Bool {
         self.dataBase.open()
-        let sqlStr = "INSERT INTO data_\(UserVC.currentUser.md5) VALUES (?, ?, ?, ?, ?, ?, ?)"
+        let sqlStr = "INSERT INTO data_\(UserInfo.phoneNumber.md5) VALUES (?, ?, ?, ?, ?, ?, ?)"
         let succeed = self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [data.title, data.content, data.createTime, data.lastEditTime, data.alertTime, data.level, data.state])
         self.dataBase.close()
         //RequestAPI.GET(<#T##url: String!##String!#>, body: <#T##AnyObject?#>, succeed: <#T##Succeed##Succeed##(NSURLSessionDataTask!, AnyObject!) -> Void#>, failed: <#T##Failure##Failure##(NSURLSessionDataTask!, NSError!) -> Void#>)
@@ -106,7 +106,7 @@ class DataBaseService: NSObject {
     //参数为创建时间
     func deleteInDB(createTime:String) -> Bool {
         self.dataBase.open()
-        let sqlStr = "DELETE FROM data_\(UserVC.currentUser.md5) WHERE CREATE_TIME=?"
+        let sqlStr = "DELETE FROM data_\(UserInfo.phoneNumber.md5) WHERE CREATE_TIME=?"
         let succeed = self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [createTime])
         self.dataBase.close()
         return succeed
@@ -115,7 +115,7 @@ class DataBaseService: NSObject {
     //将修改后的data作为参数，createTime是主键不允许修改。
     func updateInDB(data:ItemModel) -> Bool {
         self.dataBase.open()
-        let sqlStr = "UPDATE data_\(UserVC.currentUser.md5) SET TITLE=?, CONTENT=?, LAST_EDIT_TIME=?, ALERT_TIME=?, LEVEL=?, STATE=? WHERE CREATE_TIME=?"
+        let sqlStr = "UPDATE data_\(UserInfo.phoneNumber.md5) SET TITLE=?, CONTENT=?, LAST_EDIT_TIME=?, ALERT_TIME=?, LEVEL=?, STATE=? WHERE CREATE_TIME=?"
         let succeed = self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [data.title, data.content, data.lastEditTime, data.alertTime, data.level, data.state, data.createTime])
         self.dataBase.close()
         return succeed
@@ -124,7 +124,7 @@ class DataBaseService: NSObject {
     //selectAllInDB().0 是未完成列表，selectAllInDB().1 是已完成列表。
     func selectAllInDB() -> ([ItemModel], [ItemModel]) {
         self.dataBase.open()
-        let sqlStr = "SELECT * FROM data_\(UserVC.currentUser.md5) ORDER BY LEVEL, LAST_EDIT_TIME DESC"
+        let sqlStr = "SELECT * FROM data_\(UserInfo.phoneNumber.md5) ORDER BY LEVEL, LAST_EDIT_TIME DESC"
         let rs =  self.dataBase.executeQuery(sqlStr, withArgumentsInArray: [])
         var unfinished:[ItemModel] = [ItemModel]()
         var finished:[ItemModel] = [ItemModel]()

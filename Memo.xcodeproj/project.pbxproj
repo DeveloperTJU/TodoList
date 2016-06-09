@@ -25,7 +25,6 @@
 		A53A92F61D07A1B000144FE6 /* ChangePasswodCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53A92F51D07A1B000144FE6 /* ChangePasswodCell.swift */; };
 		A53A92F81D07A1B500144FE6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53A92F71D07A1B500144FE6 /* User.swift */; };
 		A53A92FA1D07A8EA00144FE6 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53A92F91D07A8EA00144FE6 /* SearchViewController.swift */; };
-		A592E0DD1CF5FF4A004762A8 /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A592E0DC1CF5FF4A004762A8 /* UserViewController.swift */; };
 		A599E43C1CF68C44005CDB8D /* DataBaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A599E43B1CF68C44005CDB8D /* DataBaseService.swift */; };
 		A599E4401CF68CA6005CDB8D /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = A599E43F1CF68CA6005CDB8D /* MBProgressHUD.m */; };
 		A5A9A0E61CEBF6C4006BB3A1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A9A0E51CEBF6C4006BB3A1 /* AppDelegate.swift */; };
@@ -87,7 +86,6 @@
 		A53A92F71D07A1B500144FE6 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = User.swift; path = Memo/User.swift; sourceTree = SOURCE_ROOT; };
 		A53A92F91D07A8EA00144FE6 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		A548B9A51CF5892B00773A58 /* Memo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Memo-Bridging-Header.h"; sourceTree = "<group>"; };
-		A592E0DC1CF5FF4A004762A8 /* UserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
 		A599E43B1CF68C44005CDB8D /* DataBaseService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataBaseService.swift; sourceTree = "<group>"; };
 		A599E43E1CF68CA6005CDB8D /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		A599E43F1CF68CA6005CDB8D /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
@@ -300,7 +298,6 @@
 				A5A9A0FB1CEBF862006BB3A1 /* CustomNavController.swift */,
 				A5A9A0F91CEBF806006BB3A1 /* RootTabBarController.swift */,
 				A5A9A0F71CEBF77F006BB3A1 /* BaseViewController.swift */,
-				A592E0DC1CF5FF4A004762A8 /* UserViewController.swift */,
 				A502F6A21D05159800C519E9 /* EditDetailViewController.swift */,
 				A502F6A31D05159800C519E9 /* EditViewController.swift */,
 				A53A92F91D07A8EA00144FE6 /* SearchViewController.swift */,
@@ -499,7 +496,6 @@
 				A5046D891D0115230046B511 /* AFSecurityPolicy.m in Sources */,
 				A85783581D03F7D5003D73D9 /* LogInViewController.swift in Sources */,
 				A5046D8C1D0115230046B511 /* AFURLSessionManager.m in Sources */,
-				A592E0DD1CF5FF4A004762A8 /* UserViewController.swift in Sources */,
 				A5C5C4CC1CF688360078C4CF /* FMDatabaseQueue.m in Sources */,
 				A5046DE61D011D2F0046B511 /* MyRect.swift in Sources */,
 				A53A92F81D07A1B500144FE6 /* User.swift in Sources */,

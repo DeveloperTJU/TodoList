@@ -56,7 +56,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         let button = UIButton(type: .System)
         button.frame = CGRectMake(0, 0, 120, 35)
         button.setImage(UIImage(named: "完成选中"), forState: .Normal)
-        button.setTitle(" \(UserVC.currentUser)", forState: .Normal)
+        button.setTitle(" \(UserInfo.nickName)", forState: .Normal)
         button.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 13.0)!
         button.addTarget(self, action: Selector("userInfo:"), forControlEvents: .TouchDown)
         let userButton = UIBarButtonItem(customView: button)

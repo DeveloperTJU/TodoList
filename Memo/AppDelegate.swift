@@ -25,12 +25,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = UIWindow(frame: screenFrame)
         self.window?.backgroundColor = UIColor.whiteColor()
         self.window?.makeKeyAndVisible()
+        
         let sqlStr = "SELECT * FROM USER WHERE CURRENTUSER = 1"
         let database = DataBaseService.sharedInstance.dataBase
         database.open()
         let rs = database.executeQuery(sqlStr, withArgumentsInArray: [])
         if rs.next() {
-            UserVC.currentUser = rs.stringForColumn("PHONENUMBER")
+            UserInfo.phoneNumber = rs.stringForColumn("PHONENUMBER")
             database.close()
             UnfinishedVC = UnfinishedViewController(title:"待办")
             FinishedVC = FinishedViewController(title:"完成")

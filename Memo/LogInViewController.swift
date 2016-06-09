@@ -149,7 +149,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
                 let LoginSuccess = resultDict["isSuccess"] as! Int
                 //登陆成功
                 if LoginSuccess == 1 {
-                    UserVC.currentUser = self.txtUser.text!
+                    UserInfo.phoneNumber = self.txtUser.text!
                     //同步数据
                     let baseURL = NSURL(string: "http://10.1.45.102/")
                     let manager = AFHTTPSessionManager(baseURL: baseURL)
@@ -173,18 +173,17 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
                         
                         self.dataBase = DataBaseService.sharedInstance.getDataBase()
                         self.dataBase.open()
-                        var sqlStr = "CREATE TABLE IF NOT EXISTS data_\(UserVC.currentUser.md5)(TITLE TEXT, CONTENT TEXT, CREATE_TIME TEXT, LAST_EDIT_TIME TEXT, ALERT_TIME TEXT, LEVEL INT, STATE INT, PRIMARY KEY(CREATE_TIME))"
+                        var sqlStr = "CREATE TABLE IF NOT EXISTS data_\(UserInfo.phoneNumber.md5)(TITLE TEXT, CONTENT TEXT, CREATE_TIME TEXT, LAST_EDIT_TIME TEXT, ALERT_TIME TEXT, LEVEL INT, STATE INT, PRIMARY KEY(CREATE_TIME))"
                         self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [])
-                        sqlStr = "INSERT INTO data_\(UserVC.currentUser.md5) VALUES (?, ?, ?, ?, ?, ?, ?)"
+                        sqlStr = "INSERT INTO data_\(UserInfo.phoneNumber.md5) VALUES (?, ?, ?, ?, ?, ?, ?)"
                         var i = 0
                         while (i < a.count){
                             self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [a[i]["title"] as! String, a[i]["content"] as! String, a[i]["createtime"] as! String, a[i]["lastedittime"] as! String, a[i]["alerttime"] as! String, Int(a[i]["level"] as! String)!, Int(a[i]["state"] as! String)!])
                             i++
                         }
                         sqlStr = "INSERT INTO USER VALUES (?, ?, ?, ?)"
-                        self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [UserVC.currentUser.md5, UserVC.currentUser,resultDict["user_nickname"] as! String,1])
+                        self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [UserInfo.phoneNumber.md5, UserInfo.phoneNumber,resultDict["user_nickname"] as! String,1])
                         UserInfo.nickName = resultDict["user_nickname"] as! String
-                        UserInfo.phoneNumber = UserVC.currentUser
                         UserInfo.UID = UID
                         UnfinishedVC = UnfinishedViewController(title:"待办")
                         FinishedVC = FinishedViewController(title:"完成")
@@ -217,7 +216,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
     
     func tapped2(button:UIButton){
         
-        UserVC.currentUser = "Visitor"
+        UserInfo.phoneNumber = "Visitor"
         UnfinishedVC = UnfinishedViewController(title: "待办")
         FinishedVC = FinishedViewController(title: "完成")
         let rootVC = RootTabBarController()
