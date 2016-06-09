@@ -13,7 +13,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var dataBasePath:String!
-    var dataBase:FMDatabase!
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
@@ -22,32 +21,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let docsDir = dirParh[0] as NSString
         self.dataBasePath = docsDir.stringByAppendingPathComponent("task.db")
         
-        self.dataBase = DataBaseService.sharedInstance.getDataBase()
-        self.dataBase.open()
-        var sqlStr = "CREATE TABLE IF NOT EXISTS USER(UID TEXT, PHONENUMBER TEXT, NICKNAME TEXT, CURRENTUSER INT, PRIMARY KEY(UID))"
-//        if !self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: []) {
-//            print("Error:\(self.dataBase.lastErrorMessage())")
-//        }
-        
         let screenFrame = UIScreen.mainScreen().bounds
         self.window = UIWindow(frame: screenFrame)
         self.window?.backgroundColor = UIColor.whiteColor()
         self.window?.makeKeyAndVisible()
-//        sqlStr = "SELECT * FROM USER WHERE CURRENTUSER = 1"
-//        let rs:FMResultSet = self.dataBase.executeQuery(sqlStr, withArgumentsInArray: [])
-//        if rs.next() {
-//            UserVC.currentUser = rs.stringForColumn("PHONENUMBER")
-//            UnfinishedVC = UnfinishedViewController(title:"待办")
-//            FinishedVC = FinishedViewController(title:"完成")
-//            self.window?.rootViewController = RootTabBarController()
-//            //print("2222")
-//        }
-//        else {
-//            self.window?.rootViewController = LogInViewController()
-//        }
-        self.window?.rootViewController = ViewController()
-        
-        
+        let sqlStr = "SELECT * FROM USER WHERE CURRENTUSER = 1"
+        let database = DataBaseService.sharedInstance.dataBase
+        database.open()
+        let rs = database.executeQuery(sqlStr, withArgumentsInArray: [])
+        if rs.next() {
+            UserVC.currentUser = rs.stringForColumn("PHONENUMBER")
+            database.close()
+            UnfinishedVC = UnfinishedViewController(title:"待办")
+            FinishedVC = FinishedViewController(title:"完成")
+            self.window?.rootViewController = RootTabBarController()
+        }
+        else {
+            database.close()
+            self.window?.rootViewController = LogInViewController()
+        }
         return true
     }
 

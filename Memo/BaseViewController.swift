@@ -43,7 +43,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.mainTableView.registerNib(cellNib, forCellReuseIdentifier: cellIdentifier)
         self.mainTableView.tableFooterView = UIView()
         self.view.addSubview(self.mainTableView)
-        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "木纹")!)
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "background")!)
         self.mainTableView.backgroundColor = UIColor.clearColor()
         self.mainTableView.separatorStyle = .None
     }

@@ -38,7 +38,7 @@ class DataBaseService: NSObject {
                 print("Error:\(db.lastErrorMessage())")
             }
             if db.open(){
-                let sqlStr = "CREATE TABLE IF NOT EXISTS TASK(ID TEXT, TIME TEXT, CONTENT TEXT, CLASS TEXT, PRIMARY KEY(ID)"
+                let sqlStr = "CREATE TABLE IF NOT EXISTS USER(UID TEXT, PHONENUMBER TEXT, NICKNAME TEXT, CURRENTUSER INT, PRIMARY KEY(UID))"
                 if !db.executeUpdate(sqlStr, withArgumentsInArray: []) {
                     print("Error:\(db.lastErrorMessage())")
                 }
@@ -54,18 +54,19 @@ class DataBaseService: NSObject {
     func getDataBaseQueue() -> FMDatabaseQueue {
         return FMDatabaseQueue(path: (UIApplication.sharedApplication().delegate as! AppDelegate).dataBasePath)
     }
+    
     func selectData(table:String) -> Dictionary<String,AnyObject> {
         self.dataBase.open()
         var dictArr = Dictionary<String, AnyObject>()
-        var sqlStr = "SELECT * FROM \(table)"
+        let sqlStr = "SELECT * FROM \(table)"
         let rs:FMResultSet = dataBase.executeQuery(sqlStr, withArgumentsInArray: [])
         while rs.next(){
-            var data:NSDictionary = ["title": rs.stringForColumn("TITLE"), "content": rs.stringForColumn("CONTENT"), "createtime": rs.stringForColumn("CREATE_TIME"), "lastedittime": rs.stringForColumn("LAST_EDIT_TIME"), "alerttime": rs.stringForColumn("ALERT_TIME"), "level": rs.longForColumn("LEVEL"), "state": rs.longForColumn("STATE")]
+            let data:NSDictionary = ["title": rs.stringForColumn("TITLE"), "content": rs.stringForColumn("CONTENT"), "createtime": rs.stringForColumn("CREATE_TIME"), "lastedittime": rs.stringForColumn("LAST_EDIT_TIME"), "alerttime": rs.stringForColumn("ALERT_TIME"), "level": rs.longForColumn("LEVEL"), "state": rs.longForColumn("STATE")]
             dictArr["\(rs.stringForColumn("CREATE_TIME"))"] = data
-            
-    }
+        }
         return dictArr
     }
+    
     func insertInDB(data:ItemModel) -> Bool {
         self.dataBase.open()
         let sqlStr = "INSERT INTO data_\(UserVC.currentUser.md5) VALUES (?, ?, ?, ?, ?, ?, ?)"
