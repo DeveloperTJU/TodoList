@@ -22,36 +22,8 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         self.view.backgroundColor = UIColor(patternImage: image)
         
         
-        //
-        //        let textField = UITextField(frame: CGRectMake(30, 120, self.view.frame.size.width - 60, 50))
-        //        textField.layer.borderWidth=1  //边框粗细
-        //        textField.layer.borderColor=UIColor.grayColor().CGColor //边框颜色
-        //        textField.placeholder = "请输入内容"
-        ////        textField.text = self.currentList.toDoList
-        //        textField.font = UIFont.boldSystemFontOfSize(20)
-        //        textField.textAlignment = .Center
-        //        textField.delegate = self
-        //
-        //        self.view.addSubview(textField)
-        //
-        //        let textview = UITextView(frame: CGRectMake(30, 180, self.view.frame.size.width - 60, 190))
-        //        textview.layer.borderWidth=1
-        //        textview.layer.borderColor=UIColor.grayColor().CGColor
-        ////        textview.text = self.currentList.detail
-        //        textview.font = UIFont.boldSystemFontOfSize(16)
-        //        textview.delegate = self
-        //
-        //        self.view.addSubview(textview)
-        
         
         self.title = "查看"
-        //        self.view.backgroundColor = UIColor.grayColor()
-        
-        //        //导航栏颜色
-        //        let mainColor = UIColor(red: 255/255, green: 223/255, blue: 110/255, alpha: 1)
-        //        self.navigationController?.navigationBar.barTintColor = mainColor
-        //        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
-        //        //        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName:UIFont(name: "Zapfino", size: 24.0)!];
         
         //给导航增加item
         let rightItem = UIBarButtonItem(title: "编辑", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("EditItem:"))
@@ -129,8 +101,6 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         
         let shareButton:UIButton = UIButton()
         shareButton.frame=CGRectMake(0, self.view.frame.size.height - 123, self.view.frame.size.width / 2, 60)
-        //shareButton.setTitle("分享", forState:UIControlState.Normal)
-        //shareButton.backgroundColor=UIColor(red: 238/255, green: 64/255, blue: 86/255, alpha:1)
         self.view.addSubview(shareButton)
         
         //删除按钮
@@ -141,21 +111,10 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         
         let deleteButton:UIButton = UIButton()
         deleteButton.frame=CGRectMake(self.view.frame.size.width / 2, self.view.frame.size.height - 123, self.view.frame.size.width / 2, 60)
-        //        deleteButton.setTitle("删除", forState:UIControlState.Normal)
-        //        deleteButton.backgroundColor=UIColor(red: 200/255, green: 200/255, blue: 200/255, alpha:1)
         deleteButton.addTarget(self, action: Selector("deleteButtonAction:"), forControlEvents: UIControlEvents.TouchDown)
         self.view.addSubview(deleteButton)
         
         
-        
-        //        let button:UIButton = UIButton()
-        //        button.frame=CGRectMake(30, 400, self.view.frame.size.width - 60, 30)
-        //        button.setTitle("编辑完成", forState:UIControlState.Normal)
-        //        button.setTitleColor(UIColor.grayColor(),forState: .Highlighted)
-        //        button.backgroundColor=UIColor(red: 238/255, green: 64/255, blue: 86/255, alpha:1)
-        //        self.view.addSubview(button);
-        //
-        //        button.addTarget(self,action:#selector(EditViewController.tapped(_:)),forControlEvents:UIControlEvents.TouchUpInside)
         
         
         
@@ -177,33 +136,6 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
     }
     
     
-//    func deleteButtonAction(sender:UIButton){
-//        let UnfinishedVC = UnfinishedViewController()
-//        //        DataBaseService.sharedInstance.deleteInDB(currentList.createTime)
-//        //        FinishedVC.mainTableView.reloadData()
-//        var row1 = 0
-//        for i in UnfinishedVC.dataArr{
-//            if i.createTime == currentList.createTime{
-//                break
-//            }
-//            row1 += 1
-//        }
-//        UnfinishedVC.removeData(row: row1)
-//        FinishedVC.mainTableView.reloadData()
-//        //        var row2 = 0
-//        //        for i in FinishedVC.dataArr{
-//        //            if i.createTime == currentList.createTime{
-//        //                break
-//        //            }
-//        //            row2 += 1
-//        //        }
-//        //        FinishedVC.removeData(row: row2)
-//        //        FinishedVC.mainTableView.reloadData()
-//        self.hidesBottomBarWhenPushed = false;
-//        self.navigationController?.pushViewController(UnfinishedVC, animated: true)
-//        
-//        
-//    }
     func deleteButtonAction(sender:UIButton){
 //        var row = 0
 //        for i in UnfinishedVC.dataArr{
