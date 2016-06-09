@@ -29,7 +29,7 @@ class MyRect: UIView {
             self.layer.shadowOffset = CGSizeMake(0, 0.4)
             self.layer.shadowOpacity = 0.2
             self.layer.shadowRadius = 0.2
-            self.backgroundColor = UIColor.clearColor()
+            self.backgroundColor = .clearColor()
         }
     }
     

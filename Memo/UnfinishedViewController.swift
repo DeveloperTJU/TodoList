@@ -52,7 +52,7 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
         newItem.otherLimitFrame = CGRectMake(8, 40, self.view.bounds.width - 16, 74)
         newItem.firstLineView = MyRect(frame: newItem.firstLineFrame, color: UIColor(red: 254/255, green: 239/255, blue: 115/255, alpha: 1.0), withShadow: true)
         newItem.otherView = MyRect(frame: newItem.otherFrame)
-        newItem.otherLimitView = MyRect(frame: newItem.otherLimitFrame, color: UIColor.clearColor(), withShadow: false)
+        newItem.otherLimitView = MyRect(frame: newItem.otherLimitFrame, color: .clearColor(), withShadow: false)
         newItem.otherLimitView.clipsToBounds = true           //超出mainView范围的部分不显示
         
         newItem.addButton.setImage(UIImage(named: "加号"), forState: .Normal)
@@ -68,7 +68,7 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
         
         newItem.levelLabel.text = "添加星级"
         newItem.levelLabel.font = UIFont(name: "HelveticaNeue-Thin", size: 13.0)
-        newItem.levelLabel.frame = CGRectMake(11, 10, 60, 32)
+        newItem.levelLabel.frame = CGRectMake(11, 10, 120, 32)
         
         for i in 0..<5 {
             let button = UIButton()
@@ -83,11 +83,11 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
         
         newItem.alertLabel.text = "提醒时间"
         newItem.alertLabel.font = UIFont(name: "HelveticaNeue-Thin", size: 13.0)
-        newItem.alertLabel.frame = CGRectMake(11, 42, 60, 32)
+        newItem.alertLabel.frame = CGRectMake(11, 42, 120, 32)
         
         newItem.alertButton.setTitle("不提醒", forState: .Normal)
         newItem.alertButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 12.0)
-        newItem.alertButton.setTitleColor(UIColor.blackColor(),forState: .Normal)
+        newItem.alertButton.setTitleColor(.blackColor(),forState: .Normal)
         newItem.alertButton.addTarget(self, action: Selector("selectDate"), forControlEvents: .TouchDown)
         newItem.alertButton.frame = CGRectMake(newItem.otherLimitFrame.width-108, 42, 100, 32)
         
@@ -240,7 +240,7 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
     
     //更新一条数据
     func updateData(data:ItemModel) -> Void {
-        DataBaseService.sharedInstance.updateInDB(data)
+        DatabaseService.sharedInstance.updateInDB(data)
         let index = findIndex(data.createTime)
         let row = rank(data.level, lastEditTime: data.lastEditTime)
         dataArr.removeAtIndex(index)

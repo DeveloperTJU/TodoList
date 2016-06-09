@@ -11,57 +11,42 @@ import UIKit
 class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITableViewDelegate,UITableViewDataSource,BackForNewPasswordDelegate,ChangeNickNameDelegate{
     
     var mainTableView:UITableView!
-    var imageView:UIImageView!
-    var currentUser:User!
+    var imageView = UIImageView()
     var dataArrs:[[String]] = [[String]]()
     var nickNameText:UILabel!
-    var userController:UserViewController = UserViewController()
+    
+    //由于同一时间内存中只有一个User，所以删除User模型，使用全局常量UserInfo存储当前用户信息，用户中心只用到nickName和phoneNumber。头像使用UserInfo.phoneNumber.md5作为文件名，从服务器获得并存入资源文件夹。
+    //请设置AutoLyout，简单使用self.view.size设置相应的frame即可。有问题请直接找我。
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let image:UIImage = UIImage(imageLiteral: "finished")
-        self.currentUser = User(phoneNumber: "13672006807", avaterImage: image, nickName: "\(UserVC.currentUser)",loginState:"1")
-        self.currentUser.phoneNumber = userController.currentUser
         //初始化数据
         self.title = "个人中心"
         initDataArrs()
         self.setTableView()
-        self.navigationController?.navigationBar.backgroundColor = UIColor.orangeColor()
-        
         //添加头像
         self.setAvaterImage()
         self.setNickNameText()
         //添加返回按钮
         self.addLeftButtonItem()
-        self.setBackGround()
-        
-    }
-    
-    //设置背景
-    func setBackGround(){
-        UIGraphicsBeginImageContext(self.view.frame.size)
-        UIImage(named: "background")!.drawInRect(CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height))
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        self.view.backgroundColor = UIColor(patternImage: image)
-        self.mainTableView.backgroundColor = UIColor.clearColor()
-        self.mainTableView.separatorStyle = .None
     }
     
     //添加tableView
     func setTableView(){
-        let tableViewFrame:CGRect = CGRectMake(10, 10, self.view.bounds.width-20, self.view.bounds.height-10)
-        self.mainTableView = UITableView(frame: tableViewFrame, style: UITableViewStyle.Plain)
-        self.mainTableView.backgroundColor = UIColor.whiteColor()
+        let tableViewFrame:CGRect = CGRectMake(8, 0, self.view.bounds.width-16, self.view.bounds.height)
+        self.mainTableView = UITableView(frame: tableViewFrame, style: .Plain)
         self.mainTableView.dataSource = self
         self.mainTableView.delegate = self
+        self.mainTableView.backgroundColor = .clearColor()
+        self.mainTableView.separatorStyle = .None
+        self.mainTableView.scrollEnabled = false
         self.view.addSubview(self.mainTableView)
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "background")!)
     }
     
     //添加返回按钮
     func addLeftButtonItem(){
-        let leftBtn:UIBarButtonItem = UIBarButtonItem(title: "返回", style: UIBarButtonItemStyle.Plain, target: self, action: "backMain")
-        self.navigationItem.leftBarButtonItem = leftBtn
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "返回", style: .Plain, target: self, action: "backMain")
     }
     
     //返回按钮事件
@@ -72,37 +57,34 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     //初始化tableView
     func initDataArrs() {
         let arr0 = [""]
-        let arr1 = ["登录账号","修改密码"]
+        let arr1 = ["当前账号","修改密码"]
         let arr2 = ["清理缓存"]
         let arr3 = ["关于我们"]
-        let arr4 = ["退出"]
+        let arr4 = ["注销"]
         self.dataArrs = [arr0,arr1,arr2,arr3,arr4]
     }
     
     //设置第一行头像
     func setAvaterImage(){
-        let avaterImage = self.currentUser.avaterImage
-        let fixedImage = self.compressImage(avaterImage, toSize: CGSizeMake(80, 80))
-        let imageX:CGFloat = 15
-        let imageWidth:CGFloat = 80
-        let imageFrame:CGRect = CGRectMake(imageX, 10, imageWidth, imageWidth)
-        self.imageView = UIImageView(frame: imageFrame)
+        self.imageView = UIImageView(frame: CGRectMake(15, 10, 80, 80))
         self.imageView.layer.cornerRadius = CGRectGetHeight(imageView.bounds)/2
         self.imageView.layer.masksToBounds = true
         self.imageView.layer.borderColor = UIColor.grayColor().CGColor
-        self.imageView.layer.borderWidth = 3
-        self.imageView.image = fixedImage
+        self.imageView.layer.borderWidth = 1
         self.imageView.userInteractionEnabled = true
+        let image = UIImage(named: UserInfo.phoneNumber.md5)
+        let scale = image!.size.width > image!.size.height ? image!.size.height/80 : image!.size.width/80
+        self.imageView.image = UIImage(CGImage: image!.CGImage!, scale: scale, orientation: .Up)
         //添加图像手势
-        let imageClickGesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "changeAvaterImage:")
+        let imageClickGesture = UITapGestureRecognizer(target: self, action: "changeAvaterImage:")
         self.imageView.addGestureRecognizer(imageClickGesture)
     }
     
-    //
+    //设置昵称
     func setNickNameText(){
         let textFrame:CGRect = CGRectMake(120, 0, 450, 100)
         self.nickNameText = UILabel(frame: textFrame)
-        self.nickNameText.text = self.currentUser.nickName
+        self.nickNameText.text = UserInfo.nickName
         self.nickNameText.userInteractionEnabled = true
         let tapGesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "onNickNameClicked:")
         self.nickNameText.addGestureRecognizer(tapGesture)
@@ -121,22 +103,18 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
             var sourceType = UIImagePickerControllerSourceType.PhotoLibrary
             switch(buttonIndex){
             case 0:
-                print("点击了本地获取")
                 sourceType = UIImagePickerControllerSourceType.PhotoLibrary
                 //跳转到相册或相册页面
-                let imagePickerController:UIImagePickerController = UIImagePickerController()
+                let imagePickerController = UIImagePickerController()
                 imagePickerController.delegate = self
                 imagePickerController.allowsEditing = true
                 imagePickerController.sourceType = sourceType
                 self.presentViewController(imagePickerController, animated: true, completion: {
                 })
-            case 1:
-                print("点击了取消按钮")
             case 2:
-                print("点击了相机获取")
-                if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera){
-                    sourceType = UIImagePickerControllerSourceType.Camera
-                    let imagePickerController:UIImagePickerController = UIImagePickerController()
+                if UIImagePickerController.isSourceTypeAvailable(.Camera){
+                    sourceType = .Camera
+                    let imagePickerController = UIImagePickerController()
                     imagePickerController.delegate = self
                     imagePickerController.allowsEditing = true
                     imagePickerController.sourceType = sourceType
@@ -146,50 +124,47 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
             default:
                 break
             }
-            
         }
     }
     
     //显示图像
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        print(info)
         let image = info[UIImagePickerControllerOriginalImage] as! UIImage
         picker.dismissViewControllerAnimated(true) {
             
         }
-        self.currentUser.avaterImage = image
-        let fixedImage = self.compressImage(image, toSize: CGSizeMake(80, 80))
-        self.imageView.image = fixedImage
+        //此处调用上传，失败则提示用户修改头像失败
+        //如上传成功，将头像保存至本地资源文件夹，名称为UserInfo.phoneNumber.md5
+        let scale = image.size.width > image.size.height ? image.size.height/80 : image.size.width/80
+        self.imageView.image = UIImage(CGImage: image.CGImage!, scale: scale, orientation: .Up)
     }
     
-    //压缩图像
-    func compressImage(originImage:UIImage ,toSize size:CGSize) -> UIImage {
-        //创建一个基于位图的上下文
-        UIGraphicsBeginImageContext(size)
-        let rect = CGRectMake(0, 0, size.width, size.height)
-        originImage.drawInRect(rect)
-        //获取新的图片
-        let compressedImg = UIGraphicsGetImageFromCurrentImageContext()
-        //销毁上下文
-        UIGraphicsEndImageContext()
-        return compressedImg
-    }
-    
+    //由于该方法会导致失真，不推荐使用该方法，请使用UIImage(CGImage: image.CGImage!, scale: scale, orientation: .Up)代替。
+//    func compressImage(originImage:UIImage ,toSize size:CGSize) -> UIImage {
+//        //创建一个基于位图的上下文
+//        UIGraphicsBeginImageContext(size)
+//        let rect = CGRectMake(0, 0, size.width, size.height)
+//        originImage.drawInRect(rect)
+//        //获取新的图片
+//        let compressedImg = UIGraphicsGetImageFromCurrentImageContext()
+//        //销毁上下文
+//        UIGraphicsEndImageContext()
+//        return compressedImg
+//    }
     
     //控制分区数
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return dataArrs.count
     }
+    
     //控制行数
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dataArrs[section].count
     }
+    
     //控制分区头
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == 0{
-            return ""
-        }
-        return "  "
+        return ""
     }
     
     //设置行高
@@ -198,92 +173,114 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
             return 100
         }
         else{
-            return 40
+            return 42
         }
+    }
+    
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 12
     }
     
     //设置分区头样式
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
-        view.backgroundColor = UIColor.clearColor()
-        view.frame = CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width, 40)
+        view.backgroundColor = .clearColor()
+        view.frame = CGRectMake(0, 0, self.view.bounds.size.width, 42)
         return view
     }
 
     //控制样式
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
-        tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
-        let frame:CGRect = CGRectMake(20, 20, 20, 40)
-        var cell:UITableViewCell = UITableViewCell(frame:frame)
+        tableView.separatorStyle = .SingleLine
+        let frame:CGRect = CGRectMake(20, 20, 20, 42)
+        var cell = UITableViewCell(frame:frame)
         let sectionArr = dataArrs[indexPath.section]
         cell.textLabel?.text = sectionArr[indexPath.row]
-        //显示头像和用户名。
-        if indexPath.section == 0 && indexPath.row == 0{
-            let frame:CGRect = CGRectMake(20, 0, 200, 200)
-            cell = UITableViewCell(frame: frame)
-            cell.addSubview(imageView)
-            cell.addSubview(nickNameText)
-            cell.selectionStyle = UITableViewCellSelectionStyle.None
-        }
         if indexPath.section == 1 && indexPath.row == 0{
-            let frame:CGRect = CGRectMake(250, 5, 100, 30)
-            let phoneNumberText:UILabel = UILabel(frame: frame)
-            phoneNumberText.text = self.currentUser.phoneNumber
-            phoneNumberText.textAlignment = NSTextAlignment.Right
+            let frame:CGRect = CGRectMake(self.view.bounds.size.width - 140, 5, 100, 42)
+            let phoneNumberText = UILabel(frame: frame)
+            phoneNumberText.text = UserInfo.phoneNumber
+            phoneNumberText.textAlignment = .Right
+            phoneNumberText.font = UIFont(name: "HelveticaNeue-Thin", size: 14.0)
             cell.addSubview(phoneNumberText)
-        }else{
-            //cell.accessoryType = UITableViewCellAccessoryType.DisclosureIndicator
         }
+        else if indexPath.section == 4 && indexPath.row == 0{
+            cell.backgroundColor = .redColor()
+            cell.textLabel?.textAlignment = .Center
+        }
+        else{
+            let detailImageView = UIImageView(image: UIImage(named: "右箭头"))
+            detailImageView.frame = CGRectMake(self.view.bounds.size.width - 40, (cell.frame.minY + cell.frame.maxY) / 2 - 6, 12, 12)
+            cell.addSubview(detailImageView)
+            if indexPath.section == 0 && indexPath.row == 0{
+                let frame:CGRect = CGRectMake(20, 0, 200, 200)
+                cell = UITableViewCell(frame: frame)
+                detailImageView.frame = CGRectMake(self.view.bounds.size.width - 40, cell.frame.minY + 94, 12, 12)
+                cell.addSubview(imageView)
+                cell.addSubview(nickNameText)
+                nickNameText.font = UIFont(name: "HelveticaNeue-Thin", size: 14.0)
+                cell.selectionStyle = .None
+            }
+        }
+        cell.textLabel!.font = UIFont(name: "HelveticaNeue-Thin", size: 14.0)
+        cell.layer.cornerRadius = 3
         return cell
     }
     
     //tableView点击事件
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell:UITableViewCell = tableView.cellForRowAtIndexPath(indexPath)!
-        cell.selectionStyle = UITableViewCellSelectionStyle.Default
-            switch(indexPath.section){
-            case 1:
-                if indexPath.row == 0{
-                }else if indexPath.row == 1{
-                    let reachability = Reachability.reachabilityForInternetConnection()
-                    if reachability!.isReachable(){
-                        let ChangePassVC = ChangePaswordController()
-                        //ChangePassVC.currentPassword = self.currentUser.password
-                        ChangePassVC.delegate = self
-                        ChangePassVC.hidesBottomBarWhenPushed = true
-                        self.navigationController?.pushViewController(ChangePassVC, animated: true)
-                    }else{
-                        let alert:UIAlertController = UIAlertController(title: "网络提示", message: "无可用网络，不可修改密码", preferredStyle: UIAlertControllerStyle.Alert)
-                        let cancelAction:UIAlertAction = UIAlertAction(title: "确定", style: UIAlertActionStyle.Cancel, handler: nil)
-                        alert.addAction(cancelAction)
-                        self.presentViewController(alert, animated: true, completion: nil)
-                    }
+        cell.selectionStyle = .Default
+        switch(indexPath.section){
+        case 1:
+            if indexPath.row == 0{
+            }else if indexPath.row == 1{
+                let reachability = Reachability.reachabilityForInternetConnection()
+                if reachability!.isReachable(){
+                    let ChangePassVC = ChangePaswordController()
+                    ChangePassVC.delegate = self
+                    ChangePassVC.hidesBottomBarWhenPushed = true
+                    self.navigationController?.pushViewController(ChangePassVC, animated: true)
+                }else{
+                    let alert = UIAlertController(title: "网络提示", message: "无可用网络，不可修改密码", preferredStyle: .Alert)
+                    let cancelAction = UIAlertAction(title: "确定", style: .Cancel, handler: nil)
+                    alert.addAction(cancelAction)
+                    self.presentViewController(alert, animated: true, completion: nil)
                 }
-            case 2:
-                self.clearCache()
-            case 3:
-                let alert = UIAlertController(title: "", message: "天软玩头盔开发团队", preferredStyle: UIAlertControllerStyle.Alert)
-                let cancelAction:UIAlertAction = UIAlertAction(title: "确定", style: UIAlertActionStyle.Cancel, handler: nil)
-                alert.addAction(cancelAction)
-                self.presentViewController(alert, animated: true, completion: nil)
-            case 4:
-                let alert = UIAlertController(title: "提示", message: "确定退出用户？", preferredStyle: UIAlertControllerStyle.Alert)
-                let confirmAction:UIAlertAction = UIAlertAction(title: "确定", style: UIAlertActionStyle.Default, handler: { (confirm) in
-                    //从数据库中修改登录状态为false,并退出程序
-                    exit(0)
-                })
-                let cancelAction:UIAlertAction = UIAlertAction(title: "取消", style: UIAlertActionStyle.Cancel, handler: nil)
-                alert.addAction(confirmAction)
-                alert.addAction(cancelAction)
-                self.presentViewController(alert, animated: true, completion: nil)
-            default:
-                break
             }
-        cell.selectionStyle = UITableViewCellSelectionStyle.None
+        case 2:
+            self.clearCache()
+        case 3:
+            let alert = UIAlertController(title: "", message: "天软玩头盔开发团队", preferredStyle: .Alert)
+            let cancelAction = UIAlertAction(title: "确定", style: .Cancel, handler: nil)
+            alert.addAction(cancelAction)
+            self.presentViewController(alert, animated: true, completion: nil)
+        case 4:
+            let alert = UIAlertController(title: "提示", message: "确定注销？", preferredStyle: .Alert)
+            let confirmAction = UIAlertAction(title: "确定", style: .Default, handler: { (confirm) in
+                if DatabaseService.sharedInstance.updateUser(0){
+                    UserInfo.UID = nil
+                    UserInfo.phoneNumber = nil
+                    UserInfo.nickName = nil
+                    self.presentViewController(LogInViewController(), animated: true, completion: nil)
+                }
+                else{
+                    let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                    hud.mode = MBProgressHUDMode.Text
+                    hud.label.text = "注销失败"
+                    hud.hideAnimated(true, afterDelay: 0.5)
+                }
+            })
+            let cancelAction = UIAlertAction(title: "取消", style: .Cancel, handler: nil)
+            alert.addAction(confirmAction)
+            alert.addAction(cancelAction)
+            self.presentViewController(alert, animated: true, completion: nil)
+        default:
+            break
+        }
+        cell.selectionStyle = .None
     }
-    
-    
     
     //清理缓存
     func clearCache(){
@@ -314,8 +311,8 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         if big/(1024*1024) >= 1 {
             message = "\(big/(1024*1024))M缓存"
         }
-        let alert = UIAlertController(title: "清除缓存", message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        let alertConirm = UIAlertAction(title: "确定", style: UIAlertActionStyle.Default) { (alertConfirm) in
+        let alert = UIAlertController(title: "清除缓存", message: message, preferredStyle: .Alert)
+        let alertConirm = UIAlertAction(title: "确定", style: .Default) { (alertConfirm) in
             //点击确定时开始删除
             for file in files!{
                 let path = cachePath.stringByAppendingFormat("/\(file)")
@@ -325,7 +322,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
             }
         }
         alert.addAction(alertConirm)
-        let cancel = UIAlertAction(title: "取消", style: UIAlertActionStyle.Cancel) { (no) in
+        let cancel = UIAlertAction(title: "取消", style: .Cancel) { (no) in
         }
         alert.addAction(cancel)
         self.presentViewController(alert, animated: true) {}
@@ -334,10 +331,9 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     
     //nickName点击手势
     func onNickNameClicked(tapGesture:UITapGestureRecognizer){
-            let changeNickNameVC = ChangeNickNameController()
-            changeNickNameVC.currentNickName = self.currentUser.nickName
-            changeNickNameVC.delegate = self
-            self.navigationController?.pushViewController(changeNickNameVC, animated: true)
+        let changeNickNameVC = ChangeNickNameController()
+        changeNickNameVC.delegate = self
+        self.navigationController?.pushViewController(changeNickNameVC, animated: true)
     }
     
     //接受修改密码返回值协议

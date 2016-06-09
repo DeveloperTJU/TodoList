@@ -23,8 +23,8 @@ class ItemCell: UITableViewCell{
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.contentView.backgroundColor = UIColor.clearColor()
-        self.backgroundColor = UIColor.clearColor()
+        self.contentView.backgroundColor = .clearColor()
+        self.backgroundColor = .clearColor()
         self.detailImage.frame = CGRectMake(self.frame.width - 17, 15, 12, 12)
         stateButton.addTarget(self, action: Selector("handleButtonClick:"), forControlEvents: .TouchDown)
     }

@@ -14,15 +14,13 @@ class CustomNavController: UINavigationController {
         super.viewDidLoad()
         self.navigationBar.barTintColor = UIColor(red: 254/255, green: 239/255, blue: 115/255, alpha: 1.0)
         self.navigationBar.translucent = false
-
-        self.navigationBar.tintColor = UIColor.blackColor()
+        self.navigationBar.tintColor = .blackColor()
 //        self.navigationBar.setValue(UIFont(name: "HelveticaNeue-Thin", size: 16.0), forKey: NSFontAttributeName)
-        
         let attr = [NSFontAttributeName: UIFont(name: "HelveticaNeue-Thin", size: 16.0)!]
-        
+        UIBarButtonItem.appearance().setTitleTextAttributes(attr, forState: .Normal)
         self.navigationBar.titleTextAttributes = attr
-        
-        
+//        UILabel.appearance().font = UIFont(name: "HelveticaNeue-Thin", size: 14)
+        UITextField.appearance().font = UIFont(name: "HelveticaNeue-Thin", size: 16.0)
     }
 
     override func didReceiveMemoryWarning() {

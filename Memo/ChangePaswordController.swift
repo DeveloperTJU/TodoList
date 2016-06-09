@@ -26,31 +26,21 @@ class ChangePaswordController: UIViewController,UITableViewDelegate,UITableViewD
         self.title = "修改密码"
         self.addLeftButtonItem()
         self.addRightButtonItem()
-        self.setBackGround()
-        
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "background")!)
         self.setMainTableView()
-    }
-    
-    //设置背景图
-    func setBackGround(){
-        UIGraphicsBeginImageContext(self.view.frame.size)
-        UIImage(named: "background")!.drawInRect(CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height))
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        self.view.backgroundColor = UIColor(patternImage: image)
     }
 
     //设置密码tableView
     func setMainTableView(){
         let tableViewFrame:CGRect = CGRectMake(10, 10, self.view.bounds.width-20, self.view.bounds.height-10)
-        self.mainTableView = UITableView(frame: tableViewFrame, style: UITableViewStyle.Plain)
-        self.mainTableView.backgroundColor = UIColor.whiteColor()
+        self.mainTableView = UITableView(frame: tableViewFrame, style: .Plain)
+        self.mainTableView.backgroundColor = .whiteColor()
         self.mainTableView.dataSource = self
         self.mainTableView.delegate = self
         let cellNib = UINib(nibName: "ChangePasswodCell", bundle: nil)
         self.mainTableView.registerNib(cellNib, forCellReuseIdentifier: cellIdentifier)
-        self.mainTableView.backgroundColor = UIColor.clearColor()
-        self.mainTableView.separatorStyle = UITableViewCellSeparatorStyle.None
+        self.mainTableView.backgroundColor = .clearColor()
+        self.mainTableView.separatorStyle = .None
         self.view.addSubview(self.mainTableView)
     }
     
@@ -60,7 +50,7 @@ class ChangePaswordController: UIViewController,UITableViewDelegate,UITableViewD
         cell.titleLabel.text = dataArr[indexPath.section][indexPath.row]
         cell.passwordText.secureTextEntry = true
         cell.selectionStyle = UITableViewCellSelectionStyle.None
-        cell.backgroundColor = UIColor.clearColor()
+        cell.backgroundColor = .clearColor()
         return cell
     }
     
@@ -79,7 +69,7 @@ class ChangePaswordController: UIViewController,UITableViewDelegate,UITableViewD
     //设置分区头视图
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
-        view.backgroundColor = UIColor.clearColor()
+        view.backgroundColor = .clearColor()
         view.frame = CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width, 20)
         return view
     }

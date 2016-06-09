@@ -8,23 +8,14 @@
 
 import UIKit
 
-struct UserInfoStruct {
-    var nickName:String!
-    var UID:String!
-    var phoneNumber:String!
-}
-
-var UnfinishedVC:UnfinishedViewController!
-var FinishedVC:FinishedViewController!
-var UserInfo = UserInfoStruct()
-
 class RootTabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        DatabaseService.sharedInstance.initDataTable()
         UnfinishedVC = UnfinishedViewController(title:"待办")
         FinishedVC = FinishedViewController(title:"完成")
-        self.view.backgroundColor = UIColor.whiteColor()
+        self.view.backgroundColor = .whiteColor()
         self.viewControllers = self.loadNavControllers([UnfinishedVC, FinishedVC])
         self.setUpTabBar()
     }
@@ -45,7 +36,7 @@ class RootTabBarController: UITabBarController {
         let images = ["book", "完成"]
         let imagesSelected = ["book选中", "完成选中"]
         for i in 0 ..< images.count{
-            self.tabBar.backgroundColor = UIColor.whiteColor()
+            self.tabBar.backgroundColor = .whiteColor()
             self.tabBar.tintColor = UIColor(red: 236/255, green: 206/255, blue: 74/255, alpha: 1.0)
             self.tabBar.items![i].image = UIImage(named: images[i])
             self.tabBar.items![i].selectedImage = UIImage(named: imagesSelected[i])

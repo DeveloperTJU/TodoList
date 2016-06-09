@@ -55,11 +55,13 @@ class DatabaseService: NSObject {
         return FMDatabaseQueue(path: (UIApplication.sharedApplication().delegate as! AppDelegate).databasePath)
     }
     
+    //查询当前已登录用户，如存在，设置UserInfo，如不存在则返回false
     func hasCurrentUser() -> Bool{
         let sqlStr = "SELECT * FROM USER WHERE CURRENTUSER = 1"
         self.database.open()
         let rs = self.database.executeQuery(sqlStr, withArgumentsInArray: [])
         if rs.next() {
+            UserInfo.UID = rs.stringForColumn("UID")
             UserInfo.phoneNumber = rs.stringForColumn("PHONENUMBER")
             UserInfo.nickName = rs.stringForColumn("NICKNAME")
             database.close()
@@ -71,49 +73,53 @@ class DatabaseService: NSObject {
         }
     }
     
-    func selectData(table:String) -> Dictionary<String,AnyObject> {
+    //如果首次登录，初始化当前用户的数据表
+    func initDataTable() -> Bool{
+        self.database.open()
+        let sqlStr = "CREATE TABLE IF NOT EXISTS data_\(UserInfo.phoneNumber.md5)(TITLE TEXT, CONTENT TEXT, CREATE_TIME TEXT, LAST_EDIT_TIME TEXT, ALERT_TIME TEXT, LEVEL INT, STATE INT, PRIMARY KEY(CREATE_TIME))"
+        let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [])
+        self.database.close()
+        return succeed
+    }
+    
+    //新增用户
+    func insertUser(UID:String, phoneNumber:String, nickName:String, isCurrentUser:Int) -> Bool{
+        self.database.open()
+        let sqlStr = "INSERT INTO USER VALUES (?, ? ,?, ?)"
+        let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [UID, phoneNumber, nickName, isCurrentUser])
+        self.database.close()
+        return succeed
+    }
+    
+    //更新当前用户的昵称和登录/注销状态
+    func updateUser(isCurrentUser:Int) -> Bool{
+        self.database.open()
+        let sqlStr = "UPDATE USER SET NICKNAME=?, CURRENTUSER=?"
+        let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [UserInfo.nickName, isCurrentUser])
+        self.database.close()
+        return succeed
+    }
+    
+    //选取当前用户所有数据准备上传
+    func selectLocalData() -> Dictionary<String,AnyObject> {
         self.database.open()
         var dictArr = Dictionary<String, AnyObject>()
-        let sqlStr = "SELECT * FROM \(table)"
+        let sqlStr = "SELECT * FROM data_\(UserInfo.phoneNumber.md5)"
         let rs = self.database.executeQuery(sqlStr, withArgumentsInArray: [])
         while rs.next(){
             let data:NSDictionary = ["title": rs.stringForColumn("TITLE"), "content": rs.stringForColumn("CONTENT"), "createtime": rs.stringForColumn("CREATE_TIME"), "lastedittime": rs.stringForColumn("LAST_EDIT_TIME"), "alerttime": rs.stringForColumn("ALERT_TIME"), "level": rs.longForColumn("LEVEL"), "state": rs.longForColumn("STATE")]
             dictArr["\(rs.stringForColumn("CREATE_TIME"))"] = data
         }
+        self.database.close()
         return dictArr
     }
     
+    //新建任务
     func insertInDB(data:ItemModel) -> Bool {
         self.database.open()
         let sqlStr = "INSERT INTO data_\(UserInfo.phoneNumber.md5) VALUES (?, ?, ?, ?, ?, ?, ?)"
         let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [data.title, data.content, data.createTime, data.lastEditTime, data.alertTime, data.level, data.state])
         self.database.close()
-        //RequestAPI.GET(<#T##url: String!##String!#>, body: <#T##AnyObject?#>, succeed: <#T##Succeed##Succeed##(NSURLSessionDataTask!, AnyObject!) -> Void#>, failed: <#T##Failure##Failure##(NSURLSessionDataTask!, NSError!) -> Void#>)
-//        let baseURL = NSURL(string: "http://172.26.209.192/")
-//        let manager = AFHTTPSessionManager(baseURL: baseURL)
-//        let paramDict:Dictionary = ["UID":UserInfo.UID,"TaskModel":data]
-//        let url:String = "todolist/index.php/Home/Task/SynchronizeTask"
-//        //请求数据的序列化器
-//        manager.requestSerializer = AFHTTPRequestSerializer()
-//        //返回数据的序列化器
-//        manager.responseSerializer = AFHTTPResponseSerializer()
-//        let resSet = NSSet(array: ["text/html"])
-//        manager.responseSerializer.acceptableContentTypes = resSet as? Set<String>
-//        manager.POST(url, parameters: paramDict, success: { (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
-//            //成功回调
-//            print("success")
-//            
-//            let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
-//            
-//            print("请求结果：\(resultDict)")
-//            let a = resultDict["taskModelArr"] as! NSArray
-//            print(a.count)
-//            
-//            
-//        }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
-//            //失败回调
-//            print("网络调用失败:\(error)")
-//        }
         return succeed
     }
     
@@ -122,6 +128,14 @@ class DatabaseService: NSObject {
         self.database.open()
         let sqlStr = "DELETE FROM data_\(UserInfo.phoneNumber.md5) WHERE CREATE_TIME=?"
         let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [createTime])
+        self.database.close()
+        return succeed
+    }
+    
+    func clearDeletedData() -> Bool {
+        self.database.open()
+        let sqlStr = "DELETE FROM data_\(UserInfo.phoneNumber.md5) WHERE STATE=1 OR STATE=3?"
+        let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [])
         self.database.close()
         return succeed
     }

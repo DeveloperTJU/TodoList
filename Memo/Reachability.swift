@@ -339,12 +339,10 @@ public class Reachability: NSObject {
             let gotFlags = withUnsafeMutablePointer(&flags) {
                 SCNetworkReachabilityGetFlags(reachabilityRef, UnsafeMutablePointer($0))
             }
-            
             if gotFlags {
                 return flags
             }
         }
-
         return []
     }
 

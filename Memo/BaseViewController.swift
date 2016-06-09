@@ -35,8 +35,8 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     //在初始化时添加TableView以在尚未加载视图时存取dataArr数据。
     func loadTableView() {
         let tableViewFrame:CGRect = self.view.bounds
-        self.mainTableView = UITableView(frame: tableViewFrame, style: UITableViewStyle.Plain)
-        self.mainTableView.backgroundColor = UIColor.whiteColor()
+        self.mainTableView = UITableView(frame: tableViewFrame, style: .Plain)
+        self.mainTableView.backgroundColor = .whiteColor()
         self.mainTableView.delegate = self
         self.mainTableView.dataSource = self
         let cellNib = UINib(nibName: "ItemCell", bundle: nil)
@@ -44,7 +44,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.mainTableView.tableFooterView = UIView()
         self.view.addSubview(self.mainTableView)
         self.view.backgroundColor = UIColor(patternImage: UIImage(named: "background")!)
-        self.mainTableView.backgroundColor = UIColor.clearColor()
+        self.mainTableView.backgroundColor = .clearColor()
         self.mainTableView.separatorStyle = .None
     }
     
@@ -55,7 +55,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         let searchButton = UIBarButtonItem(image: UIImage(named: "搜索"), style: .Plain, target: self, action: Selector("search"))
         let button = UIButton(type: .System)
         button.frame = CGRectMake(0, 0, 120, 35)
-        button.setImage(UIImage(named: "完成选中"), forState: .Normal)
+        button.setImage(UIImage(named: UserInfo.phoneNumber.md5), forState: .Normal)
         button.setTitle(" \(UserInfo.nickName)", forState: .Normal)
         button.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 13.0)!
         button.addTarget(self, action: Selector("userInfo:"), forControlEvents: .TouchDown)
@@ -64,7 +64,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         //调节导航栏控件间隔
         let spacer1 = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: nil,
             action: nil)
-        spacer1.width = -38
+        spacer1.width = -35
         let spacer2 = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: nil,
             action: nil)
         spacer2.width = -5
@@ -101,7 +101,14 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //手动同步
     func refreshManually(){
-        
+        var message = "同步失败"
+        if RequestAPI.SynchronizeTask(){
+            message = "同步成功"
+        }
+        let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        hud.mode = MBProgressHUDMode.Text
+        hud.label.text = message
+        hud.hideAnimated(true, afterDelay: 0.5)
     }
     
     //显示友好时间戳，参考自http://blog.csdn.net/zhyl8157121/article/details/42155921

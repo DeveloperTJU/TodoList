@@ -8,6 +8,16 @@
 
 import UIKit
 
+struct UserInfoStruct {
+    var nickName:String!
+    var UID:String!
+    var phoneNumber:String!
+}
+
+var UnfinishedVC:UnfinishedViewController!
+var FinishedVC:FinishedViewController!
+var UserInfo = UserInfoStruct()
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -23,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let screenFrame = UIScreen.mainScreen().bounds
         self.window = UIWindow(frame: screenFrame)
-        self.window?.backgroundColor = UIColor.whiteColor()
+        self.window?.backgroundColor = .whiteColor()
         self.window?.makeKeyAndVisible()
         
         self.window?.rootViewController = DatabaseService.sharedInstance.hasCurrentUser() ? RootTabBarController() : LogInViewController()
