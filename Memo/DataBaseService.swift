@@ -1,5 +1,5 @@
 //
-//  DatabaseService.swift
+//  databaseService.swift
 //  Memo
 //
 //  Created by hui on 16/5/26.
@@ -8,32 +8,32 @@
 
 import UIKit
 
-class DataBaseService: NSObject {
+class DatabaseService: NSObject {
     
-    var dataBase:FMDatabase!
+    var database:FMDatabase!
     var dbQueue:FMDatabaseQueue!
-    class var sharedInstance:DataBaseService {
+    class var sharedInstance:DatabaseService {
         struct Static {
             static var onceToken:dispatch_once_t = 0
-            static var instance:DataBaseService? = nil
+            static var instance:DatabaseService? = nil
         }
         dispatch_once(&Static.onceToken, { () -> Void in
-            Static.instance = DataBaseService()
+            Static.instance = DatabaseService()
         })
         return Static.instance!
     }
     
     override init(){
         super.init()
-        self.dataBase = self.getDataBase()
-        self.dbQueue = self.getDataBaseQueue()
+        self.database = self.getDatabase()
+        self.dbQueue = self.getDatabaseQueue()
     }
     
-    func getDataBase() -> FMDatabase{
+    func getDatabase() -> FMDatabase{
         let fileManager = NSFileManager.defaultManager()
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        if !fileManager.fileExistsAtPath(appDelegate.dataBasePath){
-            let db = FMDatabase(path: appDelegate.dataBasePath)
+        if !fileManager.fileExistsAtPath(appDelegate.databasePath){
+            let db = FMDatabase(path: appDelegate.databasePath)
             if db == nil{
                 print("Error:\(db.lastErrorMessage())")
             }
@@ -48,18 +48,34 @@ class DataBaseService: NSObject {
                 print("Error:\(db.lastErrorMessage())")
             }
         }
-        return FMDatabase(path: appDelegate.dataBasePath)
+        return FMDatabase(path: appDelegate.databasePath)
     }
     
-    func getDataBaseQueue() -> FMDatabaseQueue {
-        return FMDatabaseQueue(path: (UIApplication.sharedApplication().delegate as! AppDelegate).dataBasePath)
+    func getDatabaseQueue() -> FMDatabaseQueue {
+        return FMDatabaseQueue(path: (UIApplication.sharedApplication().delegate as! AppDelegate).databasePath)
+    }
+    
+    func hasCurrentUser() -> Bool{
+        let sqlStr = "SELECT * FROM USER WHERE CURRENTUSER = 1"
+        self.database.open()
+        let rs = self.database.executeQuery(sqlStr, withArgumentsInArray: [])
+        if rs.next() {
+            UserInfo.phoneNumber = rs.stringForColumn("PHONENUMBER")
+            UserInfo.nickName = rs.stringForColumn("NICKNAME")
+            database.close()
+            return true
+        }
+        else {
+            database.close()
+            return false
+        }
     }
     
     func selectData(table:String) -> Dictionary<String,AnyObject> {
-        self.dataBase.open()
+        self.database.open()
         var dictArr = Dictionary<String, AnyObject>()
         let sqlStr = "SELECT * FROM \(table)"
-        let rs:FMResultSet = dataBase.executeQuery(sqlStr, withArgumentsInArray: [])
+        let rs = self.database.executeQuery(sqlStr, withArgumentsInArray: [])
         while rs.next(){
             let data:NSDictionary = ["title": rs.stringForColumn("TITLE"), "content": rs.stringForColumn("CONTENT"), "createtime": rs.stringForColumn("CREATE_TIME"), "lastedittime": rs.stringForColumn("LAST_EDIT_TIME"), "alerttime": rs.stringForColumn("ALERT_TIME"), "level": rs.longForColumn("LEVEL"), "state": rs.longForColumn("STATE")]
             dictArr["\(rs.stringForColumn("CREATE_TIME"))"] = data
@@ -68,10 +84,10 @@ class DataBaseService: NSObject {
     }
     
     func insertInDB(data:ItemModel) -> Bool {
-        self.dataBase.open()
+        self.database.open()
         let sqlStr = "INSERT INTO data_\(UserInfo.phoneNumber.md5) VALUES (?, ?, ?, ?, ?, ?, ?)"
-        let succeed = self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [data.title, data.content, data.createTime, data.lastEditTime, data.alertTime, data.level, data.state])
-        self.dataBase.close()
+        let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [data.title, data.content, data.createTime, data.lastEditTime, data.alertTime, data.level, data.state])
+        self.database.close()
         //RequestAPI.GET(<#T##url: String!##String!#>, body: <#T##AnyObject?#>, succeed: <#T##Succeed##Succeed##(NSURLSessionDataTask!, AnyObject!) -> Void#>, failed: <#T##Failure##Failure##(NSURLSessionDataTask!, NSError!) -> Void#>)
 //        let baseURL = NSURL(string: "http://172.26.209.192/")
 //        let manager = AFHTTPSessionManager(baseURL: baseURL)
@@ -101,31 +117,29 @@ class DataBaseService: NSObject {
         return succeed
     }
     
-    
-    
     //参数为创建时间
     func deleteInDB(createTime:String) -> Bool {
-        self.dataBase.open()
+        self.database.open()
         let sqlStr = "DELETE FROM data_\(UserInfo.phoneNumber.md5) WHERE CREATE_TIME=?"
-        let succeed = self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [createTime])
-        self.dataBase.close()
+        let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [createTime])
+        self.database.close()
         return succeed
     }
     
     //将修改后的data作为参数，createTime是主键不允许修改。
     func updateInDB(data:ItemModel) -> Bool {
-        self.dataBase.open()
+        self.database.open()
         let sqlStr = "UPDATE data_\(UserInfo.phoneNumber.md5) SET TITLE=?, CONTENT=?, LAST_EDIT_TIME=?, ALERT_TIME=?, LEVEL=?, STATE=? WHERE CREATE_TIME=?"
-        let succeed = self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [data.title, data.content, data.lastEditTime, data.alertTime, data.level, data.state, data.createTime])
-        self.dataBase.close()
+        let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [data.title, data.content, data.lastEditTime, data.alertTime, data.level, data.state, data.createTime])
+        self.database.close()
         return succeed
     }
     
     //selectAllInDB().0 是未完成列表，selectAllInDB().1 是已完成列表。
     func selectAllInDB() -> ([ItemModel], [ItemModel]) {
-        self.dataBase.open()
+        self.database.open()
         let sqlStr = "SELECT * FROM data_\(UserInfo.phoneNumber.md5) ORDER BY LEVEL, LAST_EDIT_TIME DESC"
-        let rs =  self.dataBase.executeQuery(sqlStr, withArgumentsInArray: [])
+        let rs =  self.database.executeQuery(sqlStr, withArgumentsInArray: [])
         var unfinished:[ItemModel] = [ItemModel]()
         var finished:[ItemModel] = [ItemModel]()
         while rs.next(){
@@ -140,7 +154,7 @@ class DataBaseService: NSObject {
                 }
             }
         }
-        self.dataBase.close()
+        self.database.close()
         return (unfinished, finished)
     }
     

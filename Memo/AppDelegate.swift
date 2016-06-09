@@ -12,35 +12,21 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var dataBasePath:String!
+    var databasePath:String!
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         SMSSDK.registerApp("13497b5a4a530", withSecret: "5d4aa8cc0c6a64db874b7db0ad428360")
         let dirParh = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
         let docsDir = dirParh[0] as NSString
-        self.dataBasePath = docsDir.stringByAppendingPathComponent("task.db")
+        self.databasePath = docsDir.stringByAppendingPathComponent("task.db")
         
         let screenFrame = UIScreen.mainScreen().bounds
         self.window = UIWindow(frame: screenFrame)
         self.window?.backgroundColor = UIColor.whiteColor()
         self.window?.makeKeyAndVisible()
         
-        let sqlStr = "SELECT * FROM USER WHERE CURRENTUSER = 1"
-        let database = DataBaseService.sharedInstance.dataBase
-        database.open()
-        let rs = database.executeQuery(sqlStr, withArgumentsInArray: [])
-        if rs.next() {
-            UserInfo.phoneNumber = rs.stringForColumn("PHONENUMBER")
-            database.close()
-            UnfinishedVC = UnfinishedViewController(title:"待办")
-            FinishedVC = FinishedViewController(title:"完成")
-            self.window?.rootViewController = RootTabBarController()
-        }
-        else {
-            database.close()
-            self.window?.rootViewController = LogInViewController()
-        }
+        self.window?.rootViewController = DatabaseService.sharedInstance.hasCurrentUser() ? RootTabBarController() : LogInViewController()
         return true
     }
 

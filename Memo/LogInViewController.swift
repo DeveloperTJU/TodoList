@@ -171,7 +171,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
                         print("请求结果：\(resultDict)")
                         let a = resultDict["taskModelArr"] as! NSArray
                         
-                        self.dataBase = DataBaseService.sharedInstance.getDataBase()
+                        self.dataBase = DatabaseService.sharedInstance.getDatabase()
                         self.dataBase.open()
                         var sqlStr = "CREATE TABLE IF NOT EXISTS data_\(UserInfo.phoneNumber.md5)(TITLE TEXT, CONTENT TEXT, CREATE_TIME TEXT, LAST_EDIT_TIME TEXT, ALERT_TIME TEXT, LEVEL INT, STATE INT, PRIMARY KEY(CREATE_TIME))"
                         self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [])
@@ -185,16 +185,11 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
                         self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [UserInfo.phoneNumber.md5, UserInfo.phoneNumber,resultDict["user_nickname"] as! String,1])
                         UserInfo.nickName = resultDict["user_nickname"] as! String
                         UserInfo.UID = UID
-                        UnfinishedVC = UnfinishedViewController(title:"待办")
-                        FinishedVC = FinishedViewController(title:"完成")
-                        let newView = RootTabBarController()
-                        self.presentViewController(newView, animated: true, completion: nil)
-
+                        self.presentViewController(RootTabBarController(), animated: true, completion: nil)
                     }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
                         //失败回调
                         print("网络调用失败:\(error)")
                     }
-                    
                 }
                 else{
                     self.alertWindow("错误", message: "用户名或密码错误")

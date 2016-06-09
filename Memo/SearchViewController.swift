@@ -80,8 +80,8 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         //        searchController.searchBar = UISearchBar()
         searchBar.searchBarStyle = UISearchBarStyle.Minimal
         
-        self.dataArr.appendContentsOf(DataBaseService.sharedInstance.selectAllInDB().0)
-        self.dataArr1.appendContentsOf(DataBaseService.sharedInstance.selectAllInDB().1)
+        self.dataArr.appendContentsOf(DatabaseService.sharedInstance.selectAllInDB().0)
+        self.dataArr1.appendContentsOf(DatabaseService.sharedInstance.selectAllInDB().1)
         //        print(self.dataArr)
         //        onInput()
         //        var searchBarStyle: UISearchBarStyle = .Minimal

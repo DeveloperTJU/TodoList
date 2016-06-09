@@ -31,7 +31,7 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
     var newItem = NewItem()
     
     override func loadTableView() {
-        self.dataArr = DataBaseService.sharedInstance.selectAllInDB().0
+        self.dataArr = DatabaseService.sharedInstance.selectAllInDB().0
         super.loadTableView()
         self.loadNewItemView()
     }

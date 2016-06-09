@@ -186,7 +186,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     func insertData(data:ItemModel, withAnimation hasAnimation:Bool){
         let index = rank(data.level, lastEditTime: data.lastEditTime)
         data.state = (isFinished! ? 2 : 0)
-        if DataBaseService.sharedInstance.insertInDB(data){
+        if DatabaseService.sharedInstance.insertInDB(data){
             dataArr.insert(data, atIndex: index)
             self.mainTableView.beginUpdates()
             self.mainTableView.insertRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: hasAnimation ? .Automatic : .None)
@@ -203,7 +203,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     //删除指定位置的数据，单刷视图。
     func removeData(row index:Int){
         self.dataArr[index].state += 1
-        if DataBaseService.sharedInstance.updateInDB(self.dataArr[index]){
+        if DatabaseService.sharedInstance.updateInDB(self.dataArr[index]){
             dataArr.removeAtIndex(index)
             self.mainTableView.beginUpdates()
             self.mainTableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .None)
@@ -265,7 +265,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         let another = (isFinished! ? UnfinishedVC : FinishedVC)
         var message = (isFinished! ? "已恢复" : "已完成")
         data.state = (isFinished! ? 0 : 2)
-        if DataBaseService.sharedInstance.updateInDB(data){
+        if DatabaseService.sharedInstance.updateInDB(data){
             self.dataArr.removeAtIndex(row)
             self.mainTableView.beginUpdates()
             self.mainTableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: row, inSection: 0)], withRowAnimation: .Automatic)

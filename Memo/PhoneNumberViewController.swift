@@ -178,7 +178,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
 //
 //            if self.submitAuthCode(){
                 print("zhuce")
-                self.dataBase = DataBaseService.sharedInstance.getDataBase()
+                self.dataBase = DatabaseService.sharedInstance.getDatabase()
                 self.dataBase.open()
                 let baseURL = NSURL(string: "http://10.1.45.102/")
                 let manager = AFHTTPSessionManager(baseURL: baseURL)

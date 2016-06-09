@@ -22,6 +22,8 @@ class RootTabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        UnfinishedVC = UnfinishedViewController(title:"待办")
+        FinishedVC = FinishedViewController(title:"完成")
         self.view.backgroundColor = UIColor.whiteColor()
         self.viewControllers = self.loadNavControllers([UnfinishedVC, FinishedVC])
         self.setUpTabBar()

@@ -11,7 +11,7 @@ import UIKit
 class FinishedViewController: BaseViewController {
     
     override func loadTableView() {
-        self.dataArr = DataBaseService.sharedInstance.selectAllInDB().1
+        self.dataArr = DatabaseService.sharedInstance.selectAllInDB().1
         super.loadTableView()
     }
     

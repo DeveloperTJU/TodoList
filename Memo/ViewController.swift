@@ -12,7 +12,7 @@ import UIKit
 class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        let dictArr = DataBaseService.sharedInstance.selectData("data_4e68b6e728333fcc4b606fc760658356")
+        let dictArr = DatabaseService.sharedInstance.selectData("data_4e68b6e728333fcc4b606fc760658356")
         let paramDict = ["UID":"700a0d94dd539543bad0d3a237ae53b5", "TaskModelArr":dictArr]
         let url:String = "todolist/index.php/Home/Task/SynchronizeTask"
         RequestAPI.POST(url, body: paramDict, succeed: succeed, failed: failed)
