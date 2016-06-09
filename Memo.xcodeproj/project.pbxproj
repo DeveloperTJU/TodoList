@@ -56,6 +56,8 @@
 		A85783581D03F7D5003D73D9 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85783561D03F7D5003D73D9 /* LogInViewController.swift */; };
 		A85783591D03F7D5003D73D9 /* PhoneNumberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85783571D03F7D5003D73D9 /* PhoneNumberViewController.swift */; };
 		A87690841D050EE700BAB593 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87690831D050EE700BAB593 /* ViewController.swift */; };
+		A8DB470E1D07F94C00ECAD49 /* RequestClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8DB470D1D07F94C00ECAD49 /* RequestClient.swift */; };
+		A8DB47101D07F9E900ECAD49 /* RequestAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8DB470F1D07F9E900ECAD49 /* RequestAPI.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -125,6 +127,8 @@
 		A85783561D03F7D5003D73D9 /* LogInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		A85783571D03F7D5003D73D9 /* PhoneNumberViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneNumberViewController.swift; sourceTree = "<group>"; };
 		A87690831D050EE700BAB593 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		A8DB470D1D07F94C00ECAD49 /* RequestClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestClient.swift; sourceTree = "<group>"; };
+		A8DB470F1D07F9E900ECAD49 /* RequestAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestAPI.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -248,6 +252,8 @@
 				A5A9A0EE1CEBF6C4006BB3A1 /* LaunchScreen.storyboard */,
 				A5A9A0F11CEBF6C4006BB3A1 /* Info.plist */,
 				A87690831D050EE700BAB593 /* ViewController.swift */,
+				A8DB470D1D07F94C00ECAD49 /* RequestClient.swift */,
+				A8DB470F1D07F9E900ECAD49 /* RequestAPI.swift */,
 			);
 			path = Memo;
 			sourceTree = "<group>";
@@ -500,6 +506,7 @@
 				A599E43C1CF68C44005CDB8D /* DataBaseService.swift in Sources */,
 				A53A92EC1D07A14300144FE6 /* ChangePaswordController.swift in Sources */,
 				A5C5C4CD1CF688360078C4CF /* FMResultSet.m in Sources */,
+				A8DB470E1D07F94C00ECAD49 /* RequestClient.swift in Sources */,
 				A502F6A41D05159800C519E9 /* EditDetailViewController.swift in Sources */,
 				A5A9A0FC1CEBF862006BB3A1 /* CustomNavController.swift in Sources */,
 				A53A92F21D07A19200144FE6 /* PersonalCenterController.swift in Sources */,
@@ -507,6 +514,7 @@
 				A5C5C4CA1CF688360078C4CF /* FMDatabaseAdditions.m in Sources */,
 				A5DAA8851CFFCFD9008B8CAC /* StringHelper.swift in Sources */,
 				A53A92F61D07A1B000144FE6 /* ChangePasswodCell.swift in Sources */,
+				A8DB47101D07F9E900ECAD49 /* RequestAPI.swift in Sources */,
 				A5A9A0FA1CEBF806006BB3A1 /* RootTabBarController.swift in Sources */,
 				A5A9A1121CEC3761006BB3A1 /* ItemModel.swift in Sources */,
 				A5C5C4CB1CF688360078C4CF /* FMDatabasePool.m in Sources */,

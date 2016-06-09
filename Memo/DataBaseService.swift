@@ -54,12 +54,49 @@ class DataBaseService: NSObject {
     func getDataBaseQueue() -> FMDatabaseQueue {
         return FMDatabaseQueue(path: (UIApplication.sharedApplication().delegate as! AppDelegate).dataBasePath)
     }
-    
+    func selectData(table:String) -> Dictionary<String,AnyObject> {
+        self.dataBase.open()
+        var dictArr = Dictionary<String, AnyObject>()
+        var sqlStr = "SELECT * FROM \(table)"
+        let rs:FMResultSet = dataBase.executeQuery(sqlStr, withArgumentsInArray: [])
+        while rs.next(){
+            var data:NSDictionary = ["title": rs.stringForColumn("TITLE"), "content": rs.stringForColumn("CONTENT"), "createtime": rs.stringForColumn("CREATE_TIME"), "lastedittime": rs.stringForColumn("LAST_EDIT_TIME"), "alerttime": rs.stringForColumn("ALERT_TIME"), "level": rs.longForColumn("LEVEL"), "state": rs.longForColumn("STATE")]
+            dictArr["\(rs.stringForColumn("CREATE_TIME"))"] = data
+            
+    }
+        return dictArr
+    }
     func insertInDB(data:ItemModel) -> Bool {
         self.dataBase.open()
         let sqlStr = "INSERT INTO data_\(UserVC.currentUser.md5) VALUES (?, ?, ?, ?, ?, ?, ?)"
         let succeed = self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: [data.title, data.content, data.createTime, data.lastEditTime, data.alertTime, data.level, data.state])
         self.dataBase.close()
+        //RequestAPI.GET(<#T##url: String!##String!#>, body: <#T##AnyObject?#>, succeed: <#T##Succeed##Succeed##(NSURLSessionDataTask!, AnyObject!) -> Void#>, failed: <#T##Failure##Failure##(NSURLSessionDataTask!, NSError!) -> Void#>)
+//        let baseURL = NSURL(string: "http://172.26.209.192/")
+//        let manager = AFHTTPSessionManager(baseURL: baseURL)
+//        let paramDict:Dictionary = ["UID":UserInfo.UID,"TaskModel":data]
+//        let url:String = "todolist/index.php/Home/Task/SynchronizeTask"
+//        //请求数据的序列化器
+//        manager.requestSerializer = AFHTTPRequestSerializer()
+//        //返回数据的序列化器
+//        manager.responseSerializer = AFHTTPResponseSerializer()
+//        let resSet = NSSet(array: ["text/html"])
+//        manager.responseSerializer.acceptableContentTypes = resSet as? Set<String>
+//        manager.POST(url, parameters: paramDict, success: { (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
+//            //成功回调
+//            print("success")
+//            
+//            let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
+//            
+//            print("请求结果：\(resultDict)")
+//            let a = resultDict["taskModelArr"] as! NSArray
+//            print(a.count)
+//            
+//            
+//        }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
+//            //失败回调
+//            print("网络调用失败:\(error)")
+//        }
         return succeed
     }
     

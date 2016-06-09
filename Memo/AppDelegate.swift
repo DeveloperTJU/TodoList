@@ -25,27 +25,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.dataBase = DataBaseService.sharedInstance.getDataBase()
         self.dataBase.open()
         var sqlStr = "CREATE TABLE IF NOT EXISTS USER(UID TEXT, PHONENUMBER TEXT, NICKNAME TEXT, CURRENTUSER INT, PRIMARY KEY(UID))"
-        if !self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: []) {
-            print("Error:\(self.dataBase.lastErrorMessage())")
-        }
+//        if !self.dataBase.executeUpdate(sqlStr, withArgumentsInArray: []) {
+//            print("Error:\(self.dataBase.lastErrorMessage())")
+//        }
         
         let screenFrame = UIScreen.mainScreen().bounds
         self.window = UIWindow(frame: screenFrame)
         self.window?.backgroundColor = UIColor.whiteColor()
         self.window?.makeKeyAndVisible()
-        sqlStr = "SELECT * FROM USER WHERE CURRENTUSER = 1"
-        let rs:FMResultSet = self.dataBase.executeQuery(sqlStr, withArgumentsInArray: [])
-        if rs.next() {
-            UserVC.currentUser = rs.stringForColumn("PHONENUMBER")
-            UnfinishedVC = UnfinishedViewController(title:"待办")
-            FinishedVC = FinishedViewController(title:"完成")
-            self.window?.rootViewController = RootTabBarController()
-            //print("2222")
-        }
-        else {
-            self.window?.rootViewController = LogInViewController()
-        }
-        self.window?.rootViewController = LogInViewController()
+//        sqlStr = "SELECT * FROM USER WHERE CURRENTUSER = 1"
+//        let rs:FMResultSet = self.dataBase.executeQuery(sqlStr, withArgumentsInArray: [])
+//        if rs.next() {
+//            UserVC.currentUser = rs.stringForColumn("PHONENUMBER")
+//            UnfinishedVC = UnfinishedViewController(title:"待办")
+//            FinishedVC = FinishedViewController(title:"完成")
+//            self.window?.rootViewController = RootTabBarController()
+//            //print("2222")
+//        }
+//        else {
+//            self.window?.rootViewController = LogInViewController()
+//        }
+        self.window?.rootViewController = ViewController()
         
         
         return true
