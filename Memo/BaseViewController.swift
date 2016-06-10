@@ -212,6 +212,12 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         let index = rank(data.level, lastEditTime: data.lastEditTime)
         data.state = (isFinished! ? 2 : 0)
         if DatabaseService.sharedInstance.insertInDB(data){
+            let url = "todolist/index.php/Home/Task/AddTask"
+            let task = ["title":data.title, "content":data.content, "createtime":data.createTime, "lastedittime":data.lastEditTime, "alerttime":data.alertTime, "level":data.level, "state":data.state]
+            let paramDict = ["UID":UserInfo.UID, "TaskModel":task]
+            RequestAPI.POST(url, body: paramDict, succeed:{ (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
+                }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
+            }
             dataArr.insert(data, atIndex: index)
             self.mainTableView.beginUpdates()
             self.mainTableView.insertRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: hasAnimation ? .Automatic : .None)
@@ -229,6 +235,11 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     func removeData(row index:Int){
         self.dataArr[index].state += 1
         if DatabaseService.sharedInstance.updateInDB(self.dataArr[index]){
+            let url = "todolist/index.php/Home/Task/DeleteTask"
+            let paramDict = ["UID":UserInfo.UID, "createtime":self.dataArr[index].createTime]
+            RequestAPI.POST(url, body: paramDict, succeed:{ (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
+                }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
+            }
             dataArr.removeAtIndex(index)
             self.mainTableView.beginUpdates()
             self.mainTableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .None)

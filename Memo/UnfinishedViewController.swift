@@ -241,6 +241,13 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
     //更新一条数据
     func updateData(data:ItemModel) -> Void {
         DatabaseService.sharedInstance.updateInDB(data)
+        let url = "todolist/index.php/Home/Task/UpdateTask"
+        let task = ["title":data.title, "content":data.content, "createtime":data.createTime, "lastedittime":data.lastEditTime, "alerttime":data.alertTime, "level":data.level, "state":data.state]
+        let paramDict = ["UID":UserInfo.UID, "TaskModel":task]
+        RequestAPI.POST(url, body: paramDict, succeed:{ (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
+            print("update")
+            }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
+        }
         let index = findIndex(data.createTime)
         let row = rank(data.level, lastEditTime: data.lastEditTime)
         dataArr.removeAtIndex(index)
