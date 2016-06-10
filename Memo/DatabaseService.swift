@@ -120,6 +120,13 @@ class DatabaseService: NSObject {
         let sqlStr = "INSERT INTO data_\(UserInfo.phoneNumber.md5) VALUES (?, ?, ?, ?, ?, ?, ?)"
         let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [data.title, data.content, data.createTime, data.lastEditTime, data.alertTime, data.level, data.state])
         self.database.close()
+        let url = "todolist/index.php/Home/Task/AddTask"
+        let task = ["title":data.title, "content":data.content, "createtime":data.createTime, "lastedittime":data.lastEditTime, "alerttime":data.alertTime, "level":data.level, "state":data.state]
+        let paramDict = ["UID":UserInfo.UID, "TaskModel":task]
+        RequestAPI.POST(url, body: paramDict, succeed:{ (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
+            print("add")
+        }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
+        }
         return succeed
     }
     
@@ -132,9 +139,10 @@ class DatabaseService: NSObject {
         return succeed
     }
     
+    //同步成功后清除本地已删除任务
     func clearDeletedData() -> Bool {
         self.database.open()
-        let sqlStr = "DELETE FROM data_\(UserInfo.phoneNumber.md5) WHERE STATE=1 OR STATE=3?"
+        let sqlStr = "DELETE FROM data_\(UserInfo.phoneNumber.md5) WHERE STATE=1 OR STATE=3"
         let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [])
         self.database.close()
         return succeed
@@ -146,6 +154,25 @@ class DatabaseService: NSObject {
         let sqlStr = "UPDATE data_\(UserInfo.phoneNumber.md5) SET TITLE=?, CONTENT=?, LAST_EDIT_TIME=?, ALERT_TIME=?, LEVEL=?, STATE=? WHERE CREATE_TIME=?"
         let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [data.title, data.content, data.lastEditTime, data.alertTime, data.level, data.state, data.createTime])
         self.database.close()
+        if data.state & 1 == 1{
+            //删除
+            let url = "todolist/index.php/Home/Task/DeleteTask"
+            let paramDict = ["UID":UserInfo.UID, "createtime":data.createTime]
+            RequestAPI.POST(url, body: paramDict, succeed:{ (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
+                print("delete")
+            }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
+            }
+        }
+        else{
+            //更新
+            let url = "todolist/index.php/Home/Task/UpdateTask"
+            let task = ["title":data.title, "content":data.content, "createtime":data.createTime, "lastedittime":data.lastEditTime, "alerttime":data.alertTime, "level":data.level, "state":data.state]
+            let paramDict = ["UID":UserInfo.UID, "TaskModel":task]
+            RequestAPI.POST(url, body: paramDict, succeed:{ (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
+                print("update")
+            }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
+            }
+        }
         return succeed
     }
     
