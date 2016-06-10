@@ -62,29 +62,50 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         titleLabel.text = currentList.title
         titleLabel.frame = CGRectMake(60, 35, self.view.frame.size.width - 90, 20)
         titleLabel.textColor = UIColor.grayColor()
+        titleLabel.font = UIFont.systemFontOfSize(16)
         self.view.addSubview(titleLabel)
         
         //添加detail
-        let detailLabel = UILabel()
-        detailLabel.text = currentList.content
-        detailLabel.frame = CGRectMake(30, 75, self.view.frame.size.width - 90, 70)
-        detailLabel.numberOfLines = 0
-        detailLabel.textColor = UIColor.grayColor()
-        self.view.addSubview(detailLabel)
+        let detailView = UITextView(frame: CGRectMake(30, 85, self.view.frame.size.width - 60, self.view.frame.size.height-250))
+        detailView.editable = false
+        
+        let comment_message_style = NSMutableParagraphStyle()
+        comment_message_style.firstLineHeadIndent = 24.0
+        comment_message_style.headIndent = 10.0
+        let comment_message_indent = NSMutableAttributedString(string:
+            currentList.content)
+        comment_message_indent.addAttribute(NSParagraphStyleAttributeName,
+                                            value: comment_message_style,
+                                            range: NSMakeRange(0, comment_message_indent.length))
+        comment_message_indent.addAttribute(NSFontAttributeName,
+                                            value: UIFont.systemFontOfSize(14),
+                                            range: NSMakeRange(0, comment_message_indent.length))
+        comment_message_indent.addAttribute(NSForegroundColorAttributeName,
+                                            value: UIColor.grayColor(),
+                                            range: NSMakeRange(0, comment_message_indent.length))
+        detailView.attributedText = comment_message_indent
+        
+        self.view.addSubview(detailView)
         
         //提醒时间语句
         let timeLabel = UILabel()
         timeLabel.text = "提醒时间："
         timeLabel.frame = CGRectMake(40, self.view.frame.size.height - 165, (self.view.frame.size.width / 2 )-30, 20)
-        timeLabel.font = UIFont(name:"Zapfino", size:15)
+        timeLabel.font = UIFont.systemFontOfSize(13)
         timeLabel.textColor = UIColor.grayColor()
         self.view.addSubview(timeLabel)
         
         //提醒时间
         let timeLabel1 = UILabel()
-        timeLabel1.text = currentList.alertTime
-        timeLabel1.frame = CGRectMake(110, self.view.frame.size.height - 168, (self.view.frame.size.width / 2 )-30, 20)
+        if self.currentList.alertTime == ""{
+            timeLabel1.text = "无"
+        }
+        else{
+            timeLabel1.text = currentList.alertTime
+        }
+        timeLabel1.frame = CGRectMake(110, self.view.frame.size.height - 165, (self.view.frame.size.width / 2 )-30, 20)
         timeLabel1.textColor = UIColor.grayColor()
+        timeLabel1.font = UIFont.systemFontOfSize(13)
         self.view.addSubview(timeLabel1)
         
         //显示星级
@@ -94,7 +115,6 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
             button.setImage(UIImage(named: "黄星"), forState: .Normal)
             button.setImage(UIImage(named: "黄星"), forState: .Highlighted)
             self.view.addSubview(button)
-            print(currentList.level)
         }
         if currentList.level != 5{
         for i in currentList.level+1..<5 {
