@@ -52,7 +52,7 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         self.view.addSubview(TextView)
         
         //添加对勾图片
-        let img = UIImage(named: "finished_selected")
+        let img = UIImage(named: "完成选中")
         let vImg = UIImageView(image: img)
         vImg.frame = CGRect(x:30,y:35,width:20,height:20)
         self.view.addSubview(vImg)
@@ -88,12 +88,27 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         self.view.addSubview(timeLabel1)
         
         //显示星级
-        
-        
+        for i in 0..<currentList.level+1 {
+            let button = UIButton()
+            button.frame = CGRectMake(self.view.frame.size.width - 125 + CGFloat.init(integerLiteral: 20 * i ), self.view.frame.size.height - 165, 15, 15)
+            button.setImage(UIImage(named: "黄星"), forState: .Normal)
+            button.setImage(UIImage(named: "黄星"), forState: .Highlighted)
+            self.view.addSubview(button)
+            print(currentList.level)
+        }
+        if currentList.level != 5{
+        for i in currentList.level+1..<5 {
+            let button = UIButton()
+            button.frame = CGRectMake(self.view.frame.size.width - 125 + CGFloat.init(integerLiteral: 20 * i), self.view.frame.size.height - 165, 15, 15)
+            button.setImage(UIImage(named: "灰星"), forState: .Normal)
+            button.setImage(UIImage(named: "灰星"), forState: .Highlighted)
+            self.view.addSubview(button)
+        }
+        }
         
         
         //分享按钮
-        let shareimg = UIImage(named: "share")
+        let shareimg = UIImage(named: "黑分享")
         let vshareImg = UIImageView(image: shareimg)
         vshareImg.frame = CGRect(x:90,y:self.view.frame.size.height - 105,width:25,height:25)
         self.view.addSubview(vshareImg)
@@ -104,7 +119,7 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         self.view.addSubview(shareButton)
         
         //删除按钮
-        let deleteimg = UIImage(named: "delete")
+        let deleteimg = UIImage(named: "垃圾箱")
         let vdeleteImg = UIImageView(image: deleteimg)
         vdeleteImg.frame = CGRect(x:self.view.frame.size.width / 2 + 90,y:self.view.frame.size.height - 105,width:25,height:25)
         self.view.addSubview(vdeleteImg)
