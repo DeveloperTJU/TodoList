@@ -14,6 +14,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     var mainTableView:UITableView!
     var dataArr:[ItemModel]!                //数据源
     var isFinished:Bool!                    //表示当前标签页是"已完成"还是"未完成"。
+    var userButton:UIButton!
     
     init(){
         super.init(nibName: nil, bundle: nil)
@@ -53,13 +54,13 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         //添加导航栏按钮
         let refreshButton = UIBarButtonItem(image: UIImage(named: "更新"), style: .Plain, target: self, action: Selector("refreshManually"))
         let searchButton = UIBarButtonItem(image: UIImage(named: "搜索"), style: .Plain, target: self, action: Selector("search"))
-        let button = UIButton(type: .System)
-        button.frame = CGRectMake(0, 0, 120, 35)
-        button.setImage(UIImage(named: UserInfo.phoneNumber.md5), forState: .Normal)
-        button.setTitle(" \(UserInfo.nickName)", forState: .Normal)
-        button.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 13.0)!
-        button.addTarget(self, action: Selector("userInfo:"), forControlEvents: .TouchDown)
-        let userButton = UIBarButtonItem(customView: button)
+        userButton = UIButton(type: .System)
+        userButton.frame = CGRectMake(0, 0, 120, 35)
+        userButton.setImage(UIImage(named: UserInfo.phoneNumber.md5), forState: .Normal)
+        userButton.setTitle(" \(UserInfo.nickName)", forState: .Normal)
+        userButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 13.0)!
+        userButton.addTarget(self, action: Selector("userInfo:"), forControlEvents: .TouchDown)
+        let userBarButton = UIBarButtonItem(customView: userButton)
         
         //调节导航栏控件间隔
         let spacer1 = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: nil,
@@ -72,7 +73,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
             action: nil)
         spacer3.width = -20
         
-        self.navigationItem.leftBarButtonItems = [spacer1, userButton]
+        self.navigationItem.leftBarButtonItems = [spacer1, userBarButton]
         self.navigationItem.rightBarButtonItems = [spacer2, refreshButton, spacer3, searchButton]
     }
     
@@ -82,6 +83,11 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
             if let cell = self.mainTableView.cellForRowAtIndexPath(NSIndexPath(forRow: i, inSection: 0)) as? ItemCell {
                cell.timeLabel.text = friendlyTime(dataArr[i].lastEditTime)
             }
+        }
+        self.userButton.setTitle(" \(UserInfo.nickName)", forState: .Normal)
+        let image = UIImage(named: UserInfo.phoneNumber.md5)
+        if image != nil{
+            userButton.setImage(UIImage(named: UserInfo.phoneNumber.md5), forState: .Normal)
         }
     }
     
@@ -104,6 +110,9 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         var message = "同步失败"
         if RequestAPI.SynchronizeTask(){
             message = "同步成功"
+        }
+        else if UserInfo.phoneNumber == "Visitor" {
+            message = "游客模式不可用"
         }
         let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         hud.mode = MBProgressHUDMode.Text
@@ -235,7 +244,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.titleLabel.text = item.title
         cell.timeLabel.text = friendlyTime(item.lastEditTime)
         cell.createTime = item.createTime
-        cell.selectionStyle = UITableViewCellSelectionStyle.None
+        cell.selectionStyle = .None
         cell.stateButton.setImage(UIImage(named: "完成"), forState: isFinished! ? .Highlighted : .Normal)
         cell.stateButton.setImage(UIImage(named: "完成选中"), forState: isFinished! ? .Normal : .Highlighted)
         cell.delegate = self

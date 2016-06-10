@@ -14,6 +14,9 @@ class RequestAPI: NSObject {
     
     //普通post网络请求
     class func POST(url:String!,body:AnyObject?,succeed:Succeed,failed:Failure) {
+        if UserInfo.phoneNumber == "Visitor"{
+            return
+        }
         let mysucceed:Succeed = succeed
         let myfailure:Failure = failed
         RequestClient.sharedInstance.POST(url, parameters: body, success: { (task:NSURLSessionDataTask, responseObject:AnyObject?) -> Void in
@@ -25,7 +28,7 @@ class RequestAPI: NSObject {
     
     class func SynchronizeTask() -> Bool{
         var succeed = false
-        let url:String = "todolist/index.php/Home/Task/SynchronizeTask"
+        let url = "todolist/index.php/Home/Task/SynchronizeTask"
         let paramDict = ["UID":UserInfo.UID, "TaskModel":DatabaseService.sharedInstance.selectLocalData()]
         RequestAPI.POST(url, body: paramDict, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
             //成功回调

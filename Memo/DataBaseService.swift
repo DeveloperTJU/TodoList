@@ -60,7 +60,7 @@ class DatabaseService: NSObject {
         let sqlStr = "SELECT * FROM USER WHERE CURRENTUSER = 1"
         self.database.open()
         let rs = self.database.executeQuery(sqlStr, withArgumentsInArray: [])
-        if rs.next() {
+        if rs.next(){
             UserInfo.UID = rs.stringForColumn("UID")
             UserInfo.phoneNumber = rs.stringForColumn("PHONENUMBER")
             UserInfo.nickName = rs.stringForColumn("NICKNAME")

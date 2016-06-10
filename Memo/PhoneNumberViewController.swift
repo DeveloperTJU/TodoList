@@ -13,7 +13,6 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
     
     var phoneText:UITextField!
     var txtPwd:UITextField!
-    //var txtPwdConfirm:UITextField!
     var txtVerifyCode:UITextField!
     var txtNickname:UITextField!
     var register:UIButton!
@@ -31,11 +30,13 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         vImg.frame = CGRect(x:0,y:0,width:mainSize.width ,height:mainSize.height)
         self.view.sendSubviewToBack(vImg)
         self.view.addSubview(vImg)
+        
         //添加注册框
-        let vReg = UIView(frame:CGRectMake(10, 146, mainSize.width - 20, 132))
+        let vReg = UIView(frame:CGRectMake(10, 102, mainSize.width - 20, 176))
         self.view.addSubview(vReg)
         vReg.addSubview(MyRect(frame: CGRectMake(0, 41, mainSize.width - 20, 3)))
         vReg.addSubview(MyRect(frame: CGRectMake(0, 85, mainSize.width - 20, 3)))
+        vReg.addSubview(MyRect(frame: CGRectMake(0, 129, mainSize.width - 20, 3)))
         vReg.layer.cornerRadius = 3
         vReg.backgroundColor = .whiteColor()
         
@@ -44,26 +45,24 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         self.createTextField(phoneText,isPasswordTextfield: false, hint: "手机号码")
         self.addImageToTextfield(phoneText, imageName: "灰手机")
         vReg.addSubview(phoneText)
+        
         //密码输入框
-        txtPwd = UITextField(frame:CGRectMake(0, 88, vReg.frame.size.width , 44))
+        txtPwd = UITextField(frame:CGRectMake(0, 132, vReg.frame.size.width , 44))
         self.createTextField(txtPwd,isPasswordTextfield: true,hint: "输入密码，至少六位")
         self.addImageToTextfield(txtPwd, imageName: "灰锁")
         vReg.addSubview(txtPwd)
-        //密码确认框
-//        txtPwdConfirm = UITextField(frame:CGRectMake(30, 210, vLogin.frame.size.width - 60, 44))
-//        self.createTextField(txtPwdConfirm,isPasswordTextfield: true,hint: "确认密码")
-//        self.addImageToTextfield(txtPwdConfirm, imageName: "iconfont-password")
-//        vLogin.addSubview(txtPwdConfirm)
+        
         //验证码输入框
         txtVerifyCode = UITextField(frame:CGRectMake(0, 44, vReg.frame.size.width , 44))
         self.createTextField(txtVerifyCode,isPasswordTextfield: false,hint: "请输入验证码")
         self.addImageToTextfield(txtVerifyCode, imageName: "灰锁")
         vReg.addSubview(txtVerifyCode)
+        
         //昵称输入框
-//        txtNickname = UITextField(frame:CGRectMake(0, 88, vLogin.frame.size.width , 44))
-//        self.createTextField(txtNickname,isPasswordTextfield: false, hint: "请输入昵称")
-//        self.addImageToTextfield(txtNickname, imageName: "iconfont-user")
-//        vLogin.addSubview(txtNickname)
+        txtNickname = UITextField(frame:CGRectMake(0, 88, vReg.frame.size.width, 44))
+        self.createTextField(txtNickname, isPasswordTextfield: false, hint: "请输入昵称")
+        self.addImageToTextfield(txtNickname, imageName: "灰手机")
+        vReg.addSubview(txtNickname)
         
         self.register = UIButton(type:.System)
         //设置按钮位置和大小
@@ -80,7 +79,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         buttonVerifyCode.frame = CGRectMake(10, 290, vReg.frame.size.width , 44)
         buttonVerifyCode.backgroundColor = .grayColor()
         //设置按钮文字
-        buttonVerifyCode.setTitle("注册", forState:UIControlState.Normal)
+        buttonVerifyCode.setTitle("注   册", forState:UIControlState.Normal)
         buttonVerifyCode.backgroundColor = UIColor(red: 67/255, green: 67/255, blue: 67/255, alpha: 1)
         buttonVerifyCode.tintColor = UIColor(red: 232/255, green: 208/255, blue: 120/255, alpha: 1)
         buttonVerifyCode.addTarget(self, action:Selector("tapped1:"),forControlEvents: .TouchUpInside)

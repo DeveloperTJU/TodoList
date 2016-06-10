@@ -60,7 +60,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         let arr1 = ["当前账号","修改密码"]
         let arr2 = ["清理缓存"]
         let arr3 = ["关于我们"]
-        let arr4 = ["注销"]
+        let arr4 = ["注   销"]
         self.dataArrs = [arr0,arr1,arr2,arr3,arr4]
     }
     
@@ -71,7 +71,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         self.imageView.layer.masksToBounds = true
         self.imageView.layer.borderColor = UIColor.grayColor().CGColor
         self.imageView.layer.borderWidth = 1
-        self.imageView.userInteractionEnabled = true
+        self.imageView.userInteractionEnabled = UserInfo.phoneNumber != "Visitor"
         let image = UIImage(named: UserInfo.phoneNumber.md5)
         let scale = image!.size.width > image!.size.height ? image!.size.height/80 : image!.size.width/80
         self.imageView.image = UIImage(CGImage: image!.CGImage!, scale: scale, orientation: .Up)
@@ -85,14 +85,14 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         let textFrame:CGRect = CGRectMake(120, 0, 450, 100)
         self.nickNameText = UILabel(frame: textFrame)
         self.nickNameText.text = UserInfo.nickName
-        self.nickNameText.userInteractionEnabled = true
+        self.nickNameText.userInteractionEnabled = UserInfo.phoneNumber != "Visitor"
         let tapGesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "onNickNameClicked:")
         self.nickNameText.addGestureRecognizer(tapGesture)
     }
     
     //修改头像
     func changeAvaterImage(gesture:UITapGestureRecognizer){
-        let actionSheet:UIActionSheet = UIActionSheet(title: "获取图像", delegate: self, cancelButtonTitle: "取消", destructiveButtonTitle: "从相册选择", otherButtonTitles: "拍照")
+        let actionSheet = UIActionSheet(title: "获取图像", delegate: self, cancelButtonTitle: "取消", destructiveButtonTitle: "从相册选择", otherButtonTitles: "拍照")
         actionSheet.tag  = 1000
         actionSheet.showInView(self.view)
     }
@@ -206,22 +206,28 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
             cell.addSubview(phoneNumberText)
         }
         else if indexPath.section == 4 && indexPath.row == 0{
-            cell.backgroundColor = .redColor()
+            if UserInfo.phoneNumber == "Visitor"{
+                cell.backgroundColor = UIColor(red: 129/255, green: 192/255, blue: 23/255, alpha: 1.0)
+                cell.textLabel?.text = "我 要 注 册"
+            }
+            else{
+                cell.backgroundColor = .redColor()
+            }
             cell.textLabel?.textAlignment = .Center
         }
         else{
             let detailImageView = UIImageView(image: UIImage(named: "右箭头"))
             detailImageView.frame = CGRectMake(self.view.bounds.size.width - 40, (cell.frame.minY + cell.frame.maxY) / 2 - 6, 12, 12)
-            cell.addSubview(detailImageView)
             if indexPath.section == 0 && indexPath.row == 0{
                 let frame:CGRect = CGRectMake(20, 0, 200, 200)
                 cell = UITableViewCell(frame: frame)
-                detailImageView.frame = CGRectMake(self.view.bounds.size.width - 40, cell.frame.minY + 94, 12, 12)
+                detailImageView.frame = CGRectMake(self.view.bounds.size.width - 40, 44, 12, 12)
                 cell.addSubview(imageView)
                 cell.addSubview(nickNameText)
                 nickNameText.font = UIFont(name: "HelveticaNeue-Thin", size: 14.0)
                 cell.selectionStyle = .None
             }
+            cell.addSubview(detailImageView)
         }
         cell.textLabel!.font = UIFont(name: "HelveticaNeue-Thin", size: 14.0)
         cell.layer.cornerRadius = 3
@@ -235,7 +241,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         switch(indexPath.section){
         case 1:
             if indexPath.row == 0{
-            }else if indexPath.row == 1{
+            }else if indexPath.row == 1 && UserInfo.phoneNumber != "Visitor"{
                 let reachability = Reachability.reachabilityForInternetConnection()
                 if reachability!.isReachable(){
                     let ChangePassVC = ChangePaswordController()
@@ -257,25 +263,33 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
             alert.addAction(cancelAction)
             self.presentViewController(alert, animated: true, completion: nil)
         case 4:
-            let alert = UIAlertController(title: "提示", message: "确定注销？", preferredStyle: .Alert)
-            let confirmAction = UIAlertAction(title: "确定", style: .Default, handler: { (confirm) in
-                if DatabaseService.sharedInstance.updateUser(0){
-                    UserInfo.UID = nil
-                    UserInfo.phoneNumber = nil
-                    UserInfo.nickName = nil
-                    self.presentViewController(LogInViewController(), animated: true, completion: nil)
-                }
-                else{
-                    let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-                    hud.mode = MBProgressHUDMode.Text
-                    hud.label.text = "注销失败"
-                    hud.hideAnimated(true, afterDelay: 0.5)
-                }
-            })
-            let cancelAction = UIAlertAction(title: "取消", style: .Cancel, handler: nil)
-            alert.addAction(confirmAction)
-            alert.addAction(cancelAction)
-            self.presentViewController(alert, animated: true, completion: nil)
+            if UserInfo.phoneNumber == "Visitor"{
+                UserInfo.UID = nil
+                UserInfo.phoneNumber = nil
+                UserInfo.nickName = nil
+                self.presentViewController(PhoneNumberViewController(), animated: true, completion: nil)
+            }
+            else{
+                let alert = UIAlertController(title: "提示", message: "确定注销？", preferredStyle: .Alert)
+                let confirmAction = UIAlertAction(title: "确定", style: .Default, handler: { (confirm) in
+                    if DatabaseService.sharedInstance.updateUser(0){
+                        UserInfo.UID = nil
+                        UserInfo.phoneNumber = nil
+                        UserInfo.nickName = nil
+                        self.presentViewController(LogInViewController(), animated: true, completion: nil)
+                    }
+                    else{
+                        let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                        hud.mode = MBProgressHUDMode.Text
+                        hud.label.text = "注销失败"
+                        hud.hideAnimated(true, afterDelay: 0.5)
+                    }
+                })
+                let cancelAction = UIAlertAction(title: "取消", style: .Cancel, handler: nil)
+                alert.addAction(confirmAction)
+                alert.addAction(cancelAction)
+                self.presentViewController(alert, animated: true, completion: nil)
+            }
         default:
             break
         }

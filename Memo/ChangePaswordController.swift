@@ -148,21 +148,11 @@ class ChangePaswordController: UIViewController,UITableViewDelegate,UITableViewD
     
     
     func updateDataNetWork(oldPassword:String,newPassword:String){
-        let baseURL = NSURL(string: "http://10.1.43.56/")
-        let manager = AFHTTPSessionManager(baseURL: baseURL)
-        let paramDict:Dictionary = ["UID":"","user_oldPassword":oldPassword,"user_newPassword":newPassword.md5]
         let url:String = "todolist/index.php/Home/User/ChangePassword"
-        //请求数据的序列化器
-        manager.requestSerializer = AFHTTPRequestSerializer()
-        //返回数据的序列化器
-        manager.responseSerializer = AFHTTPResponseSerializer()
-        let resSet = NSSet(array: ["text/html"])
-        manager.responseSerializer.acceptableContentTypes = resSet as? Set<String>
-        manager.POST(url, parameters: paramDict, success: { (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
+        let paramDict:Dictionary = ["UID":"","user_oldPassword":oldPassword,"user_newPassword":newPassword.md5]
+        RequestAPI.POST(url, body: paramDict, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
             //成功回调
-            print("success")
             let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
-            
             print("请求结果：\(resultDict)")
             self.isPasswordChanged = true
             
