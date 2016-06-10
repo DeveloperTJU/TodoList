@@ -173,5 +173,16 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         return true;
     }
     
+//    func setLevel(button:UIButton){
+//        let level = Int.init(button.frame.origin.x) / 20
+//        newItem.data.level = level
+//        for i in 0 ... level {
+//            newItem.levelButton[i].setImage(UIImage(named: "黄星"), forState: .Normal)
+//        }
+//        for i in level+1 ..< 5 {
+//            newItem.levelButton[i].setImage(UIImage(named: "灰星"), forState: .Normal)
+//        }
+//    }
+    
     
 }
