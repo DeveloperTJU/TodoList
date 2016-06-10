@@ -19,7 +19,7 @@
 		A5046DE81D012CCC0046B511 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5046DE71D012CCC0046B511 /* Assets.xcassets */; };
 		A53A92EC1D07A14300144FE6 /* ChangePaswordController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53A92EB1D07A14300144FE6 /* ChangePaswordController.swift */; };
 		A53A92EE1D07A17600144FE6 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53A92ED1D07A17600144FE6 /* Reachability.swift */; };
-		A53A92F11D07A19200144FE6 /* ChangeNickNameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53A92EF1D07A19200144FE6 /* ChangeNickNameController.swift */; };
+		A53A92F11D07A19200144FE6 /* ChangeNicknameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53A92EF1D07A19200144FE6 /* ChangeNicknameController.swift */; };
 		A53A92F21D07A19200144FE6 /* PersonalCenterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53A92F01D07A19200144FE6 /* PersonalCenterController.swift */; };
 		A53A92F41D07A19F00144FE6 /* ChangePasswodCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A53A92F31D07A19F00144FE6 /* ChangePasswodCell.xib */; };
 		A53A92F61D07A1B000144FE6 /* ChangePasswodCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53A92F51D07A1B000144FE6 /* ChangePasswodCell.swift */; };
@@ -78,7 +78,7 @@
 		A5046DE71D012CCC0046B511 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A53A92EB1D07A14300144FE6 /* ChangePaswordController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChangePaswordController.swift; path = Memo/ChangePaswordController.swift; sourceTree = SOURCE_ROOT; };
 		A53A92ED1D07A17600144FE6 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Reachability.swift; path = Memo/Reachability.swift; sourceTree = SOURCE_ROOT; };
-		A53A92EF1D07A19200144FE6 /* ChangeNickNameController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChangeNickNameController.swift; path = Memo/ChangeNickNameController.swift; sourceTree = SOURCE_ROOT; };
+		A53A92EF1D07A19200144FE6 /* ChangeNicknameController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChangeNicknameController.swift; path = Memo/ChangeNicknameController.swift; sourceTree = SOURCE_ROOT; };
 		A53A92F01D07A19200144FE6 /* PersonalCenterController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonalCenterController.swift; path = Memo/PersonalCenterController.swift; sourceTree = SOURCE_ROOT; };
 		A53A92F31D07A19F00144FE6 /* ChangePasswodCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ChangePasswodCell.xib; path = Memo/ChangePasswodCell.xib; sourceTree = SOURCE_ROOT; };
 		A53A92F51D07A1B000144FE6 /* ChangePasswodCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChangePasswodCell.swift; path = Memo/ChangePasswodCell.swift; sourceTree = SOURCE_ROOT; };
@@ -168,7 +168,7 @@
 		5B1C65171D06CA8E00EEAA8B /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				A53A92EF1D07A19200144FE6 /* ChangeNickNameController.swift */,
+				A53A92EF1D07A19200144FE6 /* ChangeNicknameController.swift */,
 				A53A92F01D07A19200144FE6 /* PersonalCenterController.swift */,
 				A53A92EB1D07A14300144FE6 /* ChangePaswordController.swift */,
 				A53A92ED1D07A17600144FE6 /* Reachability.swift */,
@@ -459,7 +459,7 @@
 				A53A92EE1D07A17600144FE6 /* Reachability.swift in Sources */,
 				A5046D871D0115230046B511 /* AFHTTPSessionManager.m in Sources */,
 				A5046D881D0115230046B511 /* AFNetworkReachabilityManager.m in Sources */,
-				A53A92F11D07A19200144FE6 /* ChangeNickNameController.swift in Sources */,
+				A53A92F11D07A19200144FE6 /* ChangeNicknameController.swift in Sources */,
 				A5A9A1021CEBF8BC006BB3A1 /* FinishedViewController.swift in Sources */,
 				A5A9A0E61CEBF6C4006BB3A1 /* AppDelegate.swift in Sources */,
 				A5C5C4C91CF688360078C4CF /* FMDatabase.m in Sources */,
