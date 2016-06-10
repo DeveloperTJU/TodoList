@@ -94,16 +94,8 @@ class DatabaseService: NSObject {
     //更新当前用户的昵称和登录/注销状态
     func updateUser(isCurrentUser:Int) -> Bool{
         self.database.open()
-        var succeed:Bool!
-        var sqlStr:String!
-        if UserInfo.nickName == nil{
-            sqlStr = "UPDATE USER SET CURRENTUSER=? WHERE UID=\(UserInfo.UID)"
-            succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [isCurrentUser])
-        }
-        else{
-            sqlStr = "UPDATE USER SET NICKNAME=?, CURRENTUSER=? WHERE UID=\(UserInfo.UID)"
-            succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [UserInfo.nickName, isCurrentUser])
-        }
+        let sqlStr = "UPDATE USER SET NICKNAME=?, CURRENTUSER=? WHERE UID='\(UserInfo.UID)'"
+        let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [UserInfo.nickName, isCurrentUser])
         self.database.close()
         return succeed
     }

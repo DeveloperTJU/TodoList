@@ -74,7 +74,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         self.imageView.userInteractionEnabled = UserInfo.phoneNumber != "Visitor"
         var image = UIImage(named: UserInfo.phoneNumber.md5)
         if image == nil{
-             image = UIImage(named: "黑邮件")
+             image = UIImage(named: "灰邮件")
         }
         let scale = image!.size.width > image!.size.height ? image!.size.height/80 : image!.size.width/80
         self.imageView.image = UIImage(CGImage: image!.CGImage!, scale: scale, orientation: .Up)
@@ -200,16 +200,17 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         var cell = UITableViewCell(frame:frame)
         let sectionArr = dataArrs[indexPath.section]
         cell.textLabel?.text = sectionArr[indexPath.row]
+        var font = UIFont(name: "HelveticaNeue-Thin", size: 14.0)
         if indexPath.section == 1 && indexPath.row == 0{
             let frame:CGRect = CGRectMake(self.view.bounds.size.width - 140, 5, 100, 42)
             let phoneNumberText = UILabel(frame: frame)
             phoneNumberText.text = UserInfo.phoneNumber
             phoneNumberText.textAlignment = .Right
-            phoneNumberText.font = UIFont(name: "HelveticaNeue-Thin", size: 14.0)
+            phoneNumberText.font = font
             cell.addSubview(phoneNumberText)
         }
         else if indexPath.section == 4 && indexPath.row == 0{
-            cell.textLabel?.font = UIFont(name: "HelveticaNeue", size: 14.0)
+            font = UIFont(name: "HelveticaNeue", size: 16.0)
             if UserInfo.phoneNumber == "Visitor"{
                 cell.backgroundColor = UIColor(red: 129/255, green: 192/255, blue: 23/255, alpha: 1.0)
                 cell.textLabel?.text = "我 要 注 册"
@@ -229,12 +230,12 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
                 detailImageView.frame = CGRectMake(self.view.bounds.size.width - 40, 44, 12, 12)
                 cell.addSubview(imageView)
                 cell.addSubview(nickNameText)
-                nickNameText.font = UIFont(name: "HelveticaNeue-Thin", size: 14.0)
+                nickNameText.font = font
                 cell.selectionStyle = .None
             }
             cell.addSubview(detailImageView)
         }
-        cell.textLabel!.font = UIFont(name: "HelveticaNeue-Thin", size: 14.0)
+        cell.textLabel!.font = font
         cell.layer.cornerRadius = 3
         return cell
     }

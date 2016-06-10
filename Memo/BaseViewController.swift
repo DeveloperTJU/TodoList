@@ -56,8 +56,17 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         let searchButton = UIBarButtonItem(image: UIImage(named: "搜索"), style: .Plain, target: self, action: Selector("search"))
         userButton = UIButton(type: .System)
         userButton.frame = CGRectMake(0, 0, 120, 35)
-        userButton.setImage(UIImage(named: UserInfo.phoneNumber.md5), forState: .Normal)
-        userButton.setTitle(" \(UserInfo.nickName)", forState: .Normal)
+        var image = UIImage(named: UserInfo.phoneNumber.md5)
+        if image == nil{
+            image = UIImage(named: "灰邮件")
+        }
+        let scale = image!.size.width > image!.size.height ? image!.size.height/20 : image!.size.width/20
+        userButton.setImage(UIImage(CGImage: image!.CGImage!, scale: scale, orientation: .Up), forState: .Normal)
+        userButton.imageView?.layer.cornerRadius = 10
+        userButton.imageView?.layer.masksToBounds = true
+        userButton.imageView?.layer.borderColor = UIColor.grayColor().CGColor
+        userButton.imageView?.layer.borderWidth = 1
+        userButton.setTitle(" \(UserInfo.nickName == "" ? UserInfo.phoneNumber : UserInfo.nickName)", forState: .Normal)
         userButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 13.0)!
         userButton.addTarget(self, action: Selector("userInfo:"), forControlEvents: .TouchDown)
         let userBarButton = UIBarButtonItem(customView: userButton)

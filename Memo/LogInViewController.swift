@@ -105,7 +105,6 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
             alertWindow("Error", message: "请输入密码")
         }
         else {
-            print(txtPwd.text!.md5)
             UserInfo.phoneNumber = txtUser.text!
             let url:String = "todolist/index.php/Home/User/Login"
             let paramDict:Dictionary = ["user_phoneNumber":UserInfo.phoneNumber,"user_psw":txtPwd.text!.md5]
