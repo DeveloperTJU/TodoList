@@ -170,8 +170,9 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
 //        if self.checkPassword(){
 //
         //            if self.submitAuthCode(){
+        UserInfo.phoneNumber = phoneText.text!
         let url:String = "todolist/index.php/Home/User/SignUp"
-        let paramDict:Dictionary = ["user_phoneNumber": phoneText.text!, "user_psw":txtPwd.text!.md5, "user_nickname":txtNickname.text!]
+        let paramDict:Dictionary = ["user_phoneNumber": UserInfo.phoneNumber, "user_psw":txtPwd.text!.md5, "user_nickname":txtNickname.text!]
         RequestAPI.POST(url, body: paramDict, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
             //成功回调
             let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
@@ -198,6 +199,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
     func tapped3(button:UIButton){
         UserInfo.phoneNumber = "Visitor"
         UserInfo.nickName = "Visitor"
+        DatabaseService.sharedInstance.initDataTable()
         self.presentViewController(RootTabBarController(), animated: true, completion: nil)
     }
     

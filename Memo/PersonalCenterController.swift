@@ -72,7 +72,10 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         self.imageView.layer.borderColor = UIColor.grayColor().CGColor
         self.imageView.layer.borderWidth = 1
         self.imageView.userInteractionEnabled = UserInfo.phoneNumber != "Visitor"
-        let image = UIImage(named: UserInfo.phoneNumber.md5)
+        var image = UIImage(named: UserInfo.phoneNumber.md5)
+        if image == nil{
+             image = UIImage(named: "黑邮件")
+        }
         let scale = image!.size.width > image!.size.height ? image!.size.height/80 : image!.size.width/80
         self.imageView.image = UIImage(CGImage: image!.CGImage!, scale: scale, orientation: .Up)
         //添加图像手势
@@ -84,7 +87,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     func setNickNameText(){
         let textFrame:CGRect = CGRectMake(120, 0, 450, 100)
         self.nickNameText = UILabel(frame: textFrame)
-        self.nickNameText.text = UserInfo.nickName
+        self.nickNameText.text = UserInfo.nickName == "" ? UserInfo.phoneNumber : UserInfo.nickName
         self.nickNameText.userInteractionEnabled = UserInfo.phoneNumber != "Visitor"
         let tapGesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "onNickNameClicked:")
         self.nickNameText.addGestureRecognizer(tapGesture)
@@ -206,12 +209,14 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
             cell.addSubview(phoneNumberText)
         }
         else if indexPath.section == 4 && indexPath.row == 0{
+            cell.textLabel?.font = UIFont(name: "HelveticaNeue", size: 14.0)
             if UserInfo.phoneNumber == "Visitor"{
                 cell.backgroundColor = UIColor(red: 129/255, green: 192/255, blue: 23/255, alpha: 1.0)
                 cell.textLabel?.text = "我 要 注 册"
             }
             else{
                 cell.backgroundColor = .redColor()
+                cell.textLabel?.textColor = .whiteColor()
             }
             cell.textLabel?.textAlignment = .Center
         }
@@ -264,18 +269,14 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
             self.presentViewController(alert, animated: true, completion: nil)
         case 4:
             if UserInfo.phoneNumber == "Visitor"{
-                UserInfo.UID = nil
-                UserInfo.phoneNumber = nil
-                UserInfo.nickName = nil
+                UserInfo = UserInfoStruct()
                 self.presentViewController(PhoneNumberViewController(), animated: true, completion: nil)
             }
             else{
                 let alert = UIAlertController(title: "提示", message: "确定注销？", preferredStyle: .Alert)
                 let confirmAction = UIAlertAction(title: "确定", style: .Default, handler: { (confirm) in
                     if DatabaseService.sharedInstance.updateUser(0){
-                        UserInfo.UID = nil
-                        UserInfo.phoneNumber = nil
-                        UserInfo.nickName = nil
+                        UserInfo = UserInfoStruct()
                         self.presentViewController(LogInViewController(), animated: true, completion: nil)
                     }
                     else{

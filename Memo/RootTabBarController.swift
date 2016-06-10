@@ -12,7 +12,6 @@ class RootTabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        DatabaseService.sharedInstance.initDataTable()
         UnfinishedVC = UnfinishedViewController(title:"待办")
         FinishedVC = FinishedViewController(title:"完成")
         self.view.backgroundColor = .whiteColor()

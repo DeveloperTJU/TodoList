@@ -9,9 +9,9 @@
 import UIKit
 
 struct UserInfoStruct {
-    var nickName:String!
-    var UID:String!
-    var phoneNumber:String!
+    var nickName:String = ""
+    var UID:String = ""
+    var phoneNumber:String = ""
 }
 
 var UnfinishedVC:UnfinishedViewController!

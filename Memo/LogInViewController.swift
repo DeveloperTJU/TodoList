@@ -105,8 +105,10 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
             alertWindow("Error", message: "请输入密码")
         }
         else {
+            print(txtPwd.text!.md5)
+            UserInfo.phoneNumber = txtUser.text!
             let url:String = "todolist/index.php/Home/User/Login"
-            let paramDict:Dictionary = ["user_phoneNumber":txtUser.text!,"user_psw":txtPwd.text!.md5]
+            let paramDict:Dictionary = ["user_phoneNumber":UserInfo.phoneNumber,"user_psw":txtPwd.text!.md5]
             RequestAPI.POST(url, body: paramDict, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
                 //成功回调
                 let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
@@ -114,6 +116,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
                 if resultDict["isSuccess"] as! Int == 1 {
                     UserInfo.UID = resultDict["UID"] as! String
                     UserInfo.phoneNumber = self.txtUser.text!
+                    DatabaseService.sharedInstance.initDataTable()
                     //同步数据
                     RequestAPI.SynchronizeTask()
                     self.presentViewController(RootTabBarController(), animated: true, completion: nil)
@@ -131,6 +134,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
     func tapped2(button:UIButton){
         UserInfo.phoneNumber = "Visitor"
         UserInfo.nickName = "Visitor"
+        DatabaseService.sharedInstance.initDataTable()
         self.presentViewController(RootTabBarController(), animated: true, completion: nil)
     }
     

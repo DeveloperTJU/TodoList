@@ -34,7 +34,6 @@ class RequestAPI: NSObject {
             //成功回调
             let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
             let arr = resultDict["taskModelArr"] as! NSArray
-            DatabaseService.sharedInstance.initDataTable()
             for data in arr{
                 DatabaseService.sharedInstance.insertInDB(ItemModel(title: data["title"] as! String, content: data["content"] as! String, createTime: data["createtime"] as! String, lastEditTime: data["lastedittime"] as! String, alertTime: data["alerttime"] as! String, level: Int(data["level"] as! String)!, state: Int(data["state"] as! String)!))
             }

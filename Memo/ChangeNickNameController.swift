@@ -44,7 +44,7 @@ class ChangeNickNameController: UIViewController {
     
     func updateDataNetWork(nickName:String) -> Bool{
         let url:String = "todolist/index.php/Home/User/ChangePassword"
-        let paramDict:Dictionary = ["UID":"","user_newNickName":nickName]
+        let paramDict:Dictionary = ["UID":UserInfo.UID, "user_newnickName":nickName]
         var isNickNameChanged = false
         RequestAPI.POST(url, body: paramDict, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
             //成功回调
@@ -61,7 +61,7 @@ class ChangeNickNameController: UIViewController {
 
     func finishChangeNickName(){
         let result = self.nickNameTextField.text! as String
-        if result == "" || result == UserInfo.nickName{
+        if result == "" || UserInfo.nickName == "" || result == UserInfo.nickName{
             self.navigationController?.popViewControllerAnimated(true)
         }else{
             if self.updateDataNetWork(result){
