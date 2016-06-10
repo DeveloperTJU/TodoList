@@ -29,7 +29,9 @@ class RequestAPI: NSObject {
     
     class func SynchronizeTask(afterEvent:Int){
         let url = "todolist/index.php/Home/Task/SynchronizeTask"
-        let paramDict = ["UID":UserInfo.UID, "TaskModel":DatabaseService.sharedInstance.selectLocalData()]
+        let a = DatabaseService.sharedInstance.selectLocalData()
+        print(a)
+        let paramDict = ["UID":UserInfo.UID, "TaskModel":a]
         RequestAPI.POST(url, body: paramDict, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
             //成功回调
             let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)

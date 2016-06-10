@@ -1,8 +1,5 @@
 import UIKit
 
-
-
-
 class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientDelegate {
     
     //用户密码输入框
