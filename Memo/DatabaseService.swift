@@ -63,7 +63,7 @@ class DatabaseService: NSObject {
         if rs.next(){
             UserInfo.UID = rs.stringForColumn("UID")
             UserInfo.phoneNumber = rs.stringForColumn("PHONENUMBER")
-            UserInfo.nickName = rs.stringForColumn("NICKNAME")
+            UserInfo.nickname = rs.stringForColumn("NICKNAME")
             database.close()
             return true
         }
@@ -83,19 +83,28 @@ class DatabaseService: NSObject {
     }
     
     //新增用户
-    func insertUser(UID:String, phoneNumber:String, nickName:String, isCurrentUser:Int) -> Bool{
+    func insertUser(UID:String, phoneNumber:String, nickname:String, isCurrentUser:Int) -> Bool{
         self.database.open()
         let sqlStr = "INSERT INTO USER VALUES (?, ? ,?, ?)"
-        let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [UID, phoneNumber, nickName, isCurrentUser])
+        let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [UID, phoneNumber, nickname, isCurrentUser])
         self.database.close()
         return succeed
     }
     
-    //更新当前用户的昵称和登录/注销状态
-    func updateUser(isCurrentUser:Int) -> Bool{
+    //更新当前用户的昵称
+    func updateNickname() -> Bool{
         self.database.open()
-        let sqlStr = "UPDATE USER SET NICKNAME=?, CURRENTUSER=? WHERE UID='\(UserInfo.UID)'"
-        let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [UserInfo.nickName, isCurrentUser])
+        let sqlStr = "UPDATE USER SET NICKNAME=? WHERE UID='\(UserInfo.UID)'"
+        let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [UserInfo.nickname])
+        self.database.close()
+        return succeed
+    }
+    
+    //更新当前用户的登录/注销状态
+    func updateLoginState(isCurrentUser:Int) -> Bool{
+        self.database.open()
+        let sqlStr = "UPDATE USER SET CURRENTUSER=? WHERE UID='\(UserInfo.UID)'"
+        let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [isCurrentUser])
         self.database.close()
         return succeed
     }

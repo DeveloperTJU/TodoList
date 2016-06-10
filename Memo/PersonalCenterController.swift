@@ -8,14 +8,14 @@
 
 import UIKit
 
-class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITableViewDelegate,UITableViewDataSource,BackForNewPasswordDelegate,ChangeNickNameDelegate{
+class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITableViewDelegate,UITableViewDataSource,BackForNewPasswordDelegate,ChangeNicknameDelegate{
     
     var mainTableView:UITableView!
     var imageView = UIImageView()
     var dataArrs:[[String]] = [[String]]()
-    var nickNameText:UILabel!
+    var nicknameText:UILabel!
     
-    //由于同一时间内存中只有一个User，所以删除User模型，使用全局常量UserInfo存储当前用户信息，用户中心只用到nickName和phoneNumber。头像使用UserInfo.phoneNumber.md5作为文件名，从服务器获得并存入资源文件夹。
+    //由于同一时间内存中只有一个User，所以删除User模型，使用全局常量UserInfo存储当前用户信息，用户中心只用到nickname和phoneNumber。头像使用UserInfo.phoneNumber.md5作为文件名，从服务器获得并存入资源文件夹。
     //请设置AutoLyout，简单使用self.view.size设置相应的frame即可。有问题请直接找我。
     
     override func viewDidLoad() {
@@ -26,7 +26,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         self.setTableView()
         //添加头像
         self.setAvaterImage()
-        self.setNickNameText()
+        self.setNicknameText()
         //添加返回按钮
         self.addLeftButtonItem()
     }
@@ -74,7 +74,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         self.imageView.userInteractionEnabled = UserInfo.phoneNumber != "Visitor"
         var image = UIImage(named: UserInfo.phoneNumber.md5)
         if image == nil{
-             image = UIImage(named: "灰邮件")
+             image = UIImage(named: "黑邮件")
         }
         let scale = image!.size.width > image!.size.height ? image!.size.height/80 : image!.size.width/80
         self.imageView.image = UIImage(CGImage: image!.CGImage!, scale: scale, orientation: .Up)
@@ -84,13 +84,13 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     }
     
     //设置昵称
-    func setNickNameText(){
+    func setNicknameText(){
         let textFrame:CGRect = CGRectMake(120, 0, 450, 100)
-        self.nickNameText = UILabel(frame: textFrame)
-        self.nickNameText.text = UserInfo.nickName == "" ? UserInfo.phoneNumber : UserInfo.nickName
-        self.nickNameText.userInteractionEnabled = UserInfo.phoneNumber != "Visitor"
-        let tapGesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "onNickNameClicked:")
-        self.nickNameText.addGestureRecognizer(tapGesture)
+        self.nicknameText = UILabel(frame: textFrame)
+        self.nicknameText.text = UserInfo.nickname == "" ? UserInfo.phoneNumber : UserInfo.nickname
+        self.nicknameText.userInteractionEnabled = UserInfo.phoneNumber != "Visitor"
+        let tapGesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "onNicknameClicked:")
+        self.nicknameText.addGestureRecognizer(tapGesture)
     }
     
     //修改头像
@@ -229,8 +229,8 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
                 cell = UITableViewCell(frame: frame)
                 detailImageView.frame = CGRectMake(self.view.bounds.size.width - 40, 44, 12, 12)
                 cell.addSubview(imageView)
-                cell.addSubview(nickNameText)
-                nickNameText.font = font
+                cell.addSubview(nicknameText)
+                nicknameText.font = font
                 cell.selectionStyle = .None
             }
             cell.addSubview(detailImageView)
@@ -276,7 +276,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
             else{
                 let alert = UIAlertController(title: "提示", message: "确定注销？", preferredStyle: .Alert)
                 let confirmAction = UIAlertAction(title: "确定", style: .Default, handler: { (confirm) in
-                    if DatabaseService.sharedInstance.updateUser(0){
+                    if DatabaseService.sharedInstance.updateLoginState(0){
                         UserInfo = UserInfoStruct()
                         self.presentViewController(LogInViewController(), animated: true, completion: nil)
                     }
@@ -345,11 +345,11 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     }
     
     
-    //nickName点击手势
-    func onNickNameClicked(tapGesture:UITapGestureRecognizer){
-        let changeNickNameVC = ChangeNickNameController()
-        changeNickNameVC.delegate = self
-        self.navigationController?.pushViewController(changeNickNameVC, animated: true)
+    //nickname点击手势
+    func onNicknameClicked(tapGesture:UITapGestureRecognizer){
+        let changeNicknameVC = ChangeNicknameController()
+        changeNicknameVC.delegate = self
+        self.navigationController?.pushViewController(changeNicknameVC, animated: true)
     }
     
     //接受修改密码返回值协议
@@ -359,7 +359,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     }
     
     //接受修改昵称返回值
-    func setNewNickName(newNickName: String) {
-        self.nickNameText.text = newNickName
+    func setNewNickname(newNickname: String) {
+        self.nicknameText.text = newNickname
     }
 }

@@ -3,7 +3,7 @@ import UIKit
 
 
 
-class LogInViewController: UIViewController, UITextFieldDelegate {
+class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientDelegate {
     
     //用户密码输入框
     var txtUser:UITextField!
@@ -116,9 +116,10 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
                     UserInfo.UID = resultDict["UID"] as! String
                     UserInfo.phoneNumber = self.txtUser.text!
                     DatabaseService.sharedInstance.initDataTable()
+                    DatabaseService.sharedInstance.updateLoginState(1)
                     //同步数据
-                    RequestAPI.SynchronizeTask()
-                    self.presentViewController(RootTabBarController(), animated: true, completion: nil)
+                    RequestClient.sharedInstance.delegate = self
+                    RequestAPI.SynchronizeTask(0)
                 }
                 else{
                     self.alertWindow("错误", message: "用户名或密码错误")
@@ -132,7 +133,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
     
     func tapped2(button:UIButton){
         UserInfo.phoneNumber = "Visitor"
-        UserInfo.nickName = "Visitor"
+        UserInfo.nickname = "Visitor"
         DatabaseService.sharedInstance.initDataTable()
         self.presentViewController(RootTabBarController(), animated: true, completion: nil)
     }

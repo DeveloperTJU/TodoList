@@ -8,13 +8,14 @@
 
 import UIKit
 
-class BaseViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, ItemCellDelegate {
+class BaseViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, ItemCellDelegate, RequestClientDelegate {
     
     let cellIdentifier:String = "ItemCell"
     var mainTableView:UITableView!
     var dataArr:[ItemModel]!                //数据源
     var isFinished:Bool!                    //表示当前标签页是"已完成"还是"未完成"。
     var userButton:UIButton!
+    var isFirstLoad = true
     
     init(){
         super.init(nibName: nil, bundle: nil)
@@ -56,17 +57,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         let searchButton = UIBarButtonItem(image: UIImage(named: "搜索"), style: .Plain, target: self, action: Selector("search"))
         userButton = UIButton(type: .System)
         userButton.frame = CGRectMake(0, 0, 120, 35)
-        var image = UIImage(named: UserInfo.phoneNumber.md5)
-        if image == nil{
-            image = UIImage(named: "灰邮件")
-        }
-        let scale = image!.size.width > image!.size.height ? image!.size.height/20 : image!.size.width/20
-        userButton.setImage(UIImage(CGImage: image!.CGImage!, scale: scale, orientation: .Up), forState: .Normal)
-        userButton.imageView?.layer.cornerRadius = 10
-        userButton.imageView?.layer.masksToBounds = true
-        userButton.imageView?.layer.borderColor = UIColor.grayColor().CGColor
-        userButton.imageView?.layer.borderWidth = 1
-        userButton.setTitle(" \(UserInfo.nickName == "" ? UserInfo.phoneNumber : UserInfo.nickName)", forState: .Normal)
+        self.setUserAvaterImage()
         userButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 13.0)!
         userButton.addTarget(self, action: Selector("userInfo:"), forControlEvents: .TouchDown)
         let userBarButton = UIBarButtonItem(customView: userButton)
@@ -88,15 +79,16 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //刷新上次编辑时间的友好显示
     override func viewWillAppear(animated: Bool) {
-        for i in 0 ..< self.dataArr.count {
-            if let cell = self.mainTableView.cellForRowAtIndexPath(NSIndexPath(forRow: i, inSection: 0)) as? ItemCell {
-               cell.timeLabel.text = friendlyTime(dataArr[i].lastEditTime)
-            }
+        if isFirstLoad{
+            isFirstLoad = false
         }
-        self.userButton.setTitle(" \(UserInfo.nickName)", forState: .Normal)
-        let image = UIImage(named: UserInfo.phoneNumber.md5)
-        if image != nil{
-            userButton.setImage(UIImage(named: UserInfo.phoneNumber.md5), forState: .Normal)
+        else{
+            for i in 0 ..< self.dataArr.count {
+                if let cell = self.mainTableView.cellForRowAtIndexPath(NSIndexPath(forRow: i, inSection: 0)) as? ItemCell {
+                    cell.timeLabel.text = friendlyTime(dataArr[i].lastEditTime)
+                }
+            }
+            self.setUserAvaterImage()
         }
     }
     
@@ -116,17 +108,16 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //手动同步
     func refreshManually(){
-        var message = "同步失败"
-        if RequestAPI.SynchronizeTask(){
-            message = "同步成功"
+        if UserInfo.phoneNumber == "Visitor" {
+            let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+            hud.mode = MBProgressHUDMode.Text
+            hud.label.text = "游客模式不可用"
+            hud.hideAnimated(true, afterDelay: 0.5)
         }
-        else if UserInfo.phoneNumber == "Visitor" {
-            message = "游客模式不可用"
+        else{
+            RequestClient.sharedInstance.delegate = self
+            RequestAPI.SynchronizeTask(1)
         }
-        let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-        hud.mode = MBProgressHUDMode.Text
-        hud.label.text = message
-        hud.hideAnimated(true, afterDelay: 0.5)
     }
     
     //显示友好时间戳，参考自http://blog.csdn.net/zhyl8157121/article/details/42155921
@@ -176,6 +167,34 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
             }
         }
         return ""
+    }
+    
+    func setUserAvaterImage(){
+        var image = UIImage(named: UserInfo.phoneNumber.md5)
+        if image == nil{
+            image = UIImage(named: "黑邮件")
+        }
+        let scale = image!.size.width > image!.size.height ? image!.size.height/10 : image!.size.width/10
+        userButton.setImage(UIImage(CGImage: image!.CGImage!, scale: scale, orientation: .Up), forState: .Normal)
+        userButton.imageView?.layer.cornerRadius = 15
+        userButton.imageView?.frame = CGRectMake(0, 0, 10, 10)
+        userButton.imageView?.layer.masksToBounds = true
+        userButton.imageView?.layer.borderColor = UIColor.grayColor().CGColor
+        userButton.imageView?.layer.borderWidth = 1
+        userButton.setTitle(" \(UserInfo.nickname == "" ? UserInfo.phoneNumber : UserInfo.nickname)", forState: .Normal)
+    }
+    
+    func reloadDatabase(){
+        let arr = isFinished! ? DatabaseService.sharedInstance.selectAllInDB().1 : DatabaseService.sharedInstance.selectAllInDB().0
+        self.mainTableView.beginUpdates()
+        for data in arr{
+            self.dataArr.removeLast()
+            self.mainTableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .None)
+            self.dataArr.insert(data, atIndex: 0)
+            self.mainTableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Automatic)
+        }
+        self.mainTableView.endUpdates()
+        self.setUserAvaterImage()
     }
     
     //通过创建时间找到索引，无则返回-1。
@@ -286,11 +305,16 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //侧滑删除
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
-        let deleteButton = UITableViewRowAction(style: UITableViewRowActionStyle.Destructive, title: "    ") {
+        let deleteButton = UITableViewRowAction(style: .Destructive, title: "  ") {
             action, index in
             self.removeData(row: indexPath.row)
         }
-        deleteButton.backgroundColor = UIColor(patternImage: UIImage(named: "垃圾箱")!)
+        let image = UIImage(CGImage: (UIImage(named: "垃圾箱")?.CGImage)!, scale: 2.5, orientation: .Up)
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: 40, height: 40), false, 1.0)
+        image.drawInRect(CGRectMake(5, 13, 25, 25))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        deleteButton.backgroundColor = UIColor(patternImage: newImage)
         return [deleteButton]
     }
     
@@ -311,6 +335,11 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
             another.mainTableView.beginUpdates()
             another.mainTableView.insertRowsAtIndexPaths([NSIndexPath(forRow: row, inSection: 0)], withRowAnimation: .None)
             another.mainTableView.endUpdates()
+            let url = "todolist/index.php/Home/Task/SwitchTask"
+            let paramDict = ["UID":UserInfo.UID, "createtime":self.dataArr[row].createTime]
+            RequestAPI.POST(url, body: paramDict, succeed:{ (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
+                }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
+            }
         }
         else{
             message = "数据库操作失败"

@@ -9,7 +9,7 @@
 import UIKit
 
 struct UserInfoStruct {
-    var nickName:String = ""
+    var nickname:String = ""
     var UID:String = ""
     var phoneNumber:String = ""
 }
@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        SMSSDK.registerApp("13497b5a4a530", withSecret: "5d4aa8cc0c6a64db874b7db0ad428360")
+//        SMSSDK.registerApp("13497b5a4a530", withSecret: "5d4aa8cc0c6a64db874b7db0ad428360")
         let dirParh = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
         let docsDir = dirParh[0] as NSString
         self.databasePath = docsDir.stringByAppendingPathComponent("task.db")
@@ -35,6 +35,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = UIWindow(frame: screenFrame)
         self.window?.backgroundColor = .whiteColor()
         self.window?.makeKeyAndVisible()
+        
+//        方便测试
+//        let db = DatabaseService.sharedInstance.database
+//        db.open()
+//        db.executeUpdate("UPDATE USER SET CURRENTUSER=1 WHERE NICKNAME='hui'", withArgumentsInArray: [])
+//        db.close()
         
         self.window?.rootViewController = DatabaseService.sharedInstance.hasCurrentUser() ? RootTabBarController() : LogInViewController()
         return true

@@ -245,7 +245,6 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
         let task = ["title":data.title, "content":data.content, "createtime":data.createTime, "lastedittime":data.lastEditTime, "alerttime":data.alertTime, "level":data.level, "state":data.state]
         let paramDict = ["UID":UserInfo.UID, "TaskModel":task]
         RequestAPI.POST(url, body: paramDict, succeed:{ (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
-            print("update")
             }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
         }
         let index = findIndex(data.createTime)

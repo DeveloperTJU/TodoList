@@ -198,7 +198,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
     
     func tapped3(button:UIButton){
         UserInfo.phoneNumber = "Visitor"
-        UserInfo.nickName = "Visitor"
+        UserInfo.nickname = "Visitor"
         DatabaseService.sharedInstance.initDataTable()
         self.presentViewController(RootTabBarController(), animated: true, completion: nil)
     }

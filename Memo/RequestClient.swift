@@ -7,7 +7,13 @@
 //
 import UIKit
 
+protocol RequestClientDelegate{
+
+}
+
 class RequestClient: AFHTTPSessionManager {
+    
+    var delegate:RequestClientDelegate?
     
     class var sharedInstance:RequestClient {
         struct Static {
