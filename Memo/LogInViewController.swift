@@ -115,10 +115,14 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
                 if resultDict["isSuccess"] as! Int == 1 {
                     UserInfo.UID = resultDict["UID"] as! String
                     UserInfo.phoneNumber = self.txtUser.text!
+                    if UserInfo.phoneNumber != "Visitor"{
+                        DatabaseService.sharedInstance.updateUser(1)
+                    }
                     DatabaseService.sharedInstance.initDataTable()
                     //同步数据
-                    RequestAPI.SynchronizeTask()
-                    self.presentViewController(RootTabBarController(), animated: true, completion: nil)
+                     RequestAPI.SynchronizeTask()
+                        self.presentViewController(RootTabBarController(), animated: true, completion: nil)
+                    
                 }
                 else{
                     self.alertWindow("错误", message: "用户名或密码错误")
