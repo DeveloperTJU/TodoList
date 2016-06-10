@@ -97,7 +97,12 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         
         //提醒时间
         let timeLabel1 = UILabel()
-        timeLabel1.text = currentList.alertTime
+        if self.currentList.alertTime == ""{
+            timeLabel1.text = "无"
+        }
+        else{
+            timeLabel1.text = currentList.alertTime
+        }
         timeLabel1.frame = CGRectMake(110, self.view.frame.size.height - 165, (self.view.frame.size.width / 2 )-30, 20)
         timeLabel1.textColor = UIColor.grayColor()
         timeLabel1.font = UIFont.systemFontOfSize(13)

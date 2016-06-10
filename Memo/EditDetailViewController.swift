@@ -72,7 +72,12 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         //显示提醒时间
         self.timeButton = UIButton()
         self.timeButton.frame = CGRectMake(self.view.frame.size.width - 180 , self.view.frame.size.height - 107, (self.view.frame.size.width / 2 )-30, 20)
-        self.timeButton.setTitle(currentList.alertTime, forState:UIControlState.Normal)
+        if self.currentList.alertTime == ""{
+            self.timeButton.setTitle("不提醒", forState:UIControlState.Normal)
+        }
+        else{
+            self.timeButton.setTitle(currentList.alertTime, forState:UIControlState.Normal)
+        }
         self.timeButton.setTitleColor(UIColor.blackColor(),forState: .Normal)
         self.timeButton.addTarget(self, action: Selector("selectDate:"), forControlEvents: .TouchUpInside)
         self.timeButton.titleLabel?.font = UIFont.systemFontOfSize(13)
@@ -184,7 +189,15 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
             //刷新表面数据
             self.timeButton.setTitle(self.currentList.alertTime, forState:UIControlState.Normal)
             })
-        alertController.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.Cancel,handler:nil))
+        
+        alertController.addAction(UIAlertAction(title: "取消提醒", style: UIAlertActionStyle.Cancel){
+            (alertAction)->Void in
+            
+            self.currentList.alertTime = ""
+            self.timeButton.setTitle("不提醒", forState:UIControlState.Normal)
+            })
+        
+//        alertController.addAction(UIAlertAction(title: "取消修改", style: UIAlertActionStyle.Cancel,handler:nil))
         
         alertController.view.addSubview(datePicker)
         
