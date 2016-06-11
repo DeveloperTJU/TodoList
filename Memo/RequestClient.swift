@@ -21,7 +21,7 @@ class RequestClient: AFHTTPSessionManager {
             static var instance:RequestClient? = nil
         }
         dispatch_once(&Static.onceToken, { () -> Void in
-            let url:NSURL = NSURL(string: "http://172.26.185.36/")!
+            let url:NSURL = NSURL(string: "http://127.0.0.1/")!
             Static.instance = RequestClient(baseURL: url)
             Static.instance?.requestSerializer = AFHTTPRequestSerializer()
             Static.instance?.responseSerializer = AFHTTPResponseSerializer()

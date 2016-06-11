@@ -12,10 +12,10 @@ protocol ChangeNicknameDelegate{
     func setNewNickname(newNickname:String)
 }
 
-class ChangeNicknameController: UIViewController {
+class ChangeNicknameController: UIViewController,UITextFieldDelegate {
 
-    var delegate:ChangeNicknameDelegate?
     var nicknameTextField:UITextField!
+    var isNicknameChanged:Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +24,25 @@ class ChangeNicknameController: UIViewController {
         self.addLeftButtonItem()
         self.addRightButtonItem()
         self.view.backgroundColor = UIColor(patternImage: UIImage(named: "background")!)
+    }
+    
+    //设置昵称输入框
+    func setNicknameTextField(){
+        let frame:CGRect = CGRectMake(10, 15, self.view.bounds.size.width-20,30)
+        self.nicknameTextField = UITextField(frame: frame)
+        self.nicknameTextField.borderStyle = .RoundedRect
+        self.nicknameTextField.layer.borderWidth = 1.0
+        self.nicknameTextField.becomeFirstResponder()
+        self.nicknameTextField.placeholder = "请输入用户昵称"
+        self.nicknameTextField.text = UserInfo.nickname
+        self.nicknameTextField.keyboardType = .Default
+        self.nicknameTextField.delegate = self
+        self.nicknameTextField.leftView = UIView(frame:CGRectMake(0, 0, 44, 44))
+        self.nicknameTextField.leftViewMode = UITextFieldViewMode.Always
+        let imgUser =  UIImageView(frame:CGRectMake(11, 11, 22, 22))
+        imgUser.image = UIImage(named:"灰手机")
+        self.nicknameTextField.leftView!.addSubview(imgUser)
+        self.view.addSubview(nicknameTextField)
     }
     
     //设置返回按钮
@@ -41,46 +60,43 @@ class ChangeNicknameController: UIViewController {
     func backPersonalCenter(){
         self.navigationController?.popViewControllerAnimated(true)
     }
-    
+
     func updateNickname() -> Void{
-        let result = self.nicknameTextField.text! as String
-        if result == "" || result == UserInfo.nickname{
+        let nickname = self.nicknameTextField.text! as String
+        let reachability = Reachability.reachabilityForInternetConnection()
+        if nickname == "" || nickname == UserInfo.nickname{
             self.navigationController?.popViewControllerAnimated(true)
+        }
+        else if !reachability!.isReachable(){
+            self.showAlert("网络连接失败")
         }
         else{
             let url:String = "todolist/index.php/Home/User/ChangeNickname"
-            let paramDict = ["UID":UserInfo.UID, "user_newNickname":result]
+            let paramDict = ["UID":UserInfo.UID, "user_newNickname":nickname]
             RequestAPI.POST(url, body: paramDict, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
                 let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
                 if resultDict["isSuccess"] as! Int == 1 {
-                    UserInfo.nickname = result
+                    UserInfo.nickname = nickname
                     DatabaseService.sharedInstance.updateNickname()
-                    self.navigationController?.popViewControllerAnimated(true)
                 }
                 else{
-                    let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-                    hud.mode = MBProgressHUDMode.Text
-                    hud.label.text = "上传失败!"
-                    hud.hideAnimated(true, afterDelay: 0.5)
+                    self.showAlert("上传数据失败")
                 }
             }, failed: { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
-                let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-                hud.mode = MBProgressHUDMode.Text
-                hud.label.text = "上传失败!"
-                hud.hideAnimated(true, afterDelay: 0.5)
+                self.showAlert("上传数据失败")
             })
         }
     }
-
-    //设置昵称输入框
-    func setNicknameTextField(){
-        let frame:CGRect = CGRectMake(10, 15, self.view.bounds.size.width-20,30)
-        self.nicknameTextField = UITextField(frame: frame)
-        self.nicknameTextField.borderStyle = .RoundedRect
-        self.nicknameTextField.layer.borderWidth = 1.0
-        self.nicknameTextField.becomeFirstResponder()
-        self.nicknameTextField.text = UserInfo.nickname
-        self.nicknameTextField.keyboardType = .Default
-        self.view.addSubview(nicknameTextField)
+    
+    func showAlert(message:String){
+        let alert = UIAlertController(title: "提示", message: message, preferredStyle: .Alert)
+        let cancelAction = UIAlertAction(title: "确定", style: .Cancel, handler: { (cancelAction) in
+            if message == "上传数据失败"{
+                self.navigationController?.popViewControllerAnimated(true)
+            }
+        })
+        alert.addAction(cancelAction)
+        self.presentViewController(alert, animated: true, completion: nil)
     }
+
 }
