@@ -8,10 +8,6 @@
 
 import UIKit
 
-protocol ChangeNicknameDelegate{
-    func setNewNickname(newNickname:String)
-}
-
 class ChangeNicknameController: UIViewController,UITextFieldDelegate {
 
     var nicknameTextField:UITextField!

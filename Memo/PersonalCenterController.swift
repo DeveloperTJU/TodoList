@@ -6,6 +6,8 @@
 //  Copyright © 2016年 tjise. All rights reserved.
 //
 
+
+
 import UIKit
 
 class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITableViewDelegate,UITableViewDataSource{
@@ -14,6 +16,13 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     var imageView = UIImageView()
     var dataArrs:[[String]] = [[String]]()
     var nicknameText:UILabel!
+    var imagePath:String!
+    
+    //获取本地存储图像的方法如下
+    //let documentPath:String = NSHomeDirectory() as String
+    //self.imagePath = documentPath.stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png")
+    //存储路径为：NSHomeDirectory/Documents/phoneNumber.md5.png
+
     
     //由于同一时间内存中只有一个User，所以删除User模型，使用全局常量UserInfo存储当前用户信息，用户中心只用到nickname和phoneNumber。头像使用UserInfo.phoneNumber.md5作为文件名，从服务器获得并存入资源文件夹。
     //请设置AutoLyout，简单使用self.view.size设置相应的frame即可。有问题请直接找我。
@@ -66,6 +75,8 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         let arr3 = ["关于我们"]
         let arr4 = ["注   销"]
         self.dataArrs = [arr0,arr1,arr2,arr3,arr4]
+        let documentPath:String = NSHomeDirectory() as String
+        self.imagePath = documentPath.stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png")
     }
     
     //设置第一行头像
@@ -78,10 +89,17 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         self.imageView.userInteractionEnabled = UserInfo.phoneNumber != "Visitor"
         var image = UIImage(named: UserInfo.phoneNumber.md5)
         if image == nil{
-             image = UIImage(named: "黑邮件")
+            if imagePath == nil{
+                image = UIImage(named: "黑邮件")
+            }else{
+                image = UIImage(named: imagePath)
+            }
+            self.imageView.image = image
         }
-        let scale = image!.size.width > image!.size.height ? image!.size.height/80 : image!.size.width/80
-        self.imageView.image = UIImage(CGImage: image!.CGImage!, scale: scale, orientation: .Up)
+        else {
+            let scale = image!.size.width > image!.size.height ? image!.size.height/80 : image!.size.width/80
+            self.imageView.image = UIImage(CGImage: image!.CGImage!, scale: scale, orientation: .Up)
+        }
         //添加图像手势
         let imageClickGesture = UITapGestureRecognizer(target: self, action: "changeAvaterImage:")
         self.imageView.addGestureRecognizer(imageClickGesture)
@@ -142,21 +160,22 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         //此处调用上传，失败则提示用户修改头像失败
         //如上传成功，将头像保存至本地资源文件夹，名称为UserInfo.phoneNumber.md5
         let scale = image.size.width > image.size.height ? image.size.height/80 : image.size.width/80
+        let tempImg = UIImage(CGImage: image.CGImage!, scale: scale, orientation: .Up)
         self.imageView.image = UIImage(CGImage: image.CGImage!, scale: scale, orientation: .Up)
+        self.saveLocalImage(tempImg, imgName: UserInfo.phoneNumber)
     }
     
-    //由于该方法会导致失真，不推荐使用该方法，请使用UIImage(CGImage: image.CGImage!, scale: scale, orientation: .Up)代替。
-//    func compressImage(originImage:UIImage ,toSize size:CGSize) -> UIImage {
-//        //创建一个基于位图的上下文
-//        UIGraphicsBeginImageContext(size)
-//        let rect = CGRectMake(0, 0, size.width, size.height)
-//        originImage.drawInRect(rect)
-//        //获取新的图片
-//        let compressedImg = UIGraphicsGetImageFromCurrentImageContext()
-//        //销毁上下文
-//        UIGraphicsEndImageContext()
-//        return compressedImg
-//    }
+    //保存图片到本地和服务器
+    func saveLocalImage(tempImg:UIImage,imgName:String){
+        let imageData = UIImagePNGRepresentation(tempImg)
+        //保存至本地
+        let documentPath:String = NSHomeDirectory() as String
+        self.imagePath = documentPath.stringByAppendingFormat("/Documents/\(imgName.md5).png")
+        imageData?.writeToFile(self.imagePath, atomically: true)
+        print(imagePath)
+        //上传至服务器
+    }
+
     
     //控制分区数
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -266,7 +285,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         case 2:
             self.clearCache()
         case 3:
-            let alert = UIAlertController(title: "", message: "天软玩头盔开发团队", preferredStyle: .Alert)
+            let alert = UIAlertController(title: "", message: "天津市大学软件学院\nswift语言开发团队", preferredStyle: .Alert)
             let cancelAction = UIAlertAction(title: "确定", style: .Cancel, handler: nil)
             alert.addAction(cancelAction)
             self.presentViewController(alert, animated: true, completion: nil)
@@ -350,10 +369,5 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     //nickname点击手势
     func onNicknameClicked(tapGesture:UITapGestureRecognizer){
         self.navigationController?.pushViewController(ChangeNicknameController(), animated: true)
-    }
-    
-    //接受修改昵称返回值
-    func setNewNickname(newNickname: String) {
-        self.nicknameText.text = newNickname
     }
 }
