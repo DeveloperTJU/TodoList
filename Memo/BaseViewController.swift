@@ -185,15 +185,11 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func reloadDatabase(){
-        let arr = isFinished! ? DatabaseService.sharedInstance.selectAllInDB().1 : DatabaseService.sharedInstance.selectAllInDB().0
-        self.mainTableView.beginUpdates()
-        for data in arr{
-            self.dataArr.removeLast()
-            self.mainTableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .None)
-            self.dataArr.insert(data, atIndex: 0)
-            self.mainTableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Automatic)
-        }
-        self.mainTableView.endUpdates()
+        let arrs = DatabaseService.sharedInstance.selectAllInDB()
+        UnfinishedVC.dataArr = arrs.0
+        UnfinishedVC.mainTableView.reloadData()
+        FinishedVC.dataArr = arrs.1
+        FinishedVC.mainTableView.reloadData()
         self.setUserAvaterImage()
     }
     
@@ -235,6 +231,8 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
             let task = ["title":data.title, "content":data.content, "createtime":data.createTime, "lastedittime":data.lastEditTime, "alerttime":data.alertTime, "level":data.level, "state":data.state]
             let paramDict = ["UID":UserInfo.UID, "TaskModel":task]
             RequestAPI.POST(url, body: paramDict, succeed:{ (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
+                let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
+                print(resultDict["isSuccess"])
                 }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
             }
             dataArr.insert(data, atIndex: index)

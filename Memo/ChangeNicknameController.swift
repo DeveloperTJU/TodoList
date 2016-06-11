@@ -34,7 +34,7 @@ class ChangeNicknameController: UIViewController {
     
     //设置修改密码完成按钮
     func addRightButtonItem(){
-        let rightBtn:UIBarButtonItem = UIBarButtonItem(title: "完成", style: UIBarButtonItemStyle.Plain, target: self, action: "updateNickname")
+        let rightBtn = UIBarButtonItem(title: "完成", style: .Plain, target: self, action: "updateNickname")
         self.navigationItem.rightBarButtonItem = rightBtn
     }
     
@@ -55,7 +55,7 @@ class ChangeNicknameController: UIViewController {
                 if resultDict["isSuccess"] as! Int == 1 {
                     UserInfo.nickname = result
                     DatabaseService.sharedInstance.updateNickname()
-                    //刷新界面显示的nickname
+                    self.navigationController?.popViewControllerAnimated(true)
                 }
                 else{
                     let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)

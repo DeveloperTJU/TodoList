@@ -91,6 +91,17 @@ class DatabaseService: NSObject {
         return succeed
     }
     
+    //新增或更新用户信息
+    func refreshUser(UID:String, phoneNumber:String, nickname:String, isCurrentUser:Int) -> Bool{
+        self.database.open()
+        var sqlStr = "DELETE FROM USER WHERE UID = ?"
+        self.database.executeUpdate(sqlStr, withArgumentsInArray: [UID])
+        sqlStr = "INSERT INTO USER VALUES (?, ? ,?, ?)"
+        let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [UID, phoneNumber, nickname, isCurrentUser])
+        self.database.close()
+        return succeed
+    }
+    
     //更新当前用户的昵称
     func updateNickname() -> Bool{
         self.database.open()
@@ -116,7 +127,7 @@ class DatabaseService: NSObject {
         let sqlStr = "SELECT * FROM data_\(UserInfo.phoneNumber.md5)"
         let rs = self.database.executeQuery(sqlStr, withArgumentsInArray: [])
         while rs.next(){
-            let data:NSDictionary = ["title": rs.stringForColumn("TITLE"), "content": rs.stringForColumn("CONTENT"), "createtime": rs.stringForColumn("CREATE_TIME"), "lastedittime": rs.stringForColumn("LAST_EDIT_TIME"), "alerttime": rs.stringForColumn("ALERT_TIME"), "level": rs.longForColumn("LEVEL"), "state": rs.longForColumn("STATE")]
+            let data:NSDictionary = ["title": (rs.stringForColumn("TITLE")), "content": rs.stringForColumn("CONTENT"), "createtime": rs.stringForColumn("CREATE_TIME"), "lastedittime": rs.stringForColumn("LAST_EDIT_TIME"), "alerttime": rs.stringForColumn("ALERT_TIME"), "level": rs.longForColumn("LEVEL"), "state": rs.longForColumn("STATE")]
             dictArr["\(rs.stringForColumn("CREATE_TIME"))"] = data
         }
         self.database.close()
@@ -137,6 +148,17 @@ class DatabaseService: NSObject {
         self.database.open()
         let sqlStr = "DELETE FROM data_\(UserInfo.phoneNumber.md5) WHERE CREATE_TIME=?"
         let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [createTime])
+        self.database.close()
+        return succeed
+    }
+    
+    //新增或更新任务
+    func refreshInDB(data:ItemModel) -> Bool {
+        self.database.open()
+        var sqlStr = "DELETE FROM data_\(UserInfo.phoneNumber.md5) WHERE CREATE_TIME=?"
+        self.database.executeUpdate(sqlStr, withArgumentsInArray: [data.createTime])
+        sqlStr = "INSERT INTO data_\(UserInfo.phoneNumber.md5) VALUES (?, ?, ?, ?, ?, ?, ?)"
+        let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [data.title, data.content, data.createTime, data.lastEditTime, data.alertTime, data.level, data.state])
         self.database.close()
         return succeed
     }

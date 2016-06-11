@@ -31,6 +31,10 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         self.addLeftButtonItem()
     }
     
+    override func viewWillAppear(animated: Bool) {
+        self.nicknameText.text = UserInfo.nickname == "" ? UserInfo.phoneNumber : UserInfo.nickname
+    }
+    
     //添加tableView
     func setTableView(){
         let tableViewFrame:CGRect = CGRectMake(8, 0, self.view.bounds.width-16, self.view.bounds.height)
@@ -87,7 +91,6 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     func setNicknameText(){
         let textFrame:CGRect = CGRectMake(120, 0, 450, 100)
         self.nicknameText = UILabel(frame: textFrame)
-        self.nicknameText.text = UserInfo.nickname == "" ? UserInfo.phoneNumber : UserInfo.nickname
         self.nicknameText.userInteractionEnabled = UserInfo.phoneNumber != "Visitor"
         let tapGesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "onNicknameClicked:")
         self.nicknameText.addGestureRecognizer(tapGesture)

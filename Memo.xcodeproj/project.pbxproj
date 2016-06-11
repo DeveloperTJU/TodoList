@@ -228,8 +228,8 @@
 			children = (
 				A5A9A0E51CEBF6C4006BB3A1 /* AppDelegate.swift */,
 				A548B9A51CF5892B00773A58 /* Memo-Bridging-Header.h */,
-				A599E43B1CF68C44005CDB8D /* DatabaseService.swift */,
 				A5DAA8841CFFCFD9008B8CAC /* StringHelper.swift */,
+				A599E43B1CF68C44005CDB8D /* DatabaseService.swift */,
 				A8DB470D1D07F94C00ECAD49 /* RequestClient.swift */,
 				A8DB470F1D07F9E900ECAD49 /* RequestAPI.swift */,
 				A5A9A0FB1CEBF862006BB3A1 /* CustomNavController.swift */,
