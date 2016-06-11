@@ -320,6 +320,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     func switchState(button:UIButton, createTime:String){
         var row = findIndex(createTime)
         let data = self.dataArr[row]
+        let time = data.createTime
         let another = (isFinished! ? UnfinishedVC : FinishedVC)
         var message = (isFinished! ? "已恢复" : "已完成")
         data.state = (isFinished! ? 0 : 2)
@@ -334,7 +335,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
             another.mainTableView.insertRowsAtIndexPaths([NSIndexPath(forRow: row, inSection: 0)], withRowAnimation: .None)
             another.mainTableView.endUpdates()
             let url = "todolist/index.php/Home/Task/SwitchTask"
-            let paramDict = ["UID":UserInfo.UID, "createtime":self.dataArr[row].createTime]
+            let paramDict = ["UID":UserInfo.UID, "createtime":time]
             RequestAPI.POST(url, body: paramDict, succeed:{ (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
                 }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
             }

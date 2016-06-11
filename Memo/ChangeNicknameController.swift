@@ -78,6 +78,7 @@ class ChangeNicknameController: UIViewController,UITextFieldDelegate {
                 if resultDict["isSuccess"] as! Int == 1 {
                     UserInfo.nickname = nickname
                     DatabaseService.sharedInstance.updateNickname()
+                    self.navigationController?.popViewControllerAnimated(true)
                 }
                 else{
                     self.showAlert("上传数据失败")
