@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITableViewDelegate,UITableViewDataSource,BackForNewPasswordDelegate,ChangeNicknameDelegate{
+class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITableViewDelegate,UITableViewDataSource,ChangeNicknameDelegate{
     
     var mainTableView:UITableView!
     var imageView = UIImageView()
@@ -20,6 +20,9 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        UserInfo.nickname = "杨耀华"
+        UserInfo.phoneNumber = "13672006807"
+        UserInfo.UID = "123"
         //初始化数据
         self.title = "个人中心"
         initDataArrs()
@@ -251,7 +254,6 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
                 let reachability = Reachability.reachabilityForInternetConnection()
                 if reachability!.isReachable(){
                     let ChangePassVC = ChangePaswordController()
-                    ChangePassVC.delegate = self
                     ChangePassVC.hidesBottomBarWhenPushed = true
                     self.navigationController?.pushViewController(ChangePassVC, animated: true)
                 }else{
@@ -350,12 +352,6 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         let changeNicknameVC = ChangeNicknameController()
         changeNicknameVC.delegate = self
         self.navigationController?.pushViewController(changeNicknameVC, animated: true)
-    }
-    
-    //接受修改密码返回值协议
-    func setNewPassword(password:String){
-        //self.currentUser.password = password
-        print("修改后密码为\(password)")
     }
     
     //接受修改昵称返回值
