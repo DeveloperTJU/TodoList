@@ -18,6 +18,9 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     var nicknameText:UILabel!
     var imagePath:String!
     
+    //服务器下载头像代码函数,此方法返回image，同时将图片存储到本地。
+   // self.loadAvatarImg()->UIImage;
+    
     //获取本地存储图像的方法如下
     //let documentPath:String = NSHomeDirectory() as String
     //self.imagePath = documentPath.stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png")
@@ -32,6 +35,12 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         //初始化数据
         self.title = "个人中心"
         initDataArrs()
+        
+        //判断联网成功，则从服务器读取头像
+        let reachability = Reachability.reachabilityForInternetConnection()
+        if reachability!.isReachable(){
+            self.loadAvatarImg()
+        }
         self.setTableView()
         //添加头像
         self.setAvaterImage()
@@ -116,7 +125,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     
     //修改头像
     func changeAvaterImage(gesture:UITapGestureRecognizer){
-        let actionSheet = UIActionSheet(title: "获取图像", delegate: self, cancelButtonTitle: "取消", destructiveButtonTitle: "从相册选择", otherButtonTitles: "拍照")
+        let actionSheet = UIActionSheet(title: "获取图像", delegate: self, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: "从相册选择","拍照")
         actionSheet.tag  = 1000
         actionSheet.showInView(self.view)
     }
@@ -126,7 +135,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         if actionSheet.tag == 1000{
             var sourceType = UIImagePickerControllerSourceType.PhotoLibrary
             switch(buttonIndex){
-            case 0:
+            case 1:
                 sourceType = UIImagePickerControllerSourceType.PhotoLibrary
                 //跳转到相册或相册页面
                 let imagePickerController = UIImagePickerController()
@@ -173,8 +182,35 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         self.imagePath = documentPath.stringByAppendingFormat("/Documents/\(imgName.md5).png")
         imageData?.writeToFile(self.imagePath, atomically: true)
         print(imagePath)
+        
+        
         //上传至服务器
+        RequestAPI.uploadPicture("ToDoListServer/upload.php", body: nil, block: { (formData:AFMultipartFormData!) in
+            
+            formData.appendPartWithFileData(imageData!, name: "upload", fileName: imgName.md5, mimeType: "image/png")
+            
+            }, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject? ) in
+//                let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
+                print("this is \(responseObject)")
+            }) { (task:NSURLSessionDataTask?, error:NSError?) in
+                //failure
+                print("")
+        }
     }
+    
+    //从服务器下载头像
+    func loadAvatarImg()->UIImage{
+        //load pitcure
+        let loadedData = NSData(contentsOfURL: NSURL(string: "http://10.1.32.39/ToDoListServer/uploadimg/\(UserInfo.phoneNumber.md5).png")!)
+        //存储到本地
+        let documentPath:String = NSHomeDirectory() as String
+        self.imagePath = documentPath.stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png")
+        loadedData?.writeToFile(self.imagePath, atomically: true)
+        print("下载头像成功，存储本地路径为：\(self.imagePath)")
+        let image = UIImage(data: loadedData!)
+        return image!
+    }
+    
 
     
     //控制分区数
@@ -224,7 +260,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         cell.textLabel?.text = sectionArr[indexPath.row]
         var font = UIFont(name: "HelveticaNeue-Thin", size: 14.0)
         if indexPath.section == 1 && indexPath.row == 0{
-            let frame:CGRect = CGRectMake(self.view.bounds.size.width - 140, 5, 100, 42)
+            let frame:CGRect = CGRectMake(self.view.bounds.size.width - 180, 0, 140, 42)
             let phoneNumberText = UILabel(frame: frame)
             phoneNumberText.text = UserInfo.phoneNumber
             phoneNumberText.textAlignment = .Right
@@ -285,10 +321,12 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         case 2:
             self.clearCache()
         case 3:
-            let alert = UIAlertController(title: "", message: "天津市大学软件学院\nswift语言开发团队", preferredStyle: .Alert)
-            let cancelAction = UIAlertAction(title: "确定", style: .Cancel, handler: nil)
-            alert.addAction(cancelAction)
-            self.presentViewController(alert, animated: true, completion: nil)
+            let AboutVc = AboutViewController()
+            self.navigationController?.pushViewController(AboutVc, animated: true)
+//            let alert = UIAlertController(title: "", message: "天津市大学软件学院\nswift语言开发团队", preferredStyle: .Alert)
+//            let cancelAction = UIAlertAction(title: "确定", style: .Cancel, handler: nil)
+//            alert.addAction(cancelAction)
+//            self.presentViewController(alert, animated: true, completion: nil)
         case 4:
             if UserInfo.phoneNumber == "Visitor"{
                 UserInfo = UserInfoStruct()

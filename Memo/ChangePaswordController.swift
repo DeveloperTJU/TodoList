@@ -26,6 +26,7 @@ class ChangePaswordController: UIViewController ,UITextFieldDelegate{
         super.viewDidLoad()
         self.title = "修改密码"
         self.addLeftButtonItem()
+        self.addRightButtonItem()
         self.view.backgroundColor = UIColor(patternImage: UIImage(named: "background")!)
         self.setMainView()
     }
@@ -91,16 +92,16 @@ class ChangePaswordController: UIViewController ,UITextFieldDelegate{
         confirmPasswordText.leftView!.addSubview(confirmImg)
         passwordView.addSubview(confirmPasswordText)
         
-        let finishBtn:UIButton = UIButton(type:.System)
-        //设置按钮位置和大小
-        finishBtn.frame = CGRectMake(10, 290, passwordView.frame.size.width , 44)
-        finishBtn.backgroundColor = UIColor(red: 67/255, green: 67/255, blue: 67/255, alpha: 1)
-        finishBtn.tintColor = UIColor(red: 232/255, green: 208/255, blue: 120/255, alpha: 1)
-        finishBtn.layer.cornerRadius = 4
-        //设置按钮文字
-        finishBtn.setTitle("修   改", forState:UIControlState.Normal)
-        finishBtn.addTarget(self,action:Selector("updateDataNetWork"),forControlEvents: .TouchUpInside)
-        self.view.addSubview(finishBtn)
+//        let finishBtn:UIButton = UIButton(type:.System)
+//        //设置按钮位置和大小
+//        finishBtn.frame = CGRectMake(10, 290, passwordView.frame.size.width , 44)
+//        finishBtn.backgroundColor = UIColor(red: 67/255, green: 67/255, blue: 67/255, alpha: 1)
+//        finishBtn.tintColor = UIColor(red: 232/255, green: 208/255, blue: 120/255, alpha: 1)
+//        finishBtn.layer.cornerRadius = 4
+//        //设置按钮文字
+//        finishBtn.setTitle("修   改", forState:UIControlState.Normal)
+//        finishBtn.addTarget(self,action:Selector("updateDataNetWork"),forControlEvents: .TouchUpInside)
+//        self.view.addSubview(finishBtn)
     }
     
     //添加导航栏左侧按钮
@@ -108,6 +109,13 @@ class ChangePaswordController: UIViewController ,UITextFieldDelegate{
         let leftBtn:UIBarButtonItem = UIBarButtonItem(title: "返回", style: UIBarButtonItemStyle.Plain, target: self, action: "backPersonalCenter")
         self.navigationItem.leftBarButtonItem = leftBtn
     }
+    
+    //设置修改密码完成按钮
+    func addRightButtonItem(){
+        let rightBtn = UIBarButtonItem(title: "完成", style: .Plain, target: self, action: "updateDataNetWork")
+        self.navigationItem.rightBarButtonItem = rightBtn
+    }
+
     
     func backPersonalCenter(){
         self.navigationController?.popViewControllerAnimated(true)

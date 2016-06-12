@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5B0B5DD01D0DBC320086F22B /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0B5DCF1D0DBC320086F22B /* AboutViewController.swift */; };
 		A502F6A41D05159800C519E9 /* EditDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502F6A21D05159800C519E9 /* EditDetailViewController.swift */; };
 		A502F6A51D05159800C519E9 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502F6A31D05159800C519E9 /* EditViewController.swift */; };
 		A5046D871D0115230046B511 /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5046D7B1D0115220046B511 /* AFHTTPSessionManager.m */; };
@@ -59,6 +60,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5B0B5DCF1D0DBC320086F22B /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = SOURCE_ROOT; };
 		A502F6A21D05159800C519E9 /* EditDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditDetailViewController.swift; sourceTree = "<group>"; };
 		A502F6A31D05159800C519E9 /* EditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
 		A5046D7A1D0115220046B511 /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
@@ -172,6 +174,7 @@
 				A53A92F01D07A19200144FE6 /* PersonalCenterController.swift */,
 				A53A92EB1D07A14300144FE6 /* ChangePaswordController.swift */,
 				A53A92ED1D07A17600144FE6 /* Reachability.swift */,
+				5B0B5DCF1D0DBC320086F22B /* AboutViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -488,6 +491,7 @@
 				A5C5C4CB1CF688360078C4CF /* FMDatabasePool.m in Sources */,
 				A5A9A1001CEBF8B2006BB3A1 /* UnfinishedViewController.swift in Sources */,
 				A599E4401CF68CA6005CDB8D /* MBProgressHUD.m in Sources */,
+				5B0B5DD01D0DBC320086F22B /* AboutViewController.swift in Sources */,
 				A5046D8B1D0115230046B511 /* AFURLResponseSerialization.m in Sources */,
 				A502F6A51D05159800C519E9 /* EditViewController.swift in Sources */,
 			);

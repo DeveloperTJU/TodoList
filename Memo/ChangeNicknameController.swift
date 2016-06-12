@@ -8,37 +8,81 @@
 
 import UIKit
 
-class ChangeNicknameController: UIViewController,UITextFieldDelegate {
+class ChangeNicknameController: UIViewController,UITextFieldDelegate ,UITableViewDelegate,UITableViewDataSource{
 
-    var nicknameTextField:UITextField!
+   // var nicknameTextField:UITextField!
     var isNicknameChanged:Bool = false
+    var nicknameText:UITextField!
+    var mainTableView:UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "修改昵称"
-        self.setNicknameTextField()
+        //self.setNicknameTextField()
+        self.setTableView()
         self.addLeftButtonItem()
         self.addRightButtonItem()
         self.view.backgroundColor = UIColor(patternImage: UIImage(named: "background")!)
     }
     
-    //设置昵称输入框
-    func setNicknameTextField(){
-        let frame:CGRect = CGRectMake(10, 15, self.view.bounds.size.width-20,30)
-        self.nicknameTextField = UITextField(frame: frame)
-        self.nicknameTextField.borderStyle = .RoundedRect
-        self.nicknameTextField.layer.borderWidth = 1.0
-        self.nicknameTextField.becomeFirstResponder()
-        self.nicknameTextField.placeholder = "请输入用户昵称"
-        self.nicknameTextField.text = UserInfo.nickname
-        self.nicknameTextField.keyboardType = .Default
-        self.nicknameTextField.delegate = self
-        self.nicknameTextField.leftView = UIView(frame:CGRectMake(0, 0, 44, 44))
-        self.nicknameTextField.leftViewMode = UITextFieldViewMode.Always
-        let imgUser =  UIImageView(frame:CGRectMake(11, 11, 22, 22))
-        imgUser.image = UIImage(named:"灰手机")
-        self.nicknameTextField.leftView!.addSubview(imgUser)
-        self.view.addSubview(nicknameTextField)
+//    //设置昵称输入框
+//    func setNicknameTextField(){
+//        let frame:CGRect = CGRectMake(10, 15, self.view.bounds.size.width-20,30)
+//        self.nicknameTextField = UITextField(frame: frame)
+//        self.nicknameTextField.borderStyle = .RoundedRect
+//        self.nicknameTextField.layer.borderWidth = 1.0
+//        self.nicknameTextField.becomeFirstResponder()
+//        self.nicknameTextField.placeholder = "请输入用户昵称"
+//        self.nicknameTextField.text = UserInfo.nickname
+//        self.nicknameTextField.keyboardType = .Default
+//        self.nicknameTextField.delegate = self
+//        self.nicknameTextField.leftView = UIView(frame:CGRectMake(0, 0, 44, 44))
+//        self.nicknameTextField.leftViewMode = UITextFieldViewMode.Always
+//        let imgUser =  UIImageView(frame:CGRectMake(11, 11, 22, 22))
+//        imgUser.image = UIImage(named:"灰手机")
+//        self.nicknameTextField.leftView!.addSubview(imgUser)
+//        self.view.addSubview(nicknameTextField)
+//    }
+    
+    //设置修改密码的tableView
+    func setTableView(){
+        let tableViewFrame:CGRect = CGRectMake(0, 0, self.view.bounds.width, self.view.bounds.height)
+        self.mainTableView = UITableView(frame: tableViewFrame, style: .Plain)
+        self.mainTableView.dataSource = self
+        self.mainTableView.delegate = self
+        self.mainTableView.backgroundColor = .clearColor()
+        self.mainTableView.separatorStyle = .None
+        self.mainTableView.scrollEnabled = false
+        self.view.addSubview(self.mainTableView)
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "background")!)
+    }
+    
+    //行高
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 60
+    }
+    
+    //修改密码的tableView样式。
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let frame:CGRect = CGRectMake(0, 10, self.view.bounds.size.width, 100)
+        let cell = UITableViewCell(frame: frame)
+        cell.textLabel?.text = "新昵称： "
+        cell.selectionStyle = .None
+        let textFrame:CGRect = CGRectMake(100,10,self.view.bounds.size.width - 110,40)
+        nicknameText = UITextField(frame: textFrame)
+        nicknameText.text = UserInfo.nickname
+        nicknameText.textAlignment = .Left
+        nicknameText.layer.cornerRadius = 5
+        nicknameText.textColor = UIColor.blackColor()
+        nicknameText.layer.borderWidth = 1
+        nicknameText.borderStyle = .RoundedRect
+        cell.addSubview(nicknameText)
+        return cell
+    }
+    
+    //行数
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
     }
     
     //设置返回按钮
@@ -58,7 +102,7 @@ class ChangeNicknameController: UIViewController,UITextFieldDelegate {
     }
 
     func updateNickname() -> Void{
-        let nickname = self.nicknameTextField.text! as String
+        let nickname = self.nicknameText.text! as String
         let reachability = Reachability.reachabilityForInternetConnection()
         if nickname == "" || nickname == UserInfo.nickname{
             self.navigationController?.popViewControllerAnimated(true)
