@@ -14,7 +14,7 @@ protocol RequestClientDelegate{
 class RequestClient: AFHTTPSessionManager {
     
     var delegate:RequestClientDelegate?
-    let url:NSURL = NSURL(string: "http://127.0.0.1/")!
+    static var URL = NSURL(string: "http://127.0.0.1/todolist/")!
 
     class var sharedInstance:RequestClient {
         struct Static {
@@ -22,7 +22,7 @@ class RequestClient: AFHTTPSessionManager {
             static var instance:RequestClient? = nil
         }
         dispatch_once(&Static.onceToken, { () -> Void in
-            Static.instance = RequestClient(baseURL: RequestClient.sharedInstance.url)
+            Static.instance = RequestClient(baseURL: RequestClient.URL)
             Static.instance?.requestSerializer = AFHTTPRequestSerializer()
             Static.instance?.responseSerializer = AFHTTPResponseSerializer()
             let resSet = NSSet(array: ["text/html"])

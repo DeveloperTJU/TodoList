@@ -12,6 +12,7 @@ struct UserInfoStruct {
     var nickname:String = ""
     var UID:String = ""
     var phoneNumber:String = ""
+    var avatar:UIImage!
 }
 
 var UnfinishedVC:UnfinishedViewController!

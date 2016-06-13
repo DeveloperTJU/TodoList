@@ -139,7 +139,7 @@ class ChangePaswordController: UIViewController ,UITextFieldDelegate{
         let confirmPassword = self.confirmPasswordText.text! as String
         let result = self.getErrorType(oldPassword, newPassword: newPassword, confirmPasswod: confirmPassword)
         if result == "ok"{
-            let url:String = "todolist/index.php/Home/User/ChangePassword"
+            let url:String = "index.php/Home/User/ChangePassword"
             let paramDict:Dictionary = ["UID":UserInfo.UID,"user_oldPassword":oldPassword,"user_newPassword":newPassword.md5]
             RequestAPI.POST(url, body: paramDict, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
                 //成功回调

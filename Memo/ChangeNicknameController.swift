@@ -111,7 +111,7 @@ class ChangeNicknameController: UIViewController,UITextFieldDelegate ,UITableVie
             self.showAlert("网络连接失败")
         }
         else{
-            let url:String = "todolist/index.php/Home/User/ChangeNickname"
+            let url:String = "index.php/Home/User/ChangeNickname"
             let paramDict = ["UID":UserInfo.UID, "user_newNickname":nickname]
             RequestAPI.POST(url, body: paramDict, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
                 let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)

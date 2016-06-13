@@ -57,8 +57,17 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         let searchButton = UIBarButtonItem(image: UIImage(named: "搜索"), style: .Plain, target: self, action: Selector("search"))
         userButton = UIButton(type: .System)
         userButton.frame = CGRectMake(0, 0, 120, 35)
-        self.setUserAvaterImage()
         userButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 13.0)!
+        userButton.imageView?.layer.cornerRadius = 15
+        userButton.imageView?.frame = CGRectMake(0, 0, 10, 10)
+        userButton.imageView?.layer.masksToBounds = true
+        userButton.imageView?.layer.borderColor = UIColor.grayColor().CGColor
+        userButton.imageView?.layer.borderWidth = 1
+        //网络
+        UserInfo.avatar = UIImage(CGImage: UIImage(named: (NSHomeDirectory() as String).stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png"))!.CGImage!, scale: 2, orientation: .Up)
+        if UserInfo.avatar == nil{
+            UserInfo.avatar = UIImage(named: "黑邮件")
+        }
         userButton.addTarget(self, action: Selector("userInfo:"), forControlEvents: .TouchDown)
         let userBarButton = UIBarButtonItem(customView: userButton)
         
@@ -88,8 +97,8 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
                     cell.timeLabel.text = friendlyTime(dataArr[i].lastEditTime)
                 }
             }
-            self.setUserAvaterImage()
         }
+        self.setUserAvatarImage()
     }
     
     //搜索页
@@ -169,18 +178,8 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         return ""
     }
     
-    func setUserAvaterImage(){
-        var image = UIImage(named: UserInfo.phoneNumber.md5)
-        if image == nil{
-            image = UIImage(named: "黑邮件")
-        }
-        let scale = image!.size.width > image!.size.height ? image!.size.height/10 : image!.size.width/10
-        userButton.setImage(UIImage(CGImage: image!.CGImage!, scale: scale, orientation: .Up), forState: .Normal)
-        userButton.imageView?.layer.cornerRadius = 15
-        userButton.imageView?.frame = CGRectMake(0, 0, 10, 10)
-        userButton.imageView?.layer.masksToBounds = true
-        userButton.imageView?.layer.borderColor = UIColor.grayColor().CGColor
-        userButton.imageView?.layer.borderWidth = 1
+    func setUserAvatarImage(){
+        userButton.setImage(UIImage(CGImage: UserInfo.avatar!.CGImage!, scale: 8, orientation: .Up), forState: .Normal)
         userButton.setTitle(" \(UserInfo.nickname == "" ? UserInfo.phoneNumber : UserInfo.nickname)", forState: .Normal)
     }
     
@@ -190,7 +189,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         UnfinishedVC.mainTableView.reloadData()
         FinishedVC.dataArr = arrs.1
         FinishedVC.mainTableView.reloadData()
-        self.setUserAvaterImage()
+        self.setUserAvatarImage()
     }
     
     //通过创建时间找到索引，无则返回-1。
@@ -224,15 +223,15 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //使用插入排序的方式插入数据，使得cell按照优先级与最后编辑时间排序。
     func insertData(data:ItemModel, withAnimation hasAnimation:Bool){
+        print(1)
         let index = rank(data.level, lastEditTime: data.lastEditTime)
         data.state = (isFinished! ? 2 : 0)
         if DatabaseService.sharedInstance.insertInDB(data){
-            let url = "todolist/index.php/Home/Task/AddTask"
+            print(2)
+            let url = "index.php/Home/Task/AddTask"
             let task = ["title":data.title, "content":data.content, "createtime":data.createTime, "lastedittime":data.lastEditTime, "alerttime":data.alertTime, "level":data.level, "state":data.state]
             let paramDict = ["UID":UserInfo.UID, "TaskModel":task]
             RequestAPI.POST(url, body: paramDict, succeed:{ (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
-                let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
-                print(resultDict["isSuccess"])
                 }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
             }
             dataArr.insert(data, atIndex: index)
@@ -252,7 +251,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     func removeData(row index:Int){
         self.dataArr[index].state += 1
         if DatabaseService.sharedInstance.updateInDB(self.dataArr[index]){
-            let url = "todolist/index.php/Home/Task/DeleteTask"
+            let url = "index.php/Home/Task/DeleteTask"
             let paramDict = ["UID":UserInfo.UID, "createtime":self.dataArr[index].createTime]
             RequestAPI.POST(url, body: paramDict, succeed:{ (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
                 }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
@@ -334,7 +333,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
             another.mainTableView.beginUpdates()
             another.mainTableView.insertRowsAtIndexPaths([NSIndexPath(forRow: row, inSection: 0)], withRowAnimation: .None)
             another.mainTableView.endUpdates()
-            let url = "todolist/index.php/Home/Task/SwitchTask"
+            let url = "index.php/Home/Task/SwitchTask"
             let paramDict = ["UID":UserInfo.UID, "createtime":time]
             RequestAPI.POST(url, body: paramDict, succeed:{ (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
                 }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in

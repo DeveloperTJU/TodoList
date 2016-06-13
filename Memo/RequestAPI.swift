@@ -10,13 +10,12 @@ import UIKit
 
 typealias Succeed = (NSURLSessionDataTask!,AnyObject!)->Void
 typealias Failure = (NSURLSessionDataTask!,NSError!)->Void
-
 typealias uploadBlock = (AFMultipartFormData!)->Void
 
 class RequestAPI: NSObject {
     
     //upload picture
-    class func uploadPicture(url:String!,body:AnyObject?,block:uploadBlock!,succeed:Succeed,failed:Failure)->Void
+    class func UploadPicture(url:String!,body:AnyObject?,block:uploadBlock!,succeed:Succeed,failed:Failure)->Void
     {
         let mysucceed:Succeed = succeed
         let myfailure:Failure = failed
@@ -44,7 +43,7 @@ class RequestAPI: NSObject {
     }
     
     class func SynchronizeTask(afterEvent:Int){
-        let url = "todolist/index.php/Home/Task/SynchronizeTask"
+        let url = "index.php/Home/Task/SynchronizeTask"
         let paramDict = ["UID":UserInfo.UID, "TaskModelArr":DatabaseService.sharedInstance.selectLocalData()]
         RequestAPI.POST(url, body: paramDict, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
             //成功回调

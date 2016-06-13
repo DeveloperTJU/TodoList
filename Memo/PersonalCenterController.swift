@@ -16,7 +16,6 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     var imageView = UIImageView()
     var dataArrs:[[String]] = [[String]]()
     var nicknameText:UILabel!
-    var imagePath:String!
     
     //服务器下载头像代码函数,此方法返回image，同时将图片存储到本地。
    // self.loadAvatarImg()->UIImage;
@@ -35,28 +34,25 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         //初始化数据
         self.title = "个人中心"
         initDataArrs()
-        
+        self.setTableView()
+        //添加头像
+        self.setAvaterImage()
+        self.setNicknameText()
         //判断联网成功，则从服务器读取头像
         let reachability = Reachability.reachabilityForInternetConnection()
         if reachability!.isReachable(){
             PersonalCenterController.loadAvatarImg()
         }
-        self.setTableView()
-        //添加头像
-        self.setAvaterImage()
-        self.setNicknameText()
         //添加返回按钮
         self.addLeftButtonItem()
     }
     
     override func viewWillAppear(animated: Bool) {
         self.nicknameText.text = UserInfo.nickname == "" ? UserInfo.phoneNumber : UserInfo.nickname
-        var image = UIImage(named: imagePath)
-        if image == nil{
-            image = UIImage(named: "黑邮件")
+        if UserInfo.avatar == nil{
+            UserInfo.avatar = UIImage(named: "黑邮件")
         }
-        let scale = image!.size.width > image!.size.height ? image!.size.height/80 : image!.size.width/80
-        self.imageView.image = UIImage(CGImage: image!.CGImage!, scale: scale, orientation: .Up)
+        self.imageView.image = UserInfo.avatar
     }
     
     //添加tableView
@@ -90,8 +86,6 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         let arr3 = ["关于我们"]
         let arr4 = ["注   销"]
         self.dataArrs = [arr0,arr1,arr2,arr3,arr4]
-        let documentPath:String = NSHomeDirectory() as String
-        self.imagePath = documentPath.stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png")
     }
     
     //设置第一行头像
@@ -161,47 +155,36 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         }
         //此处调用上传，失败则提示用户修改头像失败
         //如上传成功，将头像保存至本地资源文件夹，名称为UserInfo.phoneNumber.md5
-        let scale = image.size.width > image.size.height ? image.size.height/80 : image.size.width/80
+        let scale = image.size.width > image.size.height ? image.size.height/160 : image.size.width/160
         let tempImg = UIImage(CGImage: image.CGImage!, scale: scale, orientation: .Up)
-        self.imageView.image = UIImage(CGImage: image.CGImage!, scale: scale, orientation: .Up)
-        self.saveLocalImage(tempImg, imgName: UserInfo.phoneNumber)
+        self.saveLocalImage(tempImg)
     }
     
     //保存图片到本地和服务器
-    func saveLocalImage(tempImg:UIImage,imgName:String){
+    func saveLocalImage(tempImg:UIImage){
+        UserInfo.avatar = UIImage(CGImage: tempImg.CGImage!, scale: 2, orientation: .Up)
         let imageData = UIImagePNGRepresentation(tempImg)
         //保存至本地
-        let documentPath:String = NSHomeDirectory() as String
-        self.imagePath = documentPath.stringByAppendingFormat("/Documents/\(imgName.md5).png")
-        imageData?.writeToFile(self.imagePath, atomically: true)
-        print(imagePath)
+        imageData?.writeToFile((NSHomeDirectory() as String).stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png"), atomically: true)
         
-        
-        //上传至服务器
-        RequestAPI.uploadPicture("todolist/upload.php", body: nil, block: { (formData:AFMultipartFormData!) in
-            
-            formData.appendPartWithFileData(imageData!, name: "upload", fileName: imgName.md5, mimeType: "image/png")
-            
-            }, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject? ) in
-//                let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
-                print("this is \(responseObject)")
-            }) { (task:NSURLSessionDataTask?, error:NSError?) in
-                //failure
-                print("")
-        }
+//        //上传至服务器
+//        RequestAPI.UploadPicture("upload.php", body: nil, block: { (formData:AFMultipartFormData!) in
+//            formData.appendPartWithFileData(imageData!, name: "upload", fileName: imgName.md5, mimeType: "image/png")
+//            }, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject? ) in
+////                let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
+//                print("this is \(responseObject)")
+//            }) { (task:NSURLSessionDataTask?, error:NSError?) in
+//                //failure
+//                print("")
+//        }
     }
     
     //从服务器下载头像
-    static func loadAvatarImg()->UIImage{
+    static func loadAvatarImg()->Void{
         //load pitcure
-        let loadedData = NSData(contentsOfURL: NSURL(string: "\(RequestClient.sharedInstance.url)/todolist/uploadimg/\(UserInfo.phoneNumber.md5).png")!)
+        let loadedData = NSData(contentsOfURL: NSURL(string: "\(RequestClient.URL)/uploadimg/\(UserInfo.phoneNumber.md5).png")!)
         //存储到本地
-        let documentPath:String = NSHomeDirectory() as String
-        let imagePath = documentPath.stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png")
-        loadedData?.writeToFile(imagePath, atomically: true)
-        print("下载头像成功，存储本地路径为：\(imagePath)")
-        let image = UIImage(data: loadedData!)
-        return image!
+        loadedData?.writeToFile((NSHomeDirectory() as String).stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png"), atomically: true)
     }
     
 

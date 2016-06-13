@@ -61,7 +61,7 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
         let arr0 = [""]
         let arr1 = ["开发团队"]
         let arr2 = ["指导教师"]
-        let arr3 = ["开发小组","薛成韵  张彦辉  郑艺峰  王贝妮  杨若岚  李训涛  田佳诺"]
+        let arr3 = ["开发小组","薛成韵  张彦辉  郑艺峰  王贝妮  杨若岚  李训涛  田嘉诺"]
         self.dataArrs = [arr0,arr1,arr2,arr3]
     }
     
@@ -146,18 +146,6 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
         }
         else if indexPath.section == 3 && indexPath.row == 1{
             cell.textLabel?.textAlignment = .Center
-        }
-        else if indexPath.section == 4 && indexPath.row == 0{
-//            font = UIFont(name: "HelveticaNeue", size: 16.0)
-//            if UserInfo.phoneNumber == "Visitor"{
-//                cell.backgroundColor = UIColor(red: 129/255, green: 192/255, blue: 23/255, alpha: 1.0)
-//                cell.textLabel?.text = "我 要 注 册"
-//            }
-//            else{
-//                cell.backgroundColor = .redColor()
-//                cell.textLabel?.textColor = .whiteColor()
-//            }
-//            cell.textLabel?.textAlignment = .Center
         }
         else{
             if indexPath.section == 0 && indexPath.row == 0{
