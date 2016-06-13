@@ -16,6 +16,8 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
     var timeButton:UIButton!
     var tapGuesture:UITapGestureRecognizer!
     var levelButton = [UIButton]()
+    var starlevel:Int!
+    var tempAlert:String!
     
     
     
@@ -70,6 +72,7 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         self.view.addSubview(timeLabel)
         
         //显示提醒时间
+        self.tempAlert = currentList.alertTime
         self.timeButton = UIButton()
         self.timeButton.frame = CGRectMake(self.view.frame.size.width - 180 , self.view.frame.size.height - 107, (self.view.frame.size.width / 2 )-30, 20)
         if self.currentList.alertTime == ""{
@@ -98,25 +101,7 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         starLabel.font = UIFont.systemFontOfSize(13)
         self.view.addSubview(starLabel)
         
-        //具体添加星级
-        for i in 0..<currentList.level+1 {
-            let button = UIButton()
-            button.frame = CGRectMake(self.view.frame.size.width - 125 + CGFloat.init(integerLiteral: 20 * i ), self.view.frame.size.height - 140, 15, 15)
-            button.setImage(UIImage(named: "黄星"), forState: .Normal)
-            button.setImage(UIImage(named: "黄星"), forState: .Highlighted)
-            self.levelButton.append(button)
-            button.addTarget(self, action: Selector("setLevel:"), forControlEvents: .TouchDown)
-            self.view.addSubview(button)
-        }
-        for i in currentList.level+1..<5 {
-            let button = UIButton()
-            button.frame = CGRectMake(self.view.frame.size.width - 125 + CGFloat.init(integerLiteral: 20 * i), self.view.frame.size.height - 140, 15, 15)
-            button.setImage(UIImage(named: "灰星"), forState: .Normal)
-            button.setImage(UIImage(named: "灰星"), forState: .Highlighted)
-            self.levelButton.append(button)
-            button.addTarget(self, action: Selector("setLevel:"), forControlEvents: .TouchDown)
-            self.view.addSubview(button)
-        }
+
         
         
         //大边框
@@ -146,6 +131,32 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         self.tapGuesture = UITapGestureRecognizer(target: self, action: Selector("hideKeyBoard"))
         self.view.addGestureRecognizer(self.tapGuesture)
         
+        
+        //具体添加星级
+        self.starlevel = currentList.level
+        for i in 0..<currentList.level+1 {
+            let button = UIButton()
+            button.frame = CGRectMake(self.view.frame.size.width - 125 + CGFloat.init(integerLiteral: 20 * i ), self.view.frame.size.height - 140, 15, 15)
+            button.setImage(UIImage(named: "黄星"), forState: .Normal)
+            button.setImage(UIImage(named: "黄星"), forState: .Highlighted)
+            button.addTarget(self, action: Selector("setLevel:"), forControlEvents: .TouchDown)
+            self.levelButton.append(button)
+//            self.levelBar.addSubview(button)
+            self.view.addSubview(button)
+        }
+        for i in currentList.level+1..<5 {
+            let button = UIButton()
+            button.frame = CGRectMake(self.view.frame.size.width - 125 + CGFloat.init(integerLiteral: 20 * i), self.view.frame.size.height - 140, 15, 15)
+            button.setImage(UIImage(named: "灰星"), forState: .Normal)
+            button.setImage(UIImage(named: "灰星"), forState: .Highlighted)
+            button.addTarget(self, action: Selector("setLevel:"), forControlEvents: .TouchDown)
+            self.levelButton.append(button)
+//            self.levelBar.addSubview(button)
+            self.view.addSubview(button)
+        }
+//        self.levelBar.frame = CGRectMake(self.view.frame.size.width - 125, 0, 100, 15)
+//        self.view.addSubview(levelBar)
+        
     }
     
     func hideKeyBoard() -> Void {
@@ -158,18 +169,31 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         // Dispose of any resources that can be recreated.
     }
     
+    //点击完成
     func FinishItem(right:UIBarButtonItem)
     {
-        currentList.title = self.titleTextField.text!
-        currentList.content = self.contentTextView.text!
-
-        UnfinishedVC.updateData(currentList)
+        if(currentList.title == self.titleTextField.text! && currentList.content == self.contentTextView.text! && currentList.level == self.starlevel && currentList.alertTime == self.tempAlert){
+            
+        }
+        else{
+            currentList.title = self.titleTextField.text!
+            currentList.content = self.contentTextView.text!
+            currentList.level = self.starlevel
+            currentList.alertTime = self.tempAlert
+            let formatter:NSDateFormatter = NSDateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
+            currentList.lastEditTime = formatter.stringFromDate(NSDate())
+            
+            UnfinishedVC.updateData(currentList)
+        }
+        
        
         UnfinishedVC.hidesBottomBarWhenPushed = false;
         self.navigationController?.popToRootViewControllerAnimated(true)
         
     }
     
+    //选择时间
     func selectDate(sender: AnyObject) {
         
         let alertController:UIAlertController=UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
@@ -180,24 +204,19 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         alertController.addAction(UIAlertAction(title: "确定", style: UIAlertActionStyle.Default){
             (alertAction)->Void in
             print("date select: \(datePicker.date.description)")
-            
             let formatter = NSDateFormatter()
             formatter.dateFormat = "yyyy-MM-dd HH:mm"
-
-            self.currentList.alertTime = formatter.stringFromDate(datePicker.date)
-                
+            self.tempAlert = formatter.stringFromDate(datePicker.date)
             //刷新表面数据
-            self.timeButton.setTitle(self.currentList.alertTime, forState:UIControlState.Normal)
+            self.timeButton.setTitle(self.tempAlert, forState:UIControlState.Normal)
             })
         
         alertController.addAction(UIAlertAction(title: "取消提醒", style: UIAlertActionStyle.Cancel){
             (alertAction)->Void in
             
-            self.currentList.alertTime = ""
+            self.tempAlert = ""
             self.timeButton.setTitle("不提醒", forState:UIControlState.Normal)
             })
-        
-//        alertController.addAction(UIAlertAction(title: "取消修改", style: UIAlertActionStyle.Cancel,handler:nil))
         
         alertController.view.addSubview(datePicker)
         
@@ -210,10 +229,12 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         return true;
     }
     
+    //选择星级
     func setLevel(button:UIButton){
-        let level = (Int.init(button.frame.origin.x) / 20) - 14
+        let differ:Int! = Int((self.view.frame.size.width - 125)/20)
+        let level = (Int.init(button.frame.origin.x) / 20) - differ
         print(level)
-        self.currentList.level = level
+        self.starlevel = level
         for i in 0 ... level {
             self.levelButton[i].setImage(UIImage(named: "黄星"), forState: .Normal)
         }
