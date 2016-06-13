@@ -158,7 +158,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
                                                 NSLog("验证成功")
                                                 self.VerifyCodeRight = true
                                                 UserInfo.phoneNumber = self.phoneText.text!
-                                                let url:String = "todolist/index.php/Home/User/SignUp"
+                                                let url:String = "index.php/Home/User/SignUp"
                                                 let paramDict:Dictionary = ["user_phoneNumber": UserInfo.phoneNumber, "user_psw":self.txtPwd.text!.md5, "user_nickname":self.txtNickname.text!]
                                                 RequestAPI.POST(url, body: paramDict, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
                                                     //成功回调
