@@ -39,7 +39,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         //判断联网成功，则从服务器读取头像
         let reachability = Reachability.reachabilityForInternetConnection()
         if reachability!.isReachable(){
-            self.loadAvatarImg()
+            PersonalCenterController.loadAvatarImg()
         }
         self.setTableView()
         //添加头像
@@ -51,6 +51,12 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     
     override func viewWillAppear(animated: Bool) {
         self.nicknameText.text = UserInfo.nickname == "" ? UserInfo.phoneNumber : UserInfo.nickname
+        var image = UIImage(named: imagePath)
+        if image == nil{
+            image = UIImage(named: "黑邮件")
+        }
+        let scale = image!.size.width > image!.size.height ? image!.size.height/80 : image!.size.width/80
+        self.imageView.image = UIImage(CGImage: image!.CGImage!, scale: scale, orientation: .Up)
     }
     
     //添加tableView
@@ -96,19 +102,6 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         self.imageView.layer.borderColor = UIColor.grayColor().CGColor
         self.imageView.layer.borderWidth = 1
         self.imageView.userInteractionEnabled = UserInfo.phoneNumber != "Visitor"
-        var image = UIImage(named: UserInfo.phoneNumber.md5)
-        if image == nil{
-            if imagePath == nil{
-                image = UIImage(named: "黑邮件")
-            }else{
-                image = UIImage(named: imagePath)
-            }
-            self.imageView.image = image
-        }
-        else {
-            let scale = image!.size.width > image!.size.height ? image!.size.height/80 : image!.size.width/80
-            self.imageView.image = UIImage(CGImage: image!.CGImage!, scale: scale, orientation: .Up)
-        }
         //添加图像手势
         let imageClickGesture = UITapGestureRecognizer(target: self, action: "changeAvaterImage:")
         self.imageView.addGestureRecognizer(imageClickGesture)
@@ -199,14 +192,14 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     }
     
     //从服务器下载头像
-    func loadAvatarImg()->UIImage{
+    static func loadAvatarImg()->UIImage{
         //load pitcure
         let loadedData = NSData(contentsOfURL: NSURL(string: "\(RequestClient.sharedInstance.url)/todolist/uploadimg/\(UserInfo.phoneNumber.md5).png")!)
         //存储到本地
         let documentPath:String = NSHomeDirectory() as String
-        self.imagePath = documentPath.stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png")
-        loadedData?.writeToFile(self.imagePath, atomically: true)
-        print("下载头像成功，存储本地路径为：\(self.imagePath)")
+        let imagePath = documentPath.stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png")
+        loadedData?.writeToFile(imagePath, atomically: true)
+        print("下载头像成功，存储本地路径为：\(imagePath)")
         let image = UIImage(data: loadedData!)
         return image!
     }
