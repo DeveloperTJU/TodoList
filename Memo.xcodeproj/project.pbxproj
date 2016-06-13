@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5B0B5DD01D0DBC320086F22B /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0B5DCF1D0DBC320086F22B /* AboutViewController.swift */; };
 		A502F6A41D05159800C519E9 /* EditDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502F6A21D05159800C519E9 /* EditDetailViewController.swift */; };
 		A502F6A51D05159800C519E9 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502F6A31D05159800C519E9 /* EditViewController.swift */; };
 		A5046D871D0115230046B511 /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5046D7B1D0115220046B511 /* AFHTTPSessionManager.m */; };
@@ -37,6 +36,7 @@
 		A5A9A1121CEC3761006BB3A1 /* ItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A9A1111CEC3761006BB3A1 /* ItemModel.swift */; };
 		A5A9A1151CEC3795006BB3A1 /* ItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A9A1131CEC3795006BB3A1 /* ItemCell.swift */; };
 		A5A9A1161CEC3795006BB3A1 /* ItemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A5A9A1141CEC3795006BB3A1 /* ItemCell.xib */; };
+		A5AD1B101D0E3B6600DF12DA /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5AD1B0F1D0E3B6600DF12DA /* AboutViewController.swift */; };
 		A5C5C4BB1CF6870C0078C4CF /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A5C5C4BA1CF6870C0078C4CF /* libsqlite3.0.tbd */; };
 		A5C5C4C91CF688360078C4CF /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = A5C5C4BE1CF688360078C4CF /* FMDatabase.m */; };
 		A5C5C4CA1CF688360078C4CF /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A5C5C4C01CF688360078C4CF /* FMDatabaseAdditions.m */; };
@@ -60,7 +60,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		5B0B5DCF1D0DBC320086F22B /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = SOURCE_ROOT; };
 		A502F6A21D05159800C519E9 /* EditDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditDetailViewController.swift; sourceTree = "<group>"; };
 		A502F6A31D05159800C519E9 /* EditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
 		A5046D7A1D0115220046B511 /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
@@ -101,6 +100,7 @@
 		A5A9A1111CEC3761006BB3A1 /* ItemModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemModel.swift; sourceTree = "<group>"; };
 		A5A9A1131CEC3795006BB3A1 /* ItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemCell.swift; sourceTree = "<group>"; };
 		A5A9A1141CEC3795006BB3A1 /* ItemCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ItemCell.xib; sourceTree = "<group>"; };
+		A5AD1B0F1D0E3B6600DF12DA /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AboutViewController.swift; path = Memo/AboutViewController.swift; sourceTree = SOURCE_ROOT; };
 		A5C5C4BA1CF6870C0078C4CF /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		A5C5C4BD1CF688360078C4CF /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabase.h; sourceTree = "<group>"; };
 		A5C5C4BE1CF688360078C4CF /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabase.m; sourceTree = "<group>"; };
@@ -174,7 +174,7 @@
 				A53A92F01D07A19200144FE6 /* PersonalCenterController.swift */,
 				A53A92EB1D07A14300144FE6 /* ChangePaswordController.swift */,
 				A53A92ED1D07A17600144FE6 /* Reachability.swift */,
-				5B0B5DCF1D0DBC320086F22B /* AboutViewController.swift */,
+				A5AD1B0F1D0E3B6600DF12DA /* AboutViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -485,13 +485,13 @@
 				A5C5C4CA1CF688360078C4CF /* FMDatabaseAdditions.m in Sources */,
 				A5DAA8851CFFCFD9008B8CAC /* StringHelper.swift in Sources */,
 				A53A92F61D07A1B000144FE6 /* ChangePasswodCell.swift in Sources */,
+				A5AD1B101D0E3B6600DF12DA /* AboutViewController.swift in Sources */,
 				A8DB47101D07F9E900ECAD49 /* RequestAPI.swift in Sources */,
 				A5A9A0FA1CEBF806006BB3A1 /* RootTabBarController.swift in Sources */,
 				A5A9A1121CEC3761006BB3A1 /* ItemModel.swift in Sources */,
 				A5C5C4CB1CF688360078C4CF /* FMDatabasePool.m in Sources */,
 				A5A9A1001CEBF8B2006BB3A1 /* UnfinishedViewController.swift in Sources */,
 				A599E4401CF68CA6005CDB8D /* MBProgressHUD.m in Sources */,
-				5B0B5DD01D0DBC320086F22B /* AboutViewController.swift in Sources */,
 				A5046D8B1D0115230046B511 /* AFURLResponseSerialization.m in Sources */,
 				A502F6A51D05159800C519E9 /* EditViewController.swift in Sources */,
 			);
