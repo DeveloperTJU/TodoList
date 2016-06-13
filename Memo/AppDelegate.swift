@@ -37,12 +37,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.backgroundColor = .whiteColor()
         self.window?.makeKeyAndVisible()
         
-//        方便测试
-//        let db = DatabaseService.sharedInstance.database
-//        db.open()
-//        db.executeUpdate("UPDATE USER SET CURRENTUSER=1 WHERE NICKNAME='hui'", withArgumentsInArray: [])
-//        db.close()
-        
         self.window?.rootViewController = DatabaseService.sharedInstance.hasCurrentUser() ? RootTabBarController() : LogInViewController()
         return true
     }

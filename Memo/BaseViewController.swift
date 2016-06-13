@@ -64,11 +64,13 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         userButton.imageView?.layer.borderColor = UIColor.grayColor().CGColor
         userButton.imageView?.layer.borderWidth = 1
         //网络
+        var image = UIImage(named: (NSHomeDirectory() as String).stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png"))
+        if image == nil{
+            image = UIImage(named: "黑邮件")
         
 //        UserInfo.avatar = UIImage(CGImage: UIImage(named: (NSHomeDirectory() as String).stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png"))!.CGImage!, scale: 2, orientation: .Up)
-        if UserInfo.avatar == nil{
-            UserInfo.avatar = UIImage(named: "黑邮件")!
         }
+        UserInfo.avatar = UIImage(CGImage: image!.CGImage!, scale: 2, orientation: .Up)
         userButton.addTarget(self, action: Selector("userInfo:"), forControlEvents: .TouchDown)
         let userBarButton = UIBarButtonItem(customView: userButton)
         
@@ -134,7 +136,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     func friendlyTime(dateTime: String) -> String {
         let dateFormatter = NSDateFormatter()
         dateFormatter.locale = NSLocale(localeIdentifier: "zh_CN")
-        dateFormatter.setLocalizedDateFormatFromTemplate("yyyy-MM-dd HH:mm:ss")
+        dateFormatter.setLocalizedDateFormatFromTemplate("yyyy-MM-dd HH:mm:ss.SSS")
         if let date = dateFormatter.dateFromString(dateTime) {
             let delta = NSDate().timeIntervalSinceDate(date)
             if (delta < 60) {
@@ -224,11 +226,9 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //使用插入排序的方式插入数据，使得cell按照优先级与最后编辑时间排序。
     func insertData(data:ItemModel, withAnimation hasAnimation:Bool){
-        print(1)
         let index = rank(data.level, lastEditTime: data.lastEditTime)
         data.state = (isFinished! ? 2 : 0)
         if DatabaseService.sharedInstance.insertInDB(data){
-            print(2)
             let url = "index.php/Home/Task/AddTask"
             let task = ["title":data.title, "content":data.content, "createtime":data.createTime, "lastedittime":data.lastEditTime, "alerttime":data.alertTime, "level":data.level, "state":data.state]
             let paramDict = ["UID":UserInfo.UID, "TaskModel":task]

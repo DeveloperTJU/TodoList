@@ -143,6 +143,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
             
         })
     }
+    
     //13207620165
     func tapped1(button:UIButton){
         
@@ -190,7 +191,6 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
             
             alertWindow("错误", message: "密码格式错误")
         }
-
     }
 
     func tapped2(button:UIButton){
@@ -209,36 +209,32 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         let phoneNum = phoneText.text
         var resultMessage = ""
         self.VerifyCodeRight = false
-        SMSSDK.commitVerificationCode(authCode, phoneNumber: phoneNum, zone: "86" ,
-                                      result:{ (error: NSError!) -> Void in
-                                        if(error == nil){
-                                            resultMessage = "恭喜您，验证成功！"
-                                            NSLog("验证成功")
-                                            self.VerifyCodeRight = true
-                                            
-                                        }else{
-                                            resultMessage = "很抱歉，验证失败！"
-                                            NSLog("验证失败！" , error)
-                                            self.VerifyCodeRight = false
-                                            
-                                        }
-                                        self.alertWindow("验证结果", message: resultMessage)
+        SMSSDK.commitVerificationCode(authCode, phoneNumber: phoneNum, zone: "86", result:{ (error: NSError!) -> Void in
+            if(error == nil){
+                resultMessage = "恭喜您，验证成功！"
+                NSLog("验证成功")
+                self.VerifyCodeRight = true
+                
+            }else{
+                resultMessage = "很抱歉，验证失败！"
+                NSLog("验证失败！" , error)
+                self.VerifyCodeRight = false
+                
+            }
+            self.alertWindow("验证结果", message: resultMessage)
         })
     }
     
     func checkPassword() -> Bool  {
-        
         if txtPwd.text == Optional(""){
             alertWindow("错误", message: "密码为空1")
             print("used")
             return false
         }
-        
         else if txtPwd.text?.characters.count < 6{
             alertWindow("错误", message: "密码至少是六位")
             return false
         }
-        
         return true
     }
 }

@@ -133,9 +133,9 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
         else{
             let formatter:NSDateFormatter = NSDateFormatter()
             formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
-            newItem.data.createTime = formatter.stringFromDate(NSDate())
-            formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-            newItem.data.lastEditTime = formatter.stringFromDate(NSDate())
+            let dateTime = formatter.stringFromDate(NSDate())
+            newItem.data.createTime = dateTime
+            newItem.data.lastEditTime = dateTime
             newItem.data.title = newItem.addTextField.text!
             self.insertData(newItem.data, withAnimation: true)
             self.reloadNewItem()
