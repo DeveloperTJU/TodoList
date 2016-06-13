@@ -18,6 +18,7 @@ class ItemCell: UITableViewCell{
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var detailImage: UIImageView!
     @IBOutlet weak var stateButton: UIButton!
+    @IBOutlet weak var background: MyRect!
     var createTime:String!
     var delegate:ItemCellDelegate?
     
@@ -25,7 +26,9 @@ class ItemCell: UITableViewCell{
         super.awakeFromNib()
         self.contentView.backgroundColor = .clearColor()
         self.backgroundColor = .clearColor()
-        self.detailImage.frame = CGRectMake(self.frame.width - 17, 15, 12, 12)
+        self.background.frame = CGRectMake(8, 4, UIScreen.mainScreen().bounds.width - 16, 42)
+        self.timeLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width - 90, 13, 50, 16)
+        self.detailImage.frame = CGRectMake(UIScreen.mainScreen().bounds.width - 33, 15, 12, 12)
         stateButton.addTarget(self, action: Selector("handleButtonClick:"), forControlEvents: .TouchDown)
     }
     

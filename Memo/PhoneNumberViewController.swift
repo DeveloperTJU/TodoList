@@ -171,7 +171,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
 //
         //            if self.submitAuthCode(){
         UserInfo.phoneNumber = phoneText.text!
-        let url:String = "todolist/index.php/Home/User/SignUp"
+        let url:String = "index.php/Home/User/SignUp"
         let paramDict:Dictionary = ["user_phoneNumber": UserInfo.phoneNumber, "user_psw":txtPwd.text!.md5, "user_nickname":txtNickname.text!]
         RequestAPI.POST(url, body: paramDict, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
             //成功回调

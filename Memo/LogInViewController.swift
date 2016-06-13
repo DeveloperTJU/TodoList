@@ -103,7 +103,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
         }
         else {
             UserInfo.phoneNumber = txtUser.text!
-            let url:String = "todolist/index.php/Home/User/Login"
+            let url:String = "index.php/Home/User/Login"
             let paramDict:Dictionary = ["user_phoneNumber":UserInfo.phoneNumber,"user_psw":txtPwd.text!.md5]
             RequestAPI.POST(url, body: paramDict, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
                 //成功回调
