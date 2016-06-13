@@ -14,15 +14,15 @@ protocol RequestClientDelegate{
 class RequestClient: AFHTTPSessionManager {
     
     var delegate:RequestClientDelegate?
-    
+    let url:NSURL = NSURL(string: "http://127.0.0.1/")!
+
     class var sharedInstance:RequestClient {
         struct Static {
             static var onceToken:dispatch_once_t = 0
             static var instance:RequestClient? = nil
         }
         dispatch_once(&Static.onceToken, { () -> Void in
-            let url:NSURL = NSURL(string: "http://10.1.32.39/")!
-            Static.instance = RequestClient(baseURL: url)
+            Static.instance = RequestClient(baseURL: RequestClient.sharedInstance.url)
             Static.instance?.requestSerializer = AFHTTPRequestSerializer()
             Static.instance?.responseSerializer = AFHTTPResponseSerializer()
             let resSet = NSSet(array: ["text/html"])

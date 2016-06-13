@@ -185,7 +185,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         
         
         //上传至服务器
-        RequestAPI.uploadPicture("ToDoListServer/upload.php", body: nil, block: { (formData:AFMultipartFormData!) in
+        RequestAPI.uploadPicture("todolist/upload.php", body: nil, block: { (formData:AFMultipartFormData!) in
             
             formData.appendPartWithFileData(imageData!, name: "upload", fileName: imgName.md5, mimeType: "image/png")
             
@@ -201,7 +201,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     //从服务器下载头像
     func loadAvatarImg()->UIImage{
         //load pitcure
-        let loadedData = NSData(contentsOfURL: NSURL(string: "http://10.1.32.39/ToDoListServer/uploadimg/\(UserInfo.phoneNumber.md5).png")!)
+        let loadedData = NSData(contentsOfURL: NSURL(string: "\(RequestClient.sharedInstance.url)/todolist/uploadimg/\(UserInfo.phoneNumber.md5).png")!)
         //存储到本地
         let documentPath:String = NSHomeDirectory() as String
         self.imagePath = documentPath.stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png")
