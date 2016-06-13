@@ -26,6 +26,8 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         self.title = "查看"
         
         //给导航增加item
+        let resetButton = UIBarButtonItem(title: "返回", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("reset"))
+        resetButton.title = "返回"
         let rightItem = UIBarButtonItem(title: "编辑", style: UIBarButtonItemStyle.Plain, target: self, action: Selector("EditItem:"))
         rightItem.title = "编辑"
         if currentList.state & 1 == 0{  //未删除
@@ -33,12 +35,13 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
                 rightItem.enabled = false
             }
         }
+        self.navigationItem.leftBarButtonItem = resetButton
         self.navigationItem.rightBarButtonItem = rightItem
         
         //标题框
         let TextField = UITextField(frame: CGRectMake(15, 20, self.view.frame.size.width - 30, 50))
         TextField.backgroundColor=UIColor.whiteColor()
-        TextField.layer.cornerRadius = 10;
+        TextField.layer.cornerRadius = 3;
         TextField.enabled=false
         self.view.addSubview(TextField)
         
@@ -47,7 +50,7 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         
         TextView.layer.borderColor = UIColor(red: 60/255, green: 40/255, blue: 129/255, alpha: 1).CGColor;
         //        TextView.layer.borderWidth = 0.5;
-        TextView.layer.cornerRadius = 10;
+        TextView.layer.cornerRadius = 3;
         TextView.editable=false
         self.view.addSubview(TextView)
         
@@ -188,6 +191,11 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
             UnfinishedVC.removeData(row: row)
         }
         self.navigationController?.popViewControllerAnimated(true)
+    }
+    
+    func reset() {
+        //        let nav = BaseViewController()
+        self.navigationController!.popViewControllerAnimated(true)
     }
     
 }
