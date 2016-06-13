@@ -64,9 +64,10 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         userButton.imageView?.layer.borderColor = UIColor.grayColor().CGColor
         userButton.imageView?.layer.borderWidth = 1
         //网络
-        UserInfo.avatar = UIImage(CGImage: UIImage(named: (NSHomeDirectory() as String).stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png"))!.CGImage!, scale: 2, orientation: .Up)
+        
+//        UserInfo.avatar = UIImage(CGImage: UIImage(named: (NSHomeDirectory() as String).stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png"))!.CGImage!, scale: 2, orientation: .Up)
         if UserInfo.avatar == nil{
-            UserInfo.avatar = UIImage(named: "黑邮件")
+            UserInfo.avatar = UIImage(named: "黑邮件")!
         }
         userButton.addTarget(self, action: Selector("userInfo:"), forControlEvents: .TouchDown)
         let userBarButton = UIBarButtonItem(customView: userButton)

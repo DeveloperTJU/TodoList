@@ -146,50 +146,51 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
     //13207620165
     func tapped1(button:UIButton){
         
-//        let authCode = txtVerifyCode.text
-//        let phoneNum = phoneText.text
-//        var resultMessage = ""
-//        SMSSDK.commitVerificationCode(authCode, phoneNumber: phoneNum, zone: "86" ,
-//                                      result:{ (error: NSError!) -> Void in
-//                                        if(error == nil){
-//                                            resultMessage = "恭喜您，验证成功！123"
-//                                            NSLog("验证成功")
-//                                            self.VerifyCodeRight = true
-//                                            
-//                                        }else{
-//                                            resultMessage = "很抱歉，验证失败！456"
-//                                            NSLog("验证失败！" , error)
-//                                            self.VerifyCodeRight = false
-//                                            
-//                                        }
-//                                        self.alertWindow("验证结果789", message: resultMessage)
-//        })
-//        print(self.VerifyCodeRight)
-        
-        
-//        if self.checkPassword(){
-//
-        //            if self.submitAuthCode(){
-        UserInfo.phoneNumber = phoneText.text!
-        let url:String = "todolist/index.php/Home/User/SignUp"
-        let paramDict:Dictionary = ["user_phoneNumber": UserInfo.phoneNumber, "user_psw":txtPwd.text!.md5, "user_nickname":txtNickname.text!]
-        RequestAPI.POST(url, body: paramDict, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
-            //成功回调
-            let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
-            //注册成功
-            if resultDict["isSuccess"] as! Int == 1{
-                self.alertWindow("成功", message: "注册成功!")
-                self.presentViewController(LogInViewController(), animated: true, completion: nil)
-            }
-            else{
-                self.alertWindow("错误", message: "注册失败!")
-            }
-        }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
-                //失败回调
-            print("网络调用失败:\(error)")
+        let authCode = txtVerifyCode.text
+        let phoneNum = phoneText.text
+        var resultMessage:String = ""
+        if checkPassword(){
+            
+            SMSSDK.commitVerificationCode(authCode, phoneNumber: phoneNum, zone: "86" ,
+                                          result:{ (error: NSError!) -> Void in
+                                            if(error == nil){
+                                                resultMessage = "恭喜您，验证成功！123"
+                                                NSLog("验证成功")
+                                                self.VerifyCodeRight = true
+                                                UserInfo.phoneNumber = self.phoneText.text!
+                                                let url:String = "todolist/index.php/Home/User/SignUp"
+                                                let paramDict:Dictionary = ["user_phoneNumber": UserInfo.phoneNumber, "user_psw":self.txtPwd.text!.md5, "user_nickname":self.txtNickname.text!]
+                                                RequestAPI.POST(url, body: paramDict, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
+                                                    //成功回调
+                                                    let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
+                                                    //注册成功
+                                                    if resultDict["isSuccess"] as! Int == 1{
+                                                        self.alertWindow("成功", message: "注册成功!")
+                                                        self.presentViewController(LogInViewController(), animated: true, completion: nil)
+                                                    }
+                                                    else{
+                                                        self.alertWindow("错误", message: "注册失败!")
+                                                    }
+                                                }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
+                                                    //失败回调
+                                                    print("网络调用失败:\(error)")
+                                                }
+                                                
+                                            }else{
+                                                resultMessage = "很抱歉，验证失败！456"
+                                                NSLog("验证失败！" , error)
+                                                self.VerifyCodeRight = false
+                                                
+                                            }
+                                            //self.alertWindow("验证结果789", message: resultMessage)
+            })
+            
         }
-//    }
-//}
+        else{
+            
+            alertWindow("错误", message: "密码格式错误")
+        }
+
     }
 
     func tapped2(button:UIButton){
