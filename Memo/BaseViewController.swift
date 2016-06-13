@@ -67,6 +67,8 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         var image = UIImage(named: (NSHomeDirectory() as String).stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png"))
         if image == nil{
             image = UIImage(named: "黑邮件")
+        
+//        UserInfo.avatar = UIImage(CGImage: UIImage(named: (NSHomeDirectory() as String).stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png"))!.CGImage!, scale: 2, orientation: .Up)
         }
         UserInfo.avatar = UIImage(CGImage: image!.CGImage!, scale: 2, orientation: .Up)
         userButton.addTarget(self, action: Selector("userInfo:"), forControlEvents: .TouchDown)
