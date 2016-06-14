@@ -92,16 +92,16 @@ class ChangePaswordController: UIViewController ,UITextFieldDelegate{
         confirmPasswordText.leftView!.addSubview(confirmImg)
         passwordView.addSubview(confirmPasswordText)
         
-//        let finishBtn:UIButton = UIButton(type:.System)
-//        //设置按钮位置和大小
-//        finishBtn.frame = CGRectMake(10, 290, passwordView.frame.size.width , 44)
-//        finishBtn.backgroundColor = UIColor(red: 67/255, green: 67/255, blue: 67/255, alpha: 1)
-//        finishBtn.tintColor = UIColor(red: 232/255, green: 208/255, blue: 120/255, alpha: 1)
-//        finishBtn.layer.cornerRadius = 4
-//        //设置按钮文字
-//        finishBtn.setTitle("修   改", forState:UIControlState.Normal)
-//        finishBtn.addTarget(self,action:Selector("updateDataNetWork"),forControlEvents: .TouchUpInside)
-//        self.view.addSubview(finishBtn)
+        //        let finishBtn:UIButton = UIButton(type:.System)
+        //        //设置按钮位置和大小
+        //        finishBtn.frame = CGRectMake(10, 290, passwordView.frame.size.width , 44)
+        //        finishBtn.backgroundColor = UIColor(red: 67/255, green: 67/255, blue: 67/255, alpha: 1)
+        //        finishBtn.tintColor = UIColor(red: 232/255, green: 208/255, blue: 120/255, alpha: 1)
+        //        finishBtn.layer.cornerRadius = 4
+        //        //设置按钮文字
+        //        finishBtn.setTitle("修   改", forState:UIControlState.Normal)
+        //        finishBtn.addTarget(self,action:Selector("updateDataNetWork"),forControlEvents: .TouchUpInside)
+        //        self.view.addSubview(finishBtn)
     }
     
     //添加导航栏左侧按钮
@@ -115,7 +115,7 @@ class ChangePaswordController: UIViewController ,UITextFieldDelegate{
         let rightBtn = UIBarButtonItem(title: "完成", style: .Plain, target: self, action: "updateDataNetWork")
         self.navigationItem.rightBarButtonItem = rightBtn
     }
-
+    
     
     func backPersonalCenter(){
         self.navigationController?.popViewControllerAnimated(true)
@@ -140,7 +140,7 @@ class ChangePaswordController: UIViewController ,UITextFieldDelegate{
         let result = self.getErrorType(oldPassword, newPassword: newPassword, confirmPasswod: confirmPassword)
         if result == "ok"{
             let url:String = "index.php/Home/User/ChangePassword"
-            let paramDict:Dictionary = ["UID":UserInfo.UID,"user_oldPassword":oldPassword,"user_newPassword":newPassword.md5]
+            let paramDict:Dictionary = ["UID":UserInfo.UID,"user_oldPassword":oldPassword.md5,"user_newPassword":newPassword.md5]
             RequestAPI.POST(url, body: paramDict, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
                 //成功回调
                 let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)

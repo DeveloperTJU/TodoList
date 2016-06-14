@@ -9,11 +9,21 @@
 import UIKit
 
 class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource{
-
+    
     var mainTableView:UITableView!
     var imageView = UIImageView()
     var dataArrs:[[String]] = [[String]]()
-    var nicknameText:UILabel!
+    var versionText:UILabel!
+    var urlText1:UrlLabel = UrlLabel()
+    var urlText2:UrlLabel = UrlLabel()
+    var urlText3:UrlLabel = UrlLabel()
+    var urlText4:UrlLabel = UrlLabel()
+    var urlText5:UrlLabel = UrlLabel()
+    var urlText6:UrlLabel = UrlLabel()
+    var urlText7:UrlLabel = UrlLabel()
+    var urlText8:UrlLabel = UrlLabel()
+    var dataArr:[UrlLabel]!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,13 +34,13 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
         self.setTableView()
         //添加头像
         self.setAvaterImage()
-        self.setNicknameText()
+        self.setversionText()
         //添加返回按钮
         self.addLeftButtonItem()
     }
     
     override func viewWillAppear(animated: Bool) {
-        self.nicknameText.text = UserInfo.nickname == "" ? UserInfo.phoneNumber : UserInfo.nickname
+        self.versionText.text = UserInfo.nickname == "" ? UserInfo.phoneNumber : UserInfo.nickname
     }
     
     //添加tableView
@@ -60,14 +70,14 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
     func initDataArrs() {
         let arr0 = [""]
         let arr1 = ["开发团队"]
-        let arr2 = ["指导教师"]
-        let arr3 = ["开发小组","薛成韵  张彦辉  郑艺峰  王贝妮  杨若岚  李训涛  田嘉诺"]
-        self.dataArrs = [arr0,arr1,arr2,arr3]
+        //let arr2 = ["指导教师"]
+        let arr3 = ["开发小组", "    薛成韵乀(ˉεˉ乀)",  "    张彦辉",  "    郑艺峰",  "    nmpp:Github@hailuy",  "    杨若岚",  "    李训涛",  "    田佳诺","    杨耀华"]
+        self.dataArrs = [arr0,arr1,arr3]
     }
     
     //设置第一行头像
     func setAvaterImage(){
-        self.imageView = UIImageView(frame: CGRectMake(self.view.bounds.size.width/2 - 50, 10, 80, 80))
+        self.imageView = UIImageView(frame: CGRectMake(self.view.bounds.size.width/2 - 40, 10, 80, 80))
         self.imageView.layer.cornerRadius = CGRectGetHeight(imageView.bounds)/2
         self.imageView.layer.masksToBounds = true
         self.imageView.layer.borderColor = UIColor.grayColor().CGColor
@@ -77,9 +87,9 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
     }
     
     //设置昵称
-    func setNicknameText(){
-        let textFrame:CGRect = CGRectMake(150, 80, 100, 50)
-        self.nicknameText = UILabel(frame: textFrame)
+    func setversionText(){
+        let textFrame:CGRect = CGRectMake(self.view.bounds.size.width/2 - 45, 80, 100, 50)
+        self.versionText = UILabel(frame: textFrame)
     }
     
     //控制分区数
@@ -127,38 +137,70 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
         var cell = UITableViewCell(frame:frame)
         let sectionArr = dataArrs[indexPath.section]
         cell.textLabel?.text = sectionArr[indexPath.row]
-        var font = UIFont(name: "HelveticaNeue-Thin", size: 14.0)
+        let font = UIFont(name: "HelveticaNeue-Thin", size: 14.0)
+        cell.textLabel!.font = font
         if indexPath.section == 1 && indexPath.row == 0{
+            tableView.separatorStyle = .SingleLine
             let frame:CGRect = CGRectMake(self.view.bounds.size.width - 250, 0, 200, 42)
-            let phoneNumberText = UILabel(frame: frame)
-            phoneNumberText.text = "天软swift开发团队"
-            phoneNumberText.textAlignment = .Right
-            phoneNumberText.font = font
-            cell.addSubview(phoneNumberText)
+            let developerText = UILabel(frame: frame)
+            developerText.text = "tju酱油一号"
+            developerText.textAlignment = .Right
+            developerText.font = font
+            cell.addSubview(developerText)
         }
-        else if indexPath.section == 2 && indexPath.row == 0{
-            let frame:CGRect = CGRectMake(self.view.bounds.size.width - 250, 0, 200, 42)
-            let phoneNumberText = UILabel(frame: frame)
-            phoneNumberText.text = "孙小圆老师"
-            phoneNumberText.textAlignment = .Right
-            phoneNumberText.font = font
-            cell.addSubview(phoneNumberText)
-        }
-        else if indexPath.section == 3 && indexPath.row == 1{
-            cell.textLabel?.textAlignment = .Center
+        else if indexPath.section == 2 && indexPath.row > 0{
+            cell.textLabel?.textAlignment = .Left
+            cell.textLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 14.0)
+            tableView.separatorStyle = .SingleLine
+            cell.textLabel?.autoresizingMask = UIViewAutoresizing.FlexibleWidth
+            let textFrame:CGRect = CGRectMake(self.view.bounds.size.width - 200,4,180,34)
+            switch(indexPath.row){
+            case 1:
+                urlText1 = UrlLabel(frame: textFrame)
+                urlText1.text = "github.com"
+                cell.addSubview(urlText1)
+            case 2:
+                urlText2 = UrlLabel(frame: textFrame)
+                urlText2.text = "baidu.com"
+                cell.addSubview(urlText2)
+            case 3:
+                urlText3 = UrlLabel(frame: textFrame)
+                urlText3.text = "how123.com"
+                cell.addSubview(urlText3)
+            case 4:
+                urlText4 = UrlLabel(frame: textFrame)
+                urlText4.text = "3g.qq.com"
+                cell.addSubview(urlText4)
+            case 5:
+                urlText5 = UrlLabel(frame: textFrame)
+                urlText5.text = "sina.cn"
+                cell.addSubview(urlText5)
+            case 6:
+                urlText6 = UrlLabel(frame: textFrame)
+                urlText6.text = "baidu.com"
+                cell.addSubview(urlText6)
+            case 7:
+                urlText7 = UrlLabel(frame: textFrame)
+                urlText7.text = "baidu.com"
+                cell.addSubview(urlText7)
+            case 8:
+                urlText8 = UrlLabel(frame: textFrame)
+                urlText8.text = "baidu.com"
+                cell.addSubview(urlText8)
+            default:break
+            }
         }
         else{
             if indexPath.section == 0 && indexPath.row == 0{
                 let frame:CGRect = CGRectMake(20, 0, 200, 200)
                 cell = UITableViewCell(frame: frame)
                 cell.addSubview(imageView)
-                self.nicknameText.text = "ToDoList v1.0.0"
-                cell.addSubview(nicknameText)
-                nicknameText.font = font
+                self.versionText.text = "ToDoList v1.0.0"
+                cell.addSubview(versionText)
+                versionText.font = font
                 cell.selectionStyle = .None
             }
         }
-        cell.textLabel!.font = font
         cell.selectionStyle = .None
         cell.layer.cornerRadius = 3
         return cell
