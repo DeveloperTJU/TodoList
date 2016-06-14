@@ -18,13 +18,13 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     var nicknameText:UILabel!
     
     //服务器下载头像代码函数,此方法返回image，同时将图片存储到本地。
-   // self.loadAvatarImg()->UIImage;
+    // self.loadAvatarImg()->UIImage;
     
     //获取本地存储图像的方法如下
     //let documentPath:String = NSHomeDirectory() as String
     //self.imagePath = documentPath.stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png")
     //存储路径为：NSHomeDirectory/Documents/phoneNumber.md5.png
-
+    
     
     //由于同一时间内存中只有一个User，所以删除User模型，使用全局常量UserInfo存储当前用户信息，用户中心只用到nickname和phoneNumber。头像使用UserInfo.phoneNumber.md5作为文件名，从服务器获得并存入资源文件夹。
     //请设置AutoLyout，简单使用self.view.size设置相应的frame即可。有问题请直接找我。
@@ -112,7 +112,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     
     //修改头像
     func changeAvaterImage(gesture:UITapGestureRecognizer){
-        let actionSheet = UIActionSheet(title: "获取图像", delegate: self, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: "从相册选择","拍照")
+        let actionSheet = UIActionSheet(title: "图片来源", delegate: self, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: "从相册选择","使用相机拍摄")
         actionSheet.tag  = 1000
         actionSheet.showInView(self.view)
     }
@@ -167,16 +167,16 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         //保存至本地
         imageData?.writeToFile((NSHomeDirectory() as String).stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png"), atomically: true)
         
-//        //上传至服务器
-//        RequestAPI.UploadPicture("upload.php", body: nil, block: { (formData:AFMultipartFormData!) in
-//            formData.appendPartWithFileData(imageData!, name: "upload", fileName: imgName.md5, mimeType: "image/png")
-//            }, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject? ) in
-////                let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
-//                print("this is \(responseObject)")
-//            }) { (task:NSURLSessionDataTask?, error:NSError?) in
-//                //failure
-//                print("")
-//        }
+        //        //上传至服务器
+        //        RequestAPI.UploadPicture("upload.php", body: nil, block: { (formData:AFMultipartFormData!) in
+        //            formData.appendPartWithFileData(imageData!, name: "upload", fileName: imgName.md5, mimeType: "image/png")
+        //            }, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject? ) in
+        ////                let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
+        //                print("this is \(responseObject)")
+        //            }) { (task:NSURLSessionDataTask?, error:NSError?) in
+        //                //failure
+        //                print("")
+        //        }
     }
     
     //从服务器下载头像
@@ -187,7 +187,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         loadedData?.writeToFile((NSHomeDirectory() as String).stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png"), atomically: true)
     }
     
-
+    
     
     //控制分区数
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -225,7 +225,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         view.frame = CGRectMake(0, 0, self.view.bounds.size.width, 42)
         return view
     }
-
+    
     //控制样式
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
@@ -271,13 +271,14 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         }
         cell.textLabel!.font = font
         cell.layer.cornerRadius = 3
+        cell.selectionStyle = .None
         return cell
     }
     
     //tableView点击事件
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell:UITableViewCell = tableView.cellForRowAtIndexPath(indexPath)!
-        cell.selectionStyle = .Default
+        //  cell.selectionStyle = .Default
         switch(indexPath.section){
         case 1:
             if indexPath.row == 0{
@@ -299,10 +300,10 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         case 3:
             let AboutVc = AboutViewController()
             self.navigationController?.pushViewController(AboutVc, animated: true)
-//            let alert = UIAlertController(title: "", message: "天津市大学软件学院\nswift语言开发团队", preferredStyle: .Alert)
-//            let cancelAction = UIAlertAction(title: "确定", style: .Cancel, handler: nil)
-//            alert.addAction(cancelAction)
-//            self.presentViewController(alert, animated: true, completion: nil)
+            //            let alert = UIAlertController(title: "", message: "天津市大学软件学院\nswift语言开发团队", preferredStyle: .Alert)
+            //            let cancelAction = UIAlertAction(title: "确定", style: .Cancel, handler: nil)
+            //            alert.addAction(cancelAction)
+        //            self.presentViewController(alert, animated: true, completion: nil)
         case 4:
             if UserInfo.phoneNumber == "Visitor"{
                 UserInfo = UserInfoStruct()
