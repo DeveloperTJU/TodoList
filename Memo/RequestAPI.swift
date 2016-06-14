@@ -46,13 +46,21 @@ class RequestAPI: NSObject {
         let url = "index.php/Home/Task/SynchronizeTask"
         let paramDict = ["UID":UserInfo.UID, "TaskModelArr":DatabaseService.sharedInstance.selectLocalData()]
         RequestAPI.POST(url, body: paramDict, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
-            //成功回调
             let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
-            if resultDict["isSuccess"] as! Int == 1{
-                let arr = resultDict["taskModelArr"] as! NSArray
+            if resultDict["isSuccess"] as! Bool{
+                var arr = resultDict["taskModelArr"]!["insert"] as! NSArray
                 for task in arr{
-                    let data = ItemModel(title: task["title"] as! String, content: task["content"] as! String, createTime: task["createtime"] as! String, lastEditTime: task["lastedittime"] as! String, alertTime: task["alerttime"] as! String, level: Int(task["level"] as! String)!, state: Int(task["state"] as! String)!)
-                    DatabaseService.sharedInstance.refreshInDB(data)
+                    let data = ItemModel(title: task["title"] as! String, content: task["content"] as! String, createTime: task["createtime"] as! String, lastEditTime: task["lastedittime"] as! String, timestamp: task["timestamp"] as! String, alertTime: task["alerttime"] as! String, level: Int(task["level"] as! String)!, state: Int(task["state"] as! String)!)
+                    DatabaseService.sharedInstance.insertInDB(data)
+                }
+                arr = resultDict["taskModelArr"]!["update"] as! NSArray
+                for task in arr{
+                    let data = ItemModel(title: task["title"] as! String, content: task["content"] as! String, createTime: task["createtime"] as! String, lastEditTime: task["lastedittime"] as! String, timestamp: task["timestamp"] as! String, alertTime: task["alerttime"] as! String, level: Int(task["level"] as! String)!, state: Int(task["state"] as! String)!)
+                    DatabaseService.sharedInstance.updateInDB(data)
+                }
+                let timeArr = resultDict["taskModelArr"]!["delete"] as! NSArray
+                for createTime in timeArr{
+                    DatabaseService.sharedInstance.deleteInDB(createTime as! String)
                 }
                 UserInfo.nickname = resultDict["user_nickname"] as! String
                 DatabaseService.sharedInstance.refreshUser(UserInfo.UID, phoneNumber: UserInfo.phoneNumber, nickname: UserInfo.nickname, isCurrentUser: 1)
@@ -85,6 +93,7 @@ class RequestAPI: NSObject {
                 }
             }
         }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
+            print(error)
             let hud = MBProgressHUD.showHUDAddedTo((RequestClient.sharedInstance.delegate as! UIViewController).view, animated: true)
             hud.mode = MBProgressHUDMode.Text
             hud.label.text = "网络连接失败"

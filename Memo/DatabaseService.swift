@@ -76,7 +76,7 @@ class DatabaseService: NSObject {
     //如果首次登录，初始化当前用户的数据表
     func initDataTable() -> Bool{
         self.database.open()
-        let sqlStr = "CREATE TABLE IF NOT EXISTS data_\(UserInfo.phoneNumber.md5)(TITLE TEXT, CONTENT TEXT, CREATE_TIME TEXT, LAST_EDIT_TIME TEXT, ALERT_TIME TEXT, LEVEL INT, STATE INT, PRIMARY KEY(CREATE_TIME))"
+        let sqlStr = "CREATE TABLE IF NOT EXISTS data_\(UserInfo.phoneNumber.md5)(TITLE TEXT, CONTENT TEXT, CREATE_TIME TEXT, LAST_EDIT_TIME TEXT, TIMESTAMP TEXT, ALERT_TIME TEXT, LEVEL INT, STATE INT, PRIMARY KEY(CREATE_TIME))"
         let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [])
         self.database.close()
         return succeed
@@ -127,7 +127,7 @@ class DatabaseService: NSObject {
         let sqlStr = "SELECT * FROM data_\(UserInfo.phoneNumber.md5)"
         let rs = self.database.executeQuery(sqlStr, withArgumentsInArray: [])
         while rs.next(){
-            let data:NSDictionary = ["title": (rs.stringForColumn("TITLE")), "content": rs.stringForColumn("CONTENT"), "createtime": rs.stringForColumn("CREATE_TIME"), "lastedittime": rs.stringForColumn("LAST_EDIT_TIME"), "alerttime": rs.stringForColumn("ALERT_TIME"), "level": rs.longForColumn("LEVEL"), "state": rs.longForColumn("STATE")]
+            let data:NSDictionary = ["title": (rs.stringForColumn("TITLE")), "content": rs.stringForColumn("CONTENT"), "createtime": rs.stringForColumn("CREATE_TIME"), "lastedittime": rs.stringForColumn("LAST_EDIT_TIME"), "timestamp": rs.stringForColumn("TIMESTAMP"), "alerttime": rs.stringForColumn("ALERT_TIME"), "level": rs.longForColumn("LEVEL"), "state": rs.longForColumn("STATE")]
             dictArr["\(rs.stringForColumn("CREATE_TIME"))"] = data
         }
         self.database.close()
@@ -137,8 +137,8 @@ class DatabaseService: NSObject {
     //新建任务
     func insertInDB(data:ItemModel) -> Bool {
         self.database.open()
-        let sqlStr = "INSERT INTO data_\(UserInfo.phoneNumber.md5) VALUES (?, ?, ?, ?, ?, ?, ?)"
-        let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [data.title, data.content, data.createTime, data.lastEditTime, data.alertTime, data.level, data.state])
+        let sqlStr = "INSERT INTO data_\(UserInfo.phoneNumber.md5) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+        let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [data.title, data.content, data.createTime, data.lastEditTime, data.timestamp, data.alertTime, data.level, data.state])
         self.database.close()
         return succeed
     }
@@ -157,8 +157,8 @@ class DatabaseService: NSObject {
         self.database.open()
         var sqlStr = "DELETE FROM data_\(UserInfo.phoneNumber.md5) WHERE CREATE_TIME=?"
         self.database.executeUpdate(sqlStr, withArgumentsInArray: [data.createTime])
-        sqlStr = "INSERT INTO data_\(UserInfo.phoneNumber.md5) VALUES (?, ?, ?, ?, ?, ?, ?)"
-        let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [data.title, data.content, data.createTime, data.lastEditTime, data.alertTime, data.level, data.state])
+        sqlStr = "INSERT INTO data_\(UserInfo.phoneNumber.md5) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+        let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [data.title, data.content, data.createTime, data.lastEditTime, data.timestamp, data.alertTime, data.level, data.state])
         self.database.close()
         return succeed
     }
@@ -175,8 +175,8 @@ class DatabaseService: NSObject {
     //将修改后的data作为参数，createTime是主键不允许修改。
     func updateInDB(data:ItemModel) -> Bool {
         self.database.open()
-        let sqlStr = "UPDATE data_\(UserInfo.phoneNumber.md5) SET TITLE=?, CONTENT=?, LAST_EDIT_TIME=?, ALERT_TIME=?, LEVEL=?, STATE=? WHERE CREATE_TIME=?"
-        let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [data.title, data.content, data.lastEditTime, data.alertTime, data.level, data.state, data.createTime])
+        let sqlStr = "UPDATE data_\(UserInfo.phoneNumber.md5) SET TITLE=?, CONTENT=?, LAST_EDIT_TIME=?, TIMESTAMP=?, ALERT_TIME=?, LEVEL=?, STATE=? WHERE CREATE_TIME=?"
+        let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [data.title, data.content, data.lastEditTime, data.timestamp, data.alertTime, data.level, data.state, data.createTime])
         self.database.close()
         return succeed
     }
@@ -190,7 +190,7 @@ class DatabaseService: NSObject {
         var finished:[ItemModel] = [ItemModel]()
         while rs.next(){
             let state = rs.longForColumn("STATE")
-            let data = ItemModel(title: rs.stringForColumn("TITLE"), content: rs.stringForColumn("CONTENT"), createTime: rs.stringForColumn("CREATE_TIME"), lastEditTime: rs.stringForColumn("LAST_EDIT_TIME"), alertTime: rs.stringForColumn("ALERT_TIME"), level: rs.longForColumn("LEVEL"), state: state)
+            let data = ItemModel(title: rs.stringForColumn("TITLE"), content: rs.stringForColumn("CONTENT"), createTime: rs.stringForColumn("CREATE_TIME"), lastEditTime: rs.stringForColumn("LAST_EDIT_TIME"), timestamp: rs.stringForColumn("TIMESTAMP"), alertTime: rs.stringForColumn("ALERT_TIME"), level: rs.longForColumn("LEVEL"), state: state)
             if state & 1 == 0{  //未删除
                 if rs.longForColumn("state") & 2 == 2{ //已完成
                     finished.append(data)

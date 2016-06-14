@@ -21,13 +21,13 @@ class ItemCell: UITableViewCell{
     @IBOutlet weak var background: MyRect!
     var createTime:String!
     var delegate:ItemCellDelegate?
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         self.contentView.backgroundColor = .clearColor()
         self.backgroundColor = .clearColor()
         self.background.frame = CGRectMake(8, 4, UIScreen.mainScreen().bounds.width - 16, 42)
-        self.timeLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width - 90, 13, 50, 16)
+        self.timeLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width - 180, 13, 140, 16)
         self.detailImage.frame = CGRectMake(UIScreen.mainScreen().bounds.width - 33, 15, 12, 12)
         stateButton.addTarget(self, action: Selector("handleButtonClick:"), forControlEvents: .TouchDown)
     }

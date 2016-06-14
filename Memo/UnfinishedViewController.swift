@@ -39,11 +39,33 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
     override func viewDidLoad() {
         isFinished = false
         super.viewDidLoad()
+        newItem.addTextField.delegate = self
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.reloadNewItem()
+    }
+    
+    func hideKeyboard(){
+        self.newItem.addTextField.resignFirstResponder()
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool
+    {
+        textField.resignFirstResponder()
+        self.addNewTask()
+        if newItem.isExpanded{
+            self.newItemAnimation()
+        }
+        return true
+    }
+    
+    func textFieldDidBeginEditing(textField: UITextField) {
+        textField.returnKeyType = .Done
+        if !newItem.isExpanded{
+            self.newItemAnimation()
+        }
     }
     
     func loadNewItemView(){
@@ -61,10 +83,10 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
         
         newItem.menuButton.setImage(UIImage(named: "三道杠"), forState: .Normal)
         newItem.menuButton.frame = CGRectMake(newItem.firstLineFrame.width-31, 11, 20, 20)
-        newItem.menuButton.addTarget(self, action: Selector("newItemViewAnimation"), forControlEvents: .TouchDown)
+        newItem.menuButton.addTarget(self, action: Selector("newItemAnimation"), forControlEvents: .TouchDown)
         
         newItem.addTextField.frame = CGRectMake(42, 11, newItem.firstLineFrame.width-84, 20)
-        newItem.addTextField.font = UIFont(name: "HelveticaNeue-Thin", size: 13.0)
+        newItem.addTextField.attributedPlaceholder = NSAttributedString(string: "添加任务...", attributes: [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName : UIFont(name: "HelveticaNeue-Thin", size: 13)!])
         
         newItem.levelLabel.text = "添加星级"
         newItem.levelLabel.font = UIFont(name: "HelveticaNeue-Thin", size: 13.0)
@@ -103,15 +125,11 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
         newItem.otherLimitView.addSubview(newItem.otherView)
         self.view.addSubview(newItem.otherLimitView)
         self.view.addSubview(newItem.firstLineView)
-        let tableViewFrame = CGRectMake(0, 54, self.view.bounds.width, self.view.bounds.height - 54)
-        self.mainTableView.frame = tableViewFrame
+//        let tableViewFrame = CGRectMake(0, 54, self.view.bounds.width, self.view.bounds.height - 54)
+//        self.mainTableView.frame = tableViewFrame
+        self.mainTableView.layer.setAffineTransform(CGAffineTransformMakeTranslation(0, 54))
+        self.mainTableView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector("hideKeyboard")))
     }
-    
-//    func textFieldShouldReturn(TextField: UITextField) -> Bool
-//    {
-//        self.newItem.addTextField.resignFirstResponder()
-//        return true
-//    }
     
     func setLevel(button:UIButton){
         let level = Int.init(button.frame.origin.x) / 20
@@ -125,31 +143,35 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
     }
     
     func handleAddButton(button:UIButton){
-        if newItem.addTextField.text == ""{
-            if !newItem.isExpanded{
-                self.newItemViewAnimation()
-            }
+        if !self.addNewTask() && !newItem.isExpanded{
+            self.newItemAnimation()
         }
-        else{
-            let formatter:NSDateFormatter = NSDateFormatter()
-            formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
+    }
+    
+    func addNewTask() -> Bool{
+        if newItem.addTextField.text != ""{
             let dateTime = formatter.stringFromDate(NSDate())
             newItem.data.createTime = dateTime
             newItem.data.lastEditTime = dateTime
+            newItem.data.timestamp = dateTime
+            newItem.addTextField.resignFirstResponder()
             newItem.data.title = newItem.addTextField.text!
             self.insertData(newItem.data, withAnimation: true)
             self.reloadNewItem()
+            self.mainTableView.scrollToRowAtIndexPath(NSIndexPath(forRow: self.findIndex(dateTime), inSection: 0), atScrollPosition: .Top, animated: true)
             //注册通知
-//            if newItem.data.alertTime != ""{
-//                let notification = UILocalNotification()
-//                notification.fireDate = NSDate(timeIntervalSinceNow: 5)
-//                notification.alertBody = "Hey you! Yeah you! Swipe to unlock!"
-//                notification.alertAction = "be awesome!"
-//                notification.soundName = UILocalNotificationDefaultSoundName
-//                notification.userInfo = ["CustomField1": "w00t"]
-//                UIApplication.sharedApplication().scheduleLocalNotification(notification)
-//            }
+            //            if newItem.data.alertTime != ""{
+            //                let notification = UILocalNotification()
+            //                notification.fireDate = NSDate(timeIntervalSinceNow: 5)
+            //                notification.alertBody = "Hey you! Yeah you! Swipe to unlock!"
+            //                notification.alertAction = "be awesome!"
+            //                notification.soundName = UILocalNotificationDefaultSoundName
+            //                notification.userInfo = ["CustomField1": "w00t"]
+            //                UIApplication.sharedApplication().scheduleLocalNotification(notification)
+            //            }
+            return true
         }
+        return false
     }
     
     func reloadNewItem(){
@@ -160,7 +182,7 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
         }
         newItem.alertButton.setTitle("不提醒", forState: .Normal)
         if newItem.isExpanded{
-            newItemViewAnimation()
+            newItemAnimation()
         }
         self.view.bringSubviewToFront(self.mainTableView)
     }
@@ -171,9 +193,9 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
         datePicker.locale = NSLocale(localeIdentifier: "zh_CN")
         datePicker.date = NSDate()
         alertController.addAction(UIAlertAction(title: "设置提醒", style: .Default){ (alertAction)->Void in
-            let formatter = NSDateFormatter()
-            formatter.dateFormat = "yyyy-MM-dd HH:mm"
-            self.newItem.data.alertTime = formatter.stringFromDate(datePicker.date)
+            let alertTimeFormatter = NSDateFormatter()
+            alertTimeFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+            self.newItem.data.alertTime = alertTimeFormatter.stringFromDate(datePicker.date)
             self.newItem.alertButton.setTitle(self.newItem.data.alertTime, forState: .Normal)
         })
         alertController.addAction(UIAlertAction(title: "关闭提醒", style: .Default){ (alertAction)->Void in
@@ -185,12 +207,12 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
         self.presentViewController(alertController, animated: true, completion: nil)
     }
     
-    func newItemViewAnimation() -> Void
+    func newItemAnimation() -> Void
     {
-        var y1:CGFloat = 64
+        var y1:CGFloat = 118
         var y2:CGFloat = 74
         if self.newItem.isExpanded {
-            y1 = 0
+            y1 = 54
             y2 = 0
         }
         self.newItem.isExpanded = !self.newItem.isExpanded
@@ -237,25 +259,6 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
 //        }))
 //        self.presentViewController(alert, animated: true, completion: nil)
 //    }
-    
-    //更新一条数据
-    func updateData(data:ItemModel) -> Void {
-        DatabaseService.sharedInstance.updateInDB(data)
-        let url = "index.php/Home/Task/UpdateTask"
-        let task = ["title":data.title, "content":data.content, "createtime":data.createTime, "lastedittime":data.lastEditTime, "alerttime":data.alertTime, "level":data.level, "state":data.state]
-        let paramDict = ["UID":UserInfo.UID, "TaskModel":task]
-        RequestAPI.POST(url, body: paramDict, succeed:{ (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
-            }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
-        }
-        let index = findIndex(data.createTime)
-        let row = rank(data.level, lastEditTime: data.lastEditTime)
-        dataArr.removeAtIndex(index)
-        dataArr.insert(data, atIndex: row)
-        self.mainTableView.beginUpdates()
-        self.mainTableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .None)
-        self.mainTableView.insertRowsAtIndexPaths([NSIndexPath(forRow: row, inSection: 0)], withRowAnimation: .None)
-        self.mainTableView.endUpdates()
-    }
 
     //左滑更改level
 //    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {

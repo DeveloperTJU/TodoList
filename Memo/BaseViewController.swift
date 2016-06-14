@@ -16,6 +16,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     var isFinished:Bool!                    //表示当前标签页是"已完成"还是"未完成"。
     var userButton:UIButton!
     var isFirstLoad = true
+    let formatter = NSDateFormatter()
     
     init(){
         super.init(nibName: nil, bundle: nil)
@@ -36,7 +37,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //在初始化时添加TableView以在尚未加载视图时存取dataArr数据。
     func loadTableView() {
-        let tableViewFrame:CGRect = self.view.bounds
+        let tableViewFrame = CGRectMake(0, 0, self.view.bounds.width, self.view.bounds.height - 69)
         self.mainTableView = UITableView(frame: tableViewFrame, style: .Plain)
         self.mainTableView.backgroundColor = .whiteColor()
         self.mainTableView.delegate = self
@@ -48,6 +49,9 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.view.backgroundColor = UIColor(patternImage: UIImage(named: "background")!)
         self.mainTableView.backgroundColor = .clearColor()
         self.mainTableView.separatorStyle = .None
+        formatter.locale = NSLocale(localeIdentifier: "zh_CN")
+        formatter.setLocalizedDateFormatFromTemplate("yyyy-MM-dd HH:mm:ss.SSS")
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
     }
     
     override func viewDidLoad() {
@@ -55,20 +59,18 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         //添加导航栏按钮
         let refreshButton = UIBarButtonItem(image: UIImage(named: "更新"), style: .Plain, target: self, action: Selector("refreshManually"))
         let searchButton = UIBarButtonItem(image: UIImage(named: "搜索"), style: .Plain, target: self, action: Selector("search"))
-        userButton = UIButton(type: .System)
-        userButton.frame = CGRectMake(0, 0, 120, 35)
+        userButton = UIButton(type: .Custom)
+        userButton.frame = CGRectMake(0, 0, UIScreen.mainScreen().bounds.width / 2 - 40, 30)
+        userButton.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, userButton.frame.size.width - 30)
+        userButton.titleEdgeInsets = UIEdgeInsetsMake(0, -18, 0, 0)
+        userButton.setTitleColor(.blackColor(), forState: .Normal)
         userButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 13.0)!
+        userButton.contentHorizontalAlignment = .Left
         userButton.imageView?.layer.cornerRadius = 15
-        userButton.imageView?.frame = CGRectMake(0, 0, 10, 10)
-        userButton.imageView?.layer.masksToBounds = true
-        userButton.imageView?.layer.borderColor = UIColor.grayColor().CGColor
-        userButton.imageView?.layer.borderWidth = 1
-        //网络
+        PersonalCenterController.loadAvatarImg()
         var image = UIImage(named: (NSHomeDirectory() as String).stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png"))
         if image == nil{
             image = UIImage(named: "黑邮件")
-        
-//        UserInfo.avatar = UIImage(CGImage: UIImage(named: (NSHomeDirectory() as String).stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png"))!.CGImage!, scale: 2, orientation: .Up)
         }
         UserInfo.avatar = UIImage(CGImage: image!.CGImage!, scale: 2, orientation: .Up)
         userButton.addTarget(self, action: Selector("userInfo:"), forControlEvents: .TouchDown)
@@ -77,7 +79,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         //调节导航栏控件间隔
         let spacer1 = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: nil,
             action: nil)
-        spacer1.width = -35
+        spacer1.width = -5
         let spacer2 = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: nil,
             action: nil)
         spacer2.width = -5
@@ -89,7 +91,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.navigationItem.rightBarButtonItems = [spacer2, refreshButton, spacer3, searchButton]
     }
     
-    //刷新上次编辑时间的友好显示
+    //刷新上次编辑时间和头像昵称
     override func viewWillAppear(animated: Bool) {
         if isFirstLoad{
             isFirstLoad = false
@@ -104,6 +106,11 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.setUserAvatarImage()
     }
     
+    func setUserAvatarImage(){
+        userButton.setImage(UIImage(CGImage: UserInfo.avatar.CGImage!, scale: 50, orientation: .Up) , forState: .Normal)
+        userButton.setTitle(UserInfo.nickname == "" ? UserInfo.phoneNumber : UserInfo.nickname, forState: .Normal)
+    }
+    
     //搜索页
     func search(){
         let searchVC = SearchViewController()
@@ -113,6 +120,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //个人中心页
     func userInfo(sender: UIButton){
+        sender.highlighted = false
         let vc = PersonalCenterController()
         vc.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(vc, animated: true)
@@ -134,15 +142,12 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //显示友好时间戳，参考自http://blog.csdn.net/zhyl8157121/article/details/42155921
     func friendlyTime(dateTime: String) -> String {
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.locale = NSLocale(localeIdentifier: "zh_CN")
-        dateFormatter.setLocalizedDateFormatFromTemplate("yyyy-MM-dd HH:mm:ss.SSS")
-        if let date = dateFormatter.dateFromString(dateTime) {
+        if let date = formatter.dateFromString(dateTime) {
             let delta = NSDate().timeIntervalSinceDate(date)
-            if (delta < 60) {
+            if (delta > 0 && delta <= 60) {
                 return "刚刚"
             }
-            else if (delta < 3600) {
+            else if (delta > 60 && delta < 3600) {
                 return "\(Int(delta / 60))分钟前"
             }
             else {
@@ -151,6 +156,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
                 
                 let comp = calendar.components(unitFlags, fromDate: NSDate())
                 let currentYear = String(comp.year)
+                let currentMonth = String(comp.month)
                 let currentDay = String(comp.day)
                 
                 let comp2 = calendar.components(unitFlags, fromDate: date)
@@ -166,24 +172,20 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
                 if comp2.minute < 10 {
                     minute = "0" + minute
                 }
-                
                 if currentYear == year {
-                    if currentDay == day {
+                    if currentMonth == month && currentDay == day {
                         return "\(hour):\(minute)"
-                    } else {
+                    }
+                    else {
                         return "\(month)/\(day)"
-                    }  
-                } else {  
+                    }
+                }
+                else {
                     return "\(year)/\(month)/\(day)"
-                }  
+                }
             }
         }
         return ""
-    }
-    
-    func setUserAvatarImage(){
-        userButton.setImage(UIImage(CGImage: UserInfo.avatar!.CGImage!, scale: 8, orientation: .Up), forState: .Normal)
-        userButton.setTitle(" \(UserInfo.nickname == "" ? UserInfo.phoneNumber : UserInfo.nickname)", forState: .Normal)
     }
     
     func reloadDatabase(){
@@ -230,10 +232,10 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         data.state = (isFinished! ? 2 : 0)
         if DatabaseService.sharedInstance.insertInDB(data){
             let url = "index.php/Home/Task/AddTask"
-            let task = ["title":data.title, "content":data.content, "createtime":data.createTime, "lastedittime":data.lastEditTime, "alerttime":data.alertTime, "level":data.level, "state":data.state]
+            let task = ["title":data.title, "content":data.content, "createtime":data.createTime, "lastedittime":data.lastEditTime, "timestamp":data.timestamp, "alerttime":data.alertTime, "level":data.level, "state":data.state]
             let paramDict = ["UID":UserInfo.UID, "TaskModel":task]
             RequestAPI.POST(url, body: paramDict, succeed:{ (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
-                }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
+            }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
             }
             dataArr.insert(data, atIndex: index)
             self.mainTableView.beginUpdates()
@@ -250,12 +252,20 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //删除指定位置的数据，单刷视图。
     func removeData(row index:Int){
+        let temp = self.dataArr[index].timestamp
         self.dataArr[index].state += 1
+        self.dataArr[index].timestamp = formatter.stringFromDate(NSDate())
         if DatabaseService.sharedInstance.updateInDB(self.dataArr[index]){
+            let time = self.dataArr[index].createTime
             let url = "index.php/Home/Task/DeleteTask"
-            let paramDict = ["UID":UserInfo.UID, "createtime":self.dataArr[index].createTime]
+            let paramDict = ["UID":UserInfo.UID, "createtime":self.dataArr[index].createTime, "timestamp":self.dataArr[index].timestamp]
             RequestAPI.POST(url, body: paramDict, succeed:{ (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
-                }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
+                let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
+                //登陆成功
+                if resultDict["isSuccess"] as! Bool {
+                    DatabaseService.sharedInstance.deleteInDB(time)
+                }
+            }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
             }
             dataArr.removeAtIndex(index)
             self.mainTableView.beginUpdates()
@@ -263,6 +273,41 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.mainTableView.endUpdates()
         }
         else{
+            self.dataArr[index].state -= 1
+            self.dataArr[index].timestamp = temp
+            let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+            hud.mode = MBProgressHUDMode.Text
+            hud.label.text = "数据库操作失败"
+            hud.hideAnimated(true, afterDelay: 0.5)
+        }
+    }
+    
+    func updateInServer(data:ItemModel) -> Void{
+        let url = "index.php/Home/Task/UpdateTask"
+        let task = ["title":data.title, "content":data.content, "createtime":data.createTime, "lastedittime":data.lastEditTime, "timestamp":data.timestamp, "alerttime":data.alertTime, "level":data.level, "state":data.state]
+        let paramDict = ["UID":UserInfo.UID, "TaskModel":task]
+        RequestAPI.POST(url, body: paramDict, succeed:{ (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
+        }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
+        }
+    }
+    
+    //更新一条数据
+    func updateData(data:ItemModel) -> Void {
+        let temp = data.timestamp
+        data.timestamp = formatter.stringFromDate(NSDate())
+        if DatabaseService.sharedInstance.updateInDB(data){
+            self.updateInServer(data)
+            let index = findIndex(data.createTime)
+            dataArr.removeAtIndex(index)
+            let row = rank(data.level, lastEditTime: data.lastEditTime)
+            dataArr.insert(data, atIndex: row)
+            self.mainTableView.beginUpdates()
+            self.mainTableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .None)
+            self.mainTableView.insertRowsAtIndexPaths([NSIndexPath(forRow: row, inSection: 0)], withRowAnimation: .None)
+            self.mainTableView.endUpdates()
+        }
+        else{
+            data.timestamp = temp
             let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
             hud.mode = MBProgressHUDMode.Text
             hud.label.text = "数据库操作失败"
@@ -320,11 +365,13 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     func switchState(button:UIButton, createTime:String){
         var row = findIndex(createTime)
         let data = self.dataArr[row]
-        let time = data.createTime
+        let temp = data.timestamp
         let another = (isFinished! ? UnfinishedVC : FinishedVC)
         var message = (isFinished! ? "已恢复" : "已完成")
         data.state = (isFinished! ? 0 : 2)
+        self.dataArr[row].timestamp = formatter.stringFromDate(NSDate())
         if DatabaseService.sharedInstance.updateInDB(data){
+            self.updateInServer(data)
             self.dataArr.removeAtIndex(row)
             self.mainTableView.beginUpdates()
             self.mainTableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: row, inSection: 0)], withRowAnimation: .Automatic)
@@ -334,13 +381,10 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
             another.mainTableView.beginUpdates()
             another.mainTableView.insertRowsAtIndexPaths([NSIndexPath(forRow: row, inSection: 0)], withRowAnimation: .None)
             another.mainTableView.endUpdates()
-            let url = "index.php/Home/Task/SwitchTask"
-            let paramDict = ["UID":UserInfo.UID, "createtime":time]
-            RequestAPI.POST(url, body: paramDict, succeed:{ (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
-                }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
-            }
         }
         else{
+            self.dataArr[row].state = (isFinished! ? 2 : 0)
+            self.dataArr[row].timestamp = temp
             message = "数据库操作失败"
         }
         let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)

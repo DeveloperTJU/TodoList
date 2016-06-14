@@ -18,8 +18,6 @@ class CustomNavController: UINavigationController {
         let attr = [NSFontAttributeName: UIFont(name: "HelveticaNeue-Thin", size: 16.0)!]
         UIBarButtonItem.appearance().setTitleTextAttributes(attr, forState: .Normal)
         self.navigationBar.titleTextAttributes = attr
-//        UILabel.appearance().font = UIFont(name: "HelveticaNeue-Thin", size: 14)
-        UITextField.appearance().font = UIFont(name: "HelveticaNeue-Thin", size: 16.0)
     }
 
     override func didReceiveMemoryWarning() {
