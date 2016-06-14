@@ -161,7 +161,7 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
                 cell.addSubview(urlText1)
             case 2:
                 urlText2 = UrlLabel(frame: textFrame)
-                urlText2.text = "baidu.com"
+                urlText2.text = "GitHub.com/CodeInDreams"
                 cell.addSubview(urlText2)
             case 3:
                 urlText3 = UrlLabel(frame: textFrame)
