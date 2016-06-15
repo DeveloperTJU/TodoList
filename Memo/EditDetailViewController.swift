@@ -70,14 +70,15 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         //提醒时间
         let timeLabel = UILabel()
         timeLabel.text = "提醒时间"
-        timeLabel.frame = CGRectMake(35, self.view.frame.size.height - 105, (self.view.frame.size.width / 2 )-30, 20)
+        timeLabel.frame = CGRectMake(35, self.view.frame.size.height - 113, (self.view.frame.size.width / 2 )-30, 20)
         timeLabel.font = UIFont.systemFontOfSize(13)
         self.view.addSubview(timeLabel)
         
         //显示提醒时间
         self.tempAlert = currentList.alertTime
         self.timeButton = UIButton()
-        self.timeButton.frame = CGRectMake(self.view.frame.size.width - 160 , self.view.frame.size.height - 107, (self.view.frame.size.width / 2 )-30, 20)
+        self.timeButton.frame = CGRectMake(self.view.frame.size.width - 160 , self.view.frame.size.height - 113, (self.view.frame.size.width / 2 )-30, 20)
+//        self.timeButton.backgroundColor = UIColor.grayColor()
         if self.currentList.alertTime == ""{
             self.timeButton.setTitle("不提醒", forState:UIControlState.Normal)
         }
@@ -88,6 +89,12 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         self.timeButton.addTarget(self, action: Selector("selectDate:"), forControlEvents: .TouchUpInside)
         self.timeButton.titleLabel?.font = UIFont.systemFontOfSize(13)
         self.view.addSubview(self.timeButton)
+        
+        let bigButton = UIButton()
+        bigButton.frame = CGRectMake(85 , self.view.frame.size.height - 113, self.view.frame.size.width - 100, 20)
+//        bigButton.backgroundColor = UIColor.grayColor()
+        bigButton.addTarget(self, action: Selector("selectDate:"), forControlEvents: .TouchUpInside)
+        self.view.addSubview(bigButton)
         
         //添加星级边框
         let starTV = UITextView(frame: CGRectMake(15, self.view.frame.size.height - 195, self.view.frame.size.width - 30, 80))
@@ -100,7 +107,7 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         //添加星级
         let starLabel = UILabel()
         starLabel.text = "添加星级"
-        starLabel.frame = CGRectMake(35, self.view.frame.size.height - 140, (self.view.frame.size.width / 2 )-30, 20)
+        starLabel.frame = CGRectMake(35, self.view.frame.size.height - 150, (self.view.frame.size.width / 2 )-30, 20)
         starLabel.font = UIFont.systemFontOfSize(13)
         self.view.addSubview(starLabel)
         
@@ -139,9 +146,11 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         self.starlevel = currentList.level
         for i in 0..<currentList.level+1 {
             let button = UIButton()
-            button.frame = CGRectMake(self.view.frame.size.width - 130 + CGFloat.init(integerLiteral: 20 * i ), self.view.frame.size.height - 140, 15, 15)
+            button.frame = CGRectMake(self.view.frame.size.width - 130 + CGFloat.init(integerLiteral: 20 * i ), self.view.frame.size.height - 150, 20, 20)
             button.setImage(UIImage(named: "黄星"), forState: .Normal)
             button.setImage(UIImage(named: "黄星"), forState: .Highlighted)
+            button.imageEdgeInsets = UIEdgeInsetsMake(2.5, 2.5, 2.5, 2.5)
+//            button.backgroundColor=UIColor.grayColor()
             button.addTarget(self, action: Selector("setLevel:"), forControlEvents: .TouchDown)
             self.levelButton.append(button)
 //            self.levelBar.addSubview(button)
@@ -149,9 +158,10 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         }
         for i in currentList.level+1..<5 {
             let button = UIButton()
-            button.frame = CGRectMake(self.view.frame.size.width - 130 + CGFloat.init(integerLiteral: 20 * i), self.view.frame.size.height - 140, 15, 15)
+            button.frame = CGRectMake(self.view.frame.size.width - 130 + CGFloat.init(integerLiteral: 20 * i), self.view.frame.size.height - 150, 20, 20)
             button.setImage(UIImage(named: "灰星"), forState: .Normal)
             button.setImage(UIImage(named: "灰星"), forState: .Highlighted)
+            button.imageEdgeInsets = UIEdgeInsetsMake(2.5, 2.5, 2.5, 2.5)
             button.addTarget(self, action: Selector("setLevel:"), forControlEvents: .TouchDown)
             self.levelButton.append(button)
 //            self.levelBar.addSubview(button)
@@ -161,7 +171,7 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
 //        self.view.addSubview(levelBar)
         
         //之间的横线
-        let line = UITextView(frame: CGRectMake(30, self.view.frame.size.height - 112, self.view.frame.size.width - 60, 0.4))
+        let line = UITextView(frame: CGRectMake(30, self.view.frame.size.height - 122, self.view.frame.size.width - 60, 0.4))
         line.editable=false
         line.layer.borderColor = UIColor(red: 160/255, green: 160/255, blue: 160/255, alpha: 1).CGColor;
         line.layer.borderWidth = 0.4;
