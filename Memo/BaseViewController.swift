@@ -14,7 +14,8 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     var mainTableView:UITableView!
     var dataArr:[ItemModel]!                //数据源
     var isFinished:Bool!                    //表示当前标签页是"已完成"还是"未完成"。
-    var userButton:UIButton!
+    var userButtonImage = UIImageView()
+    var userButtonTitle = UILabel()
     var isFirstLoad = true
     let formatter = NSDateFormatter()
     
@@ -32,8 +33,6 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.init()
         self.title = title
     }
-    
-    //MJRefresh
     
     //在初始化时添加TableView以在尚未加载视图时存取dataArr数据。
     func loadTableView() {
@@ -56,39 +55,46 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //添加下拉刷新手势
+//        let refresher = MJRefreshHeader()
+//        
+//        self.view.addSubview(refresher)
+        
         //添加导航栏按钮
         let refreshButton = UIBarButtonItem(image: UIImage(named: "更新"), style: .Plain, target: self, action: Selector("refreshManually"))
         let searchButton = UIBarButtonItem(image: UIImage(named: "搜索"), style: .Plain, target: self, action: Selector("search"))
-        userButton = UIButton(type: .Custom)
+        searchButton.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -25)
+        let userButton = UIButton(type: .Custom)
         userButton.frame = CGRectMake(0, 0, UIScreen.mainScreen().bounds.width / 2 - 40, 30)
-        userButton.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, userButton.frame.size.width - 30)
-        userButton.titleEdgeInsets = UIEdgeInsetsMake(0, -18, 0, 0)
-        userButton.setTitleColor(.blackColor(), forState: .Normal)
-        userButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 13.0)!
-        userButton.contentHorizontalAlignment = .Left
-        userButton.imageView?.layer.cornerRadius = 15
+        userButtonImage.frame = CGRectMake(0, 0, 30, 30)
+        userButtonTitle.frame = CGRectMake(35, 0, userButton.frame.size.width - 35, 30)
+        userButtonTitle.font = UIFont(name: "HelveticaNeue-Thin", size: 13.0)!
+        userButtonTitle.textAlignment = .Left
+        userButtonImage.layer.masksToBounds = true
+        userButtonImage.layer.cornerRadius = 15
+        userButton.addSubview(userButtonImage)
+        userButton.addSubview(userButtonTitle)
         PersonalCenterController.loadAvatarImg()
         var image = UIImage(named: (NSHomeDirectory() as String).stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png"))
-        if image == nil{
-            image = UIImage(named: "黑邮件")
+        if image == nil || UserInfo.phoneNumber == "Visitor"{
+            image = UIImage(named: "user")
         }
-        UserInfo.avatar = UIImage(CGImage: image!.CGImage!, scale: 2, orientation: .Up)
+        let scale = image!.size.width > image!.size.height ? image!.size.height/80 : image!.size.width/80
+        UserInfo.avatar = UIImage(CGImage: image!.CGImage!, scale: scale, orientation: .Up)
         userButton.addTarget(self, action: Selector("userInfo:"), forControlEvents: .TouchDown)
         let userBarButton = UIBarButtonItem(customView: userButton)
         
         //调节导航栏控件间隔
         let spacer1 = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: nil,
             action: nil)
-        spacer1.width = -5
+        spacer1.width = -10
         let spacer2 = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: nil,
             action: nil)
         spacer2.width = -5
-        let spacer3 = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: nil,
-            action: nil)
-        spacer3.width = -20
         
         self.navigationItem.leftBarButtonItems = [spacer1, userBarButton]
-        self.navigationItem.rightBarButtonItems = [spacer2, refreshButton, spacer3, searchButton]
+        self.navigationItem.rightBarButtonItems = [spacer2, refreshButton, searchButton]
     }
     
     //刷新上次编辑时间和头像昵称
@@ -107,8 +113,8 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func setUserAvatarImage(){
-        userButton.setImage(UIImage(CGImage: UserInfo.avatar.CGImage!, scale: 50, orientation: .Up) , forState: .Normal)
-        userButton.setTitle(UserInfo.nickname == "" ? UserInfo.phoneNumber : UserInfo.nickname, forState: .Normal)
+        userButtonImage.image = UserInfo.avatar
+        userButtonTitle.text = UserInfo.nickname == "" ? UserInfo.phoneNumber : UserInfo.nickname
     }
     
     //搜索页
@@ -129,10 +135,14 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     //手动同步
     func refreshManually(){
         if UserInfo.phoneNumber == "Visitor" {
-            let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-            hud.mode = MBProgressHUDMode.Text
-            hud.label.text = "游客模式不可用"
-            hud.hideAnimated(true, afterDelay: 0.5)
+            let alert = UIAlertController(title: "提示", message: "同步功能需要登录后才能使用，是否立即前往登录？", preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "取消", style: .Default, handler: {(UIAlertAction) in
+            }))
+            alert.addAction(UIAlertAction(title: "确定", style: .Default, handler:{ (UIAlertAction) in
+                UserInfo = UserInfoStruct()
+                self.presentViewController(LogInViewController(), animated: true, completion: nil)
+            }))
+            self.presentViewController(alert, animated: true, completion: nil)
         }
         else{
             RequestClient.sharedInstance.delegate = self
@@ -190,10 +200,22 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func reloadDatabase(){
         let arrs = DatabaseService.sharedInstance.selectAllInDB()
+        UnfinishedVC.mainTableView.beginUpdates()
         UnfinishedVC.dataArr = arrs.0
-        UnfinishedVC.mainTableView.reloadData()
+        UnfinishedVC.mainTableView.deleteSections(NSIndexSet(index: 0), withRowAnimation: .None)
+        UnfinishedVC.mainTableView.insertSections(NSIndexSet(index: 0), withRowAnimation: .None)
+        for i in 0 ..< arrs.0.count{
+            UnfinishedVC.mainTableView.insertRowsAtIndexPaths([NSIndexPath(forRow: i, inSection: 0)], withRowAnimation: .None)
+        }
+        UnfinishedVC.mainTableView.endUpdates()
+        FinishedVC.mainTableView.beginUpdates()
         FinishedVC.dataArr = arrs.1
-        FinishedVC.mainTableView.reloadData()
+        FinishedVC.mainTableView.deleteSections(NSIndexSet(index: 0), withRowAnimation: .None)
+        FinishedVC.mainTableView.insertSections(NSIndexSet(index: 0), withRowAnimation: .None)
+        for i in 0 ..< arrs.1.count{
+            FinishedVC.mainTableView.insertRowsAtIndexPaths([NSIndexPath(forRow: i, inSection: 0)], withRowAnimation: .None)
+        }
+        FinishedVC.mainTableView.endUpdates()
         self.setUserAvatarImage()
     }
     
@@ -243,10 +265,8 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.mainTableView.endUpdates()
         }
         else{
-            let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-            hud.mode = MBProgressHUDMode.Text
-            hud.label.text = "数据库操作失败"
-            hud.hideAnimated(true, afterDelay: 0.5)
+            data.state = (isFinished! ? 0 : 2)
+            print("数据库操作失败")
         }
     }
     
@@ -275,10 +295,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         else{
             self.dataArr[index].state -= 1
             self.dataArr[index].timestamp = temp
-            let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-            hud.mode = MBProgressHUDMode.Text
-            hud.label.text = "数据库操作失败"
-            hud.hideAnimated(true, afterDelay: 0.5)
+            print("数据库操作失败")
         }
     }
     

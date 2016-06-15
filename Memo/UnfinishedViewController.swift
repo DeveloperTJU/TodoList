@@ -11,16 +11,14 @@ import UIKit
 class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
     
     struct NewItem{
-        var firstLineFrame:CGRect!
+        var mainView:UIView!            //父视图
         var firstLineView:MyRect!       //第一行视图
-        var otherFrame:CGRect!
         var otherView:MyRect!           //第二三行视图
-        var otherLimitFrame:CGRect!
         var otherLimitView:MyRect!      //用于限制第二三行的显示区域
         let addButton = UIButton()
         let addTextField = UITextField()
         let menuButton = UIButton()
-        var isExpanded = false
+        var isExpanded = false          //记录当前展开状态
         let levelLabel = UILabel()
         let levelBar = UIView()         //用于设置等级
         var levelButton = [UIButton]()
@@ -29,6 +27,7 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
         var data = ItemModel()
     }
     var newItem = NewItem()
+    var tap:UITapGestureRecognizer!
     
     override func loadTableView() {
         self.dataArr = DatabaseService.sharedInstance.selectAllInDB().0
@@ -47,13 +46,10 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
         self.reloadNewItem()
     }
     
-    func hideKeyboard(){
-        self.newItem.addTextField.resignFirstResponder()
-    }
-    
     func textFieldShouldReturn(textField: UITextField) -> Bool
     {
         textField.resignFirstResponder()
+        self.mainTableView.removeGestureRecognizer(tap)
         self.addNewTask()
         if newItem.isExpanded{
             self.newItemAnimation()
@@ -63,29 +59,41 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
     
     func textFieldDidBeginEditing(textField: UITextField) {
         textField.returnKeyType = .Done
+        self.mainTableView.addGestureRecognizer(tap)
         if !newItem.isExpanded{
             self.newItemAnimation()
         }
     }
     
+    func hideKeyboard(){
+        self.newItem.addTextField.resignFirstResponder()
+        self.mainTableView.removeGestureRecognizer(tap)
+    }
+    
     func loadNewItemView(){
-        newItem.firstLineFrame = CGRectMake(8, 8, self.view.bounds.width - 16, 42)
-        newItem.otherFrame = CGRectMake(0, -74, self.view.bounds.width - 16, 74)
-        newItem.otherLimitFrame = CGRectMake(8, 40, self.view.bounds.width - 16, 74)
-        newItem.firstLineView = MyRect(frame: newItem.firstLineFrame, color: UIColor(red: 254/255, green: 239/255, blue: 115/255, alpha: 1.0), withShadow: true)
-        newItem.otherView = MyRect(frame: newItem.otherFrame)
-        newItem.otherLimitView = MyRect(frame: newItem.otherLimitFrame, color: .clearColor(), withShadow: false)
+        let mainFrame = CGRectMake(8, 8, self.view.bounds.width - 16, 54)
+        let firstLineFrame = CGRectMake(8, 8, self.view.bounds.width - 16, 42)
+        let otherFrame = CGRectMake(0, -74, self.view.bounds.width - 16, 74)
+        let otherLimitFrame = CGRectMake(8, 40, self.view.bounds.width - 16, 74)
+        
+        newItem.mainView = UIView(frame: mainFrame)
+        newItem.mainView.backgroundColor = .clearColor()
+        newItem.firstLineView = MyRect(frame: firstLineFrame, color: UIColor(red: 254/255, green: 239/255, blue: 115/255, alpha: 1.0), withShadow: true)
+        newItem.otherView = MyRect(frame: otherFrame)
+        newItem.otherLimitView = MyRect(frame: otherLimitFrame, color: .clearColor(), withShadow: false)
         newItem.otherLimitView.clipsToBounds = true           //超出mainView范围的部分不显示
         
         newItem.addButton.setImage(UIImage(named: "加号"), forState: .Normal)
-        newItem.addButton.frame = CGRectMake(11, 11, 20, 20)
+        newItem.addButton.frame = CGRectMake(0, 0, 42, 42)
+        newItem.addButton.imageEdgeInsets = UIEdgeInsets(top: 11, left: 11, bottom: 11, right: 11)
         newItem.addButton.addTarget(self, action: "handleAddButton:", forControlEvents: .TouchDown)
         
         newItem.menuButton.setImage(UIImage(named: "三道杠"), forState: .Normal)
-        newItem.menuButton.frame = CGRectMake(newItem.firstLineFrame.width-31, 11, 20, 20)
+        newItem.menuButton.frame = CGRectMake(firstLineFrame.width-42, 0, 42, 42)
+        newItem.menuButton.imageEdgeInsets = UIEdgeInsets(top: 11, left: 11, bottom: 11, right: 11)
         newItem.menuButton.addTarget(self, action: Selector("newItemAnimation"), forControlEvents: .TouchDown)
         
-        newItem.addTextField.frame = CGRectMake(42, 11, newItem.firstLineFrame.width-84, 20)
+        newItem.addTextField.frame = CGRectMake(42, 11, firstLineFrame.width-84, 20)
         newItem.addTextField.attributedPlaceholder = NSAttributedString(string: "添加任务...", attributes: [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName : UIFont(name: "HelveticaNeue-Thin", size: 13)!])
         
         newItem.levelLabel.text = "添加星级"
@@ -101,7 +109,7 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
             newItem.levelButton.append(button)
             newItem.levelBar.addSubview(button)
         }
-        newItem.levelBar.frame = CGRectMake(newItem.otherLimitFrame.width-106, 19, 100, 32)
+        newItem.levelBar.frame = CGRectMake(otherLimitFrame.width-106, 19, 100, 32)
         
         newItem.alertLabel.text = "提醒时间"
         newItem.alertLabel.font = UIFont(name: "HelveticaNeue-Thin", size: 13.0)
@@ -111,7 +119,7 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
         newItem.alertButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 12.0)
         newItem.alertButton.setTitleColor(.blackColor(),forState: .Normal)
         newItem.alertButton.addTarget(self, action: Selector("selectDate"), forControlEvents: .TouchDown)
-        newItem.alertButton.frame = CGRectMake(newItem.otherLimitFrame.width-108, 42, 100, 32)
+        newItem.alertButton.frame = CGRectMake(otherLimitFrame.width-108, 42, 100, 32)
         
         newItem.firstLineView.addSubview(newItem.addButton)
         newItem.firstLineView.addSubview(newItem.addTextField)
@@ -123,12 +131,21 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
         newItem.otherView.addSubview(newItem.alertButton)
         
         newItem.otherLimitView.addSubview(newItem.otherView)
-        self.view.addSubview(newItem.otherLimitView)
-        self.view.addSubview(newItem.firstLineView)
-//        let tableViewFrame = CGRectMake(0, 54, self.view.bounds.width, self.view.bounds.height - 54)
-//        self.mainTableView.frame = tableViewFrame
-        self.mainTableView.layer.setAffineTransform(CGAffineTransformMakeTranslation(0, 54))
-        self.mainTableView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector("hideKeyboard")))
+        newItem.mainView.addSubview(newItem.otherLimitView)
+        newItem.mainView.addSubview(newItem.firstLineView)
+        tap = UITapGestureRecognizer(target: self, action: Selector("hideKeyboard"))
+    }
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 54
+    }
+    
+    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return newItem.mainView
     }
     
     func setLevel(button:UIButton){
@@ -209,17 +226,14 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
     
     func newItemAnimation() -> Void
     {
-        var y1:CGFloat = 118
-        var y2:CGFloat = 74
-        if self.newItem.isExpanded {
-            y1 = 54
-            y2 = 0
-        }
+        let y:CGFloat = self.newItem.isExpanded ? 0 : 74
         self.newItem.isExpanded = !self.newItem.isExpanded
         UIView.animateWithDuration(0.3, delay: 0, options: UIViewAnimationOptions.TransitionNone, animations: {
-            self.mainTableView.layer.setAffineTransform(CGAffineTransformMakeTranslation(0, y1))
-            self.newItem.otherView.layer.setAffineTransform(CGAffineTransformMakeTranslation(0, y2))
-            }, completion: { (finish:Bool) in
+            self.newItem.otherView.layer.setAffineTransform(CGAffineTransformMakeTranslation(0, y))
+        }, completion: { (finish:Bool) in
+            self.mainTableView.tableHeaderView?.frame = CGRectMake(8, 8, self.view.bounds.width, 118)
+//            self.mainTableView.headerViewForSection(0)!.frame = CGRectMake(8, 8, self.view.bounds.width - 16, 118)
+            self.mainTableView.tableHeaderView = self.mainTableView.tableHeaderView
         })
     }
     
