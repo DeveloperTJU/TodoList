@@ -18,8 +18,6 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     var isFinished:Bool!    //表示当前标签页是"已完成"还是"未完成"。
     var dataBase:FMDatabase!
     var dbQueue:FMDatabaseQueue!
-    
-    
     var tabledata:[String] = []
     var searchActive : Bool = false
     
@@ -27,13 +25,15 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     var filtered1:[ItemModel] = [ItemModel]()
     //    var editVC = EditController()
     //    var resultSearchController : UISearchController = UISearchController()
-    lazy   var searchBar:UISearchBar = UISearchBar(frame: CGRectMake(0, 0, 200, 20))
+    lazy var searchBar:UISearchBar = UISearchBar(frame: CGRectMake(0, 0, 200, 20))
     //    lazy var search:UITextField = UITextField(frame: CGRectMake(0, 0, 200, 20))
     //    var searchController:UISearchController!
-    
+    var tap:UITapGestureRecognizer!
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tap = UITapGestureRecognizer(target: self, action: "clicked")
+
         //        searchController = UISearchController(searchResultsController: nil)
         searchBar.delegate = self
         //        searchController.searchResultsUpdater = self
@@ -58,7 +58,6 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         self.view.backgroundColor = UIColor(patternImage: image)
         self.mainTableView.backgroundColor = UIColor.clearColor()
         self.mainTableView.separatorStyle = .None
-        
         
         
         //        self.dataBase.open()
@@ -93,9 +92,6 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         //        self.mainTableView.tableHeaderView = self.searchBar
         self.navigationItem.leftBarButtonItem = resetButton
         
-        
-        
-        
         // Reload the table
         self.mainTableView.reloadData()
     }
@@ -121,13 +117,21 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     //        }
     //    }
     
+   // override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    //    self.view.endEditing(true)
+  //  }
+    func clicked(){
+        self.searchBar.resignFirstResponder()
+    }
     
     func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
         searchActive = true;
+        self.view.addGestureRecognizer(tap)
     }
     
     func searchBarTextDidEndEditing(searchBar: UISearchBar) {
         searchActive = false;
+        self.view.removeGestureRecognizer(tap)
     }
     
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
@@ -171,11 +175,11 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         if (filtered.count != 0 || filtered1.count != 0) {
             if section == 0 {
                 if (filtered.count != 0 ) {
-                    return "UnFinished"
+                    return "未完成"
                 }
             } else {
                 if (filtered1.count != 0 ) {
-                    return "finished"
+                    return "完成"
                 }
             }
         }
