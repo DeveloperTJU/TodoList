@@ -22,7 +22,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         self.view.backgroundColor = .whiteColor()
         let mainSize = UIScreen.mainScreen().bounds.size
         let img = UIImage(named:"background")
@@ -41,28 +41,34 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         vReg.backgroundColor = .whiteColor()
         
         //手机号输入框
-        phoneText = UITextField(frame:CGRectMake(0, 0, vReg.frame.size.width, 44))
+        phoneText = UITextField(frame:CGRectMake(0, 0, vReg.frame.size.width-122, 44))
         self.createTextField(phoneText,isPasswordTextfield: false, hint: "手机号码")
         self.addImageToTextfield(phoneText, imageName: "灰手机")
         vReg.addSubview(phoneText)
+        phoneText.clearButtonMode = .WhileEditing
+        phoneText.keyboardType = UIKeyboardType.NumberPad
         
         //密码输入框
         txtPwd = UITextField(frame:CGRectMake(0, 132, vReg.frame.size.width , 44))
         self.createTextField(txtPwd,isPasswordTextfield: true,hint: "输入密码，至少六位")
         self.addImageToTextfield(txtPwd, imageName: "灰锁")
         vReg.addSubview(txtPwd)
+        txtPwd.clearButtonMode = .WhileEditing
         
         //验证码输入框
         txtVerifyCode = UITextField(frame:CGRectMake(0, 44, vReg.frame.size.width , 44))
         self.createTextField(txtVerifyCode,isPasswordTextfield: false,hint: "请输入验证码")
         self.addImageToTextfield(txtVerifyCode, imageName: "灰锁")
         vReg.addSubview(txtVerifyCode)
+        txtVerifyCode.clearButtonMode = .WhileEditing
+        txtVerifyCode.keyboardType = UIKeyboardType.NumberPad
         
         //昵称输入框
         txtNickname = UITextField(frame:CGRectMake(0, 88, vReg.frame.size.width, 44))
         self.createTextField(txtNickname, isPasswordTextfield: false, hint: "请输入昵称")
         self.addImageToTextfield(txtNickname, imageName: "灰手机")
         vReg.addSubview(txtNickname)
+        txtNickname.clearButtonMode = .WhileEditing
         
         self.register = UIButton(type:.System)
         //设置按钮位置和大小
@@ -105,7 +111,16 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         buttonVisitor.tintColor = UIColor(red: 67/255, green: 67/255, blue: 67/255, alpha: 1)
         buttonVisitor.addTarget(self,action:Selector("tapped3:"),forControlEvents:.TouchUpInside)
         self.view.addSubview(buttonVisitor)
+        
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector("hideKeyboard")))
         }
+    
+    func hideKeyboard(){
+        phoneText.resignFirstResponder()
+        txtPwd.resignFirstResponder()
+        txtVerifyCode.resignFirstResponder()
+        txtNickname.resignFirstResponder()
+    }
     
     //设置输入框属性
     func createTextField(textField:UITextField!, isPasswordTextfield:Bool, hint:String)  {
@@ -132,13 +147,14 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
     //发送验证码
     func tapped(button:UIButton){
         let phoneNum = phoneText.text
+        SMSSDK.registerApp("13497b5a4a530", withSecret: "5d4aa8cc0c6a64db874b7db0ad428360")
         SMSSDK.getVerificationCodeByMethod(SMSGetCodeMethodSMS, phoneNumber:phoneNum, zone: "86",customIdentifier: nil,result: {(error: NSError!) ->Void in
             if(error == nil){
                 NSLog("发送成功")
                 self.register.setTitle("再次发送", forState: UIControlState.Normal)
-                //self.countDown(10)
             }else{
-                self.alertWindow("error", message: error.debugDescription)
+                self.alertWindow("提示", message: "发送失败")
+                
             }
             
         })
@@ -155,7 +171,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
             SMSSDK.commitVerificationCode(authCode, phoneNumber: phoneNum, zone: "86" ,
                                           result:{ (error: NSError!) -> Void in
                                             if(error == nil){
-                                                resultMessage = "恭喜您，验证成功！123"
+                                                resultMessage = "恭喜您，验证成功！"
                                                 NSLog("验证成功")
                                                 self.VerifyCodeRight = true
                                                 UserInfo.phoneNumber = self.phoneText.text!
@@ -170,7 +186,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
                                                         self.presentViewController(LogInViewController(), animated: true, completion: nil)
                                                     }
                                                     else{
-                                                        self.alertWindow("错误", message: "注册失败!")
+                                                        self.alertWindow("提示", message: "注册失败!")
                                                     }
                                                 }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
                                                     //失败回调
@@ -178,19 +194,20 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
                                                 }
                                                 
                                             }else{
-                                                resultMessage = "很抱歉，验证失败！456"
+                                                resultMessage = "很抱歉，验证失败！"
                                                 NSLog("验证失败！" , error)
                                                 self.VerifyCodeRight = false
+                                                self.alertWindow("提示", message: "验证失败")
                                                 
                                             }
                                             //self.alertWindow("验证结果789", message: resultMessage)
             })
             
         }
-        else{
-            
-            alertWindow("错误", message: "密码格式错误")
-        }
+//        else{
+//            
+//            alertWindow("提示", message: "密码格式错误")
+//        }
     }
 
     func tapped2(button:UIButton){
@@ -227,7 +244,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
     
     func checkPassword() -> Bool  {
         if txtPwd.text == Optional(""){
-            alertWindow("错误", message: "密码为空1")
+            alertWindow("错误", message: "密码为空")
             print("used")
             return false
         }

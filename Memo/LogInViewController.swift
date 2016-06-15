@@ -9,7 +9,8 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        
         //获取屏幕尺寸
         let mainSize = self.view.bounds.size
         self.view.backgroundColor = .whiteColor()
@@ -28,7 +29,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
         
         //用户名输入框
         txtUser = UITextField(frame:CGRectMake(0, 0, vLogin.frame.size.width , 44))
-        txtUser.placeholder = "请输入用户名"
+        txtUser.placeholder = "请输入手机号码"
         txtUser.delegate = self
         txtUser.leftView = UIView(frame:CGRectMake(0, 0, 44, 44))
         txtUser.leftViewMode = UITextFieldViewMode.Always
@@ -46,6 +47,9 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
         txtPwd.secureTextEntry = true
         txtPwd.leftView = UIView(frame:CGRectMake(0, 0, 44, 44))
         txtPwd.leftViewMode = UITextFieldViewMode.Always
+        txtUser.clearButtonMode = .WhileEditing
+        txtPwd.clearButtonMode = .WhileEditing
+        txtUser.keyboardType = UIKeyboardType.NumberPad
         
         //密码输入框左侧图标
         let imgPwd =  UIImageView(frame:CGRectMake(11, 11, 22, 22))
@@ -83,8 +87,14 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
         button2.setTitle("游客模式", forState:UIControlState.Normal)
         button2.addTarget(self,action:Selector("tapped2:"),forControlEvents: .TouchUpInside)
         self.view.addSubview(button2)
+        
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector("hideKeyboard")))
     }
     
+    func hideKeyboard(){
+        txtUser.resignFirstResponder()
+        txtPwd.resignFirstResponder()
+    }
     func alertWindow(title:String, message:String)  {
         let alert = UIAlertView(title: title, message: message, delegate: nil, cancelButtonTitle: "Back")
         alert.show()
@@ -96,10 +106,10 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
     
     func tapped1(button:UIButton){
         if txtUser.text! == "" {
-            alertWindow("Error", message: "请输入用户名")
+            alertWindow("提示", message: "请输入用户名")
         }
         else if txtPwd.text! == "" {
-            alertWindow("Error", message: "请输入密码")
+            alertWindow("提示", message: "请输入密码")
         }
         else {
             UserInfo.phoneNumber = txtUser.text!
@@ -133,6 +143,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
         UserInfo.nickname = "Visitor"
         DatabaseService.sharedInstance.initDataTable()
         self.presentViewController(RootTabBarController(), animated: true, completion: nil)
+        print(123)
     }
     
 }
