@@ -77,7 +77,7 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         //显示提醒时间
         self.tempAlert = currentList.alertTime
         self.timeButton = UIButton()
-        self.timeButton.frame = CGRectMake(self.view.frame.size.width - 175 , self.view.frame.size.height - 107, (self.view.frame.size.width / 2 )-30, 20)
+        self.timeButton.frame = CGRectMake(self.view.frame.size.width - 160 , self.view.frame.size.height - 107, (self.view.frame.size.width / 2 )-30, 20)
         if self.currentList.alertTime == ""{
             self.timeButton.setTitle("不提醒", forState:UIControlState.Normal)
         }

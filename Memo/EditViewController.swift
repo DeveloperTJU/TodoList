@@ -93,8 +93,8 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         //提醒时间语句
         let timeLabel = UILabel()
         timeLabel.text = "提醒时间："
-        timeLabel.frame = CGRectMake(40, self.view.frame.size.height - 165, (self.view.frame.size.width / 2 )-30, 20)
-        timeLabel.font = UIFont.systemFontOfSize(13)
+        timeLabel.frame = CGRectMake(30, self.view.frame.size.height - 165, (self.view.frame.size.width / 2 )-30, 20)
+        timeLabel.font = UIFont.systemFontOfSize(12)
         timeLabel.textColor = UIColor.grayColor()
         self.view.addSubview(timeLabel)
         
@@ -106,9 +106,9 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         else{
             timeLabel1.text = currentList.alertTime
         }
-        timeLabel1.frame = CGRectMake(110, self.view.frame.size.height - 165, (self.view.frame.size.width / 2 )-30, 20)
+        timeLabel1.frame = CGRectMake(85, self.view.frame.size.height - 165, (self.view.frame.size.width / 2 )-30, 20)
         timeLabel1.textColor = UIColor.grayColor()
-        timeLabel1.font = UIFont.systemFontOfSize(13)
+        timeLabel1.font = UIFont.systemFontOfSize(12)
         self.view.addSubview(timeLabel1)
         
         //显示星级
@@ -133,7 +133,7 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         //分享按钮
         let shareimg = UIImage(named: "黑分享")
         let vshareImg = UIImageView(image: shareimg)
-        vshareImg.frame = CGRect(x:90,y:self.view.frame.size.height - 105,width:25,height:25)
+        vshareImg.frame = CGRect(x:self.view.frame.size.width / 4,y:self.view.frame.size.height - 105,width:25,height:25)
         self.view.addSubview(vshareImg)
         
         
@@ -144,7 +144,7 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         //删除按钮
         let deleteimg = UIImage(named: "垃圾箱")
         let vdeleteImg = UIImageView(image: deleteimg)
-        vdeleteImg.frame = CGRect(x:self.view.frame.size.width / 2 + 90,y:self.view.frame.size.height - 105,width:25,height:25)
+        vdeleteImg.frame = CGRect(x:self.view.frame.size.width * 3 / 4 - 25,y:self.view.frame.size.height - 105,width:25,height:25)
         self.view.addSubview(vdeleteImg)
         
         let deleteButton:UIButton = UIButton()
