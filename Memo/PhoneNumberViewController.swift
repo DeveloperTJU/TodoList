@@ -17,6 +17,33 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
     var txtNickname:UITextField!
     var register:UIButton!
     var sendVerifyCode:UIButton!
+    var countdownTimer: NSTimer?
+    var isCounting = false {
+        willSet {
+            if newValue {
+                countdownTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "updateTime:", userInfo: nil, repeats: true)
+                remainingSeconds = 10
+            } else {
+                countdownTimer?.invalidate()
+                countdownTimer = nil
+                
+            }
+            
+            register.enabled = !newValue
+        }
+    }
+    var remainingSeconds: Int = 0 {
+        willSet {
+            self.register.backgroundColor = UIColor(patternImage: UIImage(named: "发验证码框")!)
+            register.setTitle("\(newValue)秒后重新获取", forState: .Normal)
+            
+            if newValue <= 0 {
+                self.register.backgroundColor = UIColor(patternImage: UIImage(named: "发验证码框")!)
+                register.setTitle("重新获取验证码", forState: .Normal)
+                isCounting = false
+            }
+        }
+    }
     
     var VerifyCodeRight:Bool = false
     
@@ -114,6 +141,10 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector("hideKeyboard")))
         }
+    func updateTime(timer: NSTimer) {
+        // 计时开始时，逐秒减少remainingSeconds的值
+        remainingSeconds -= 1
+    }
     
     func hideKeyboard(){
         phoneText.resignFirstResponder()
@@ -151,7 +182,8 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         SMSSDK.getVerificationCodeByMethod(SMSGetCodeMethodSMS, phoneNumber:phoneNum, zone: "86",customIdentifier: nil,result: {(error: NSError!) ->Void in
             if(error == nil){
                 NSLog("发送成功")
-                self.register.setTitle("再次发送", forState: UIControlState.Normal)
+                self.isCounting = true
+                //self.register.setTitle("再次发送", forState: UIControlState.Normal)
             }else{
                 self.alertWindow("提示", message: "发送失败")
                 
@@ -167,7 +199,6 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         let phoneNum = phoneText.text
         var resultMessage:String = ""
         if checkPassword(){
-            
             SMSSDK.commitVerificationCode(authCode, phoneNumber: phoneNum, zone: "86" ,
                                           result:{ (error: NSError!) -> Void in
                                             if(error == nil){

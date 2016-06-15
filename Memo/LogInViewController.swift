@@ -129,7 +129,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
                     RequestAPI.SynchronizeTask(0)
                 }
                 else{
-                    self.alertWindow("错误", message: "用户名或密码错误")
+                    self.alertWindow("提示", message: "用户名或密码错误")
                 }
             }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
                 //失败回调
