@@ -134,6 +134,8 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
             }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
                 //失败回调
                 print("网络调用失败:\(error)")
+                self.alertWindow("提示", message: "网络连接有问题")
+                
             }
         }
     }
