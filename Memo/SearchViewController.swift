@@ -82,6 +82,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         
         self.dataArr.appendContentsOf(DatabaseService.sharedInstance.selectAllInDB().0)
         self.dataArr1.appendContentsOf(DatabaseService.sharedInstance.selectAllInDB().1)
+        //print("kjkfdgsdfghjk",dataArr1)
         //        print(self.dataArr)
         //        onInput()
         //        var searchBarStyle: UISearchBarStyle = .Minimal
@@ -167,14 +168,18 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     
     // 告诉tableview组头应该显示的文字，就算没有设置组头的高度也适用。
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if (filtered.count != 0) {
+        if (filtered.count != 0 || filtered1.count != 0) {
             if section == 0 {
-                return "Finished"
+                if (filtered.count != 0 ) {
+                    return "UnFinished"
+                }
             } else {
-                return "Unfinished"
+                if (filtered1.count != 0 ) {
+                    return "finished"
+                }
             }
         }
-        return ""
+        return nil
     }
     
     // 当某一行cell已经被选中时调用
@@ -202,13 +207,13 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         //        return self.tabledata.count
         //        }
         //        if(searchActive) {
-        if (filtered.count != 0) {
+        if (filtered.count != 0 || filtered1.count != 0) {
             if section == 0 {
                 return filtered.count
             }
-//            else {
-//                return filtered1.count
-//            }
+            else {
+                return filtered1.count
+            }
         }
         return 0
         
