@@ -18,8 +18,6 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     var isFinished:Bool!    //表示当前标签页是"已完成"还是"未完成"。
     var dataBase:FMDatabase!
     var dbQueue:FMDatabaseQueue!
-    
-    
     var tabledata:[String] = []
     var searchActive : Bool = false
     
@@ -27,13 +25,15 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     var filtered1:[ItemModel] = [ItemModel]()
     //    var editVC = EditController()
     //    var resultSearchController : UISearchController = UISearchController()
-    lazy   var searchBar:UISearchBar = UISearchBar(frame: CGRectMake(0, 0, 200, 20))
+    lazy var searchBar:UISearchBar = UISearchBar(frame: CGRectMake(0, 0, 200, 20))
     //    lazy var search:UITextField = UITextField(frame: CGRectMake(0, 0, 200, 20))
     //    var searchController:UISearchController!
-    
+    var tap:UITapGestureRecognizer!
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tap = UITapGestureRecognizer(target: self, action: "clicked")
+
         //        searchController = UISearchController(searchResultsController: nil)
         searchBar.delegate = self
         //        searchController.searchResultsUpdater = self
@@ -60,7 +60,6 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         self.mainTableView.separatorStyle = .None
         
         
-        
         //        self.dataBase.open()
         //
         //        self.dataBase.close()
@@ -82,6 +81,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         
         self.dataArr.appendContentsOf(DatabaseService.sharedInstance.selectAllInDB().0)
         self.dataArr1.appendContentsOf(DatabaseService.sharedInstance.selectAllInDB().1)
+        //print("kjkfdgsdfghjk",dataArr1)
         //        print(self.dataArr)
         //        onInput()
         //        var searchBarStyle: UISearchBarStyle = .Minimal
@@ -91,9 +91,6 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         navigationItem.titleView = searchBar
         //        self.mainTableView.tableHeaderView = self.searchBar
         self.navigationItem.leftBarButtonItem = resetButton
-        
-        
-        
         
         // Reload the table
         self.mainTableView.reloadData()
@@ -120,13 +117,21 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     //        }
     //    }
     
+   // override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    //    self.view.endEditing(true)
+  //  }
+    func clicked(){
+        self.searchBar.resignFirstResponder()
+    }
     
     func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
         searchActive = true;
+        self.view.addGestureRecognizer(tap)
     }
     
     func searchBarTextDidEndEditing(searchBar: UISearchBar) {
         searchActive = false;
+        self.view.removeGestureRecognizer(tap)
     }
     
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
@@ -167,14 +172,18 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     
     // 告诉tableview组头应该显示的文字，就算没有设置组头的高度也适用。
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if (filtered.count != 0) {
+        if (filtered.count != 0 || filtered1.count != 0) {
             if section == 0 {
-                return "Finished"
+                if (filtered.count != 0 ) {
+                    return "未完成"
+                }
             } else {
-                return "Unfinished"
+                if (filtered1.count != 0 ) {
+                    return "完成"
+                }
             }
         }
-        return ""
+        return nil
     }
     
     // 当某一行cell已经被选中时调用
@@ -202,13 +211,13 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         //        return self.tabledata.count
         //        }
         //        if(searchActive) {
-        if (filtered.count != 0) {
+        if (filtered.count != 0 || filtered1.count != 0) {
             if section == 0 {
                 return filtered.count
             }
-//            else {
-//                return filtered1.count
-//            }
+            else {
+                return filtered1.count
+            }
         }
         return 0
         
