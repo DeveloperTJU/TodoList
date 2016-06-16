@@ -29,7 +29,7 @@ class ItemCell: UITableViewCell{
         self.background.frame = CGRectMake(8, 4, UIScreen.mainScreen().bounds.width - 16, 42)
         self.timeLabel.frame = CGRectMake(UIScreen.mainScreen().bounds.width - 180, 13, 140, 16)
         self.detailImage.frame = CGRectMake(UIScreen.mainScreen().bounds.width - 33, 15, 12, 12)
-        stateButton.addTarget(self, action: Selector("handleButtonClick:"), forControlEvents: .TouchDown)
+        stateButton.addTarget(self, action: Selector("handleButtonClick:"), forControlEvents: .TouchUpInside)
     }
     
     func handleButtonClick(button:UIButton){

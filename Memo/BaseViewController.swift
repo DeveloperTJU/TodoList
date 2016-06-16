@@ -88,7 +88,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         //调节导航栏控件间隔
         let spacer1 = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: nil,
             action: nil)
-        spacer1.width = -10
+        spacer1.width = -5
         let spacer2 = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: nil,
             action: nil)
         spacer2.width = -5

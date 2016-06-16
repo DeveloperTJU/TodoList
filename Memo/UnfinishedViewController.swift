@@ -22,6 +22,7 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
         let levelLabel = UILabel()
         let levelBar = UIView()         //用于设置等级
         var levelButton = [UIButton]()
+        var originPos:CGPoint!
         let alertLabel = UILabel()
         let alertButton = UIButton()
         var data = ItemModel()
@@ -102,14 +103,16 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
         
         for i in 0..<5 {
             let button = UIButton()
-            button.frame = CGRectMake(CGFloat.init(integerLiteral: 20 * i), 0, 15, 15)
+            button.frame = CGRectMake(CGFloat.init(integerLiteral: 20 * i), 0, 20, 32)
+            button.imageEdgeInsets = UIEdgeInsets(top: 8, left: 2, bottom: 8, right: 2)
             button.setImage(UIImage(named: "黄星"), forState: .Normal)
             button.setImage(UIImage(named: "黄星"), forState: .Highlighted)
             button.addTarget(self, action: Selector("setLevel:"), forControlEvents: .TouchDown)
             newItem.levelButton.append(button)
             newItem.levelBar.addSubview(button)
         }
-        newItem.levelBar.frame = CGRectMake(otherLimitFrame.width-106, 19, 100, 32)
+        newItem.levelBar.frame = CGRectMake(otherLimitFrame.width-106, 10, 100, 32)
+        newItem.levelBar.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: Selector("changeLevel:")))
         
         newItem.alertLabel.text = "提醒时间"
         newItem.alertLabel.font = UIFont(name: "HelveticaNeue-Thin", size: 13.0)
@@ -141,7 +144,7 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
     }
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 54
+        return self.newItem.isExpanded ? 118 : 54
     }
     
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -159,9 +162,33 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
         }
     }
     
+    func changeLevel(gesture:UIPanGestureRecognizer){
+        switch gesture.state{
+        case .Began:
+            self.newItem.originPos = gesture.locationInView(self.newItem.levelBar)
+        case .Changed:
+            let level = Int.init(self.newItem.originPos.x + gesture.translationInView(self.newItem.levelBar).x) / 20
+            if level >= 0 && level < 5{
+                for i in 0 ... level{
+                    newItem.levelButton[i].setImage(UIImage(named: "黄星"), forState: .Normal)
+                }
+                if level < 4{
+                    for i in level+1 ..< 5{
+                        newItem.levelButton[i].setImage(UIImage(named: "灰星"), forState: .Normal)
+                    }
+                }
+            }
+        case .Ended:
+            self.newItem.data.level = Int.init(self.newItem.originPos.x + gesture.translationInView(self.newItem.levelBar).x) / 20
+        default:
+            break
+        }
+    }
+    
     func handleAddButton(button:UIButton){
         if !self.addNewTask() && !newItem.isExpanded{
             self.newItemAnimation()
+            self.newItem.addTextField.becomeFirstResponder()
         }
     }
     
@@ -174,18 +201,20 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
             newItem.addTextField.resignFirstResponder()
             newItem.data.title = newItem.addTextField.text!
             self.insertData(newItem.data, withAnimation: true)
+            if newItem.data.alertTime != ""{
+                let notification = UILocalNotification()
+                let formatter = NSDateFormatter()
+                formatter.locale = NSLocale(localeIdentifier: "zh_CN")
+                formatter.setLocalizedDateFormatFromTemplate("yyyy-MM-dd HH:mm")
+                notification.fireDate = formatter.dateFromString(self.newItem.data.alertTime)
+                notification.alertBody = self.newItem.data.title
+                notification.alertAction = "be awesome!"
+                notification.soundName = UILocalNotificationDefaultSoundName
+                notification.userInfo = ["详情": self.newItem.data.content]
+                UIApplication.sharedApplication().scheduleLocalNotification(notification)
+            }
             self.reloadNewItem()
             self.mainTableView.scrollToRowAtIndexPath(NSIndexPath(forRow: self.findIndex(dateTime), inSection: 0), atScrollPosition: .Top, animated: true)
-            //注册通知
-            //            if newItem.data.alertTime != ""{
-            //                let notification = UILocalNotification()
-            //                notification.fireDate = NSDate(timeIntervalSinceNow: 5)
-            //                notification.alertBody = "Hey you! Yeah you! Swipe to unlock!"
-            //                notification.alertAction = "be awesome!"
-            //                notification.soundName = UILocalNotificationDefaultSoundName
-            //                notification.userInfo = ["CustomField1": "w00t"]
-            //                UIApplication.sharedApplication().scheduleLocalNotification(notification)
-            //            }
             return true
         }
         return false
@@ -205,13 +234,14 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
     }
     
     func selectDate() {
-        let alertController:UIAlertController = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n", message: nil, preferredStyle: .ActionSheet)
+        let alertController = UIAlertController(title: "\n\n\n\n\n\n\n\n\n", message: nil, preferredStyle: .ActionSheet)
+        let alertTimeFormatter = NSDateFormatter()
+        alertTimeFormatter.dateFormat = "yyyy-MM-dd HH:mm"
         let datePicker = UIDatePicker()
+        datePicker.frame = CGRectMake(0, 0, alertController.view.bounds.width-25, 200)
         datePicker.locale = NSLocale(localeIdentifier: "zh_CN")
-        datePicker.date = NSDate()
+        datePicker.date = newItem.data.alertTime == "" ? NSDate() : alertTimeFormatter.dateFromString(newItem.data.alertTime)!
         alertController.addAction(UIAlertAction(title: "设置提醒", style: .Default){ (alertAction)->Void in
-            let alertTimeFormatter = NSDateFormatter()
-            alertTimeFormatter.dateFormat = "yyyy-MM-dd HH:mm"
             self.newItem.data.alertTime = alertTimeFormatter.stringFromDate(datePicker.date)
             self.newItem.alertButton.setTitle(self.newItem.data.alertTime, forState: .Normal)
         })
@@ -228,117 +258,14 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
     {
         let y:CGFloat = self.newItem.isExpanded ? 0 : 74
         self.newItem.isExpanded = !self.newItem.isExpanded
-        UIView.animateWithDuration(0.3, delay: 0, options: UIViewAnimationOptions.TransitionNone, animations: {
+        let height:CGFloat = self.newItem.isExpanded ? 118 : 54
+        self.newItem.mainView.frame = CGRectMake(0, 0, self.view.bounds.width, height)
+        UIView.animateWithDuration(0.2, delay: 0, options: UIViewAnimationOptions.TransitionNone, animations: {
+            self.mainTableView.beginUpdates()
             self.newItem.otherView.layer.setAffineTransform(CGAffineTransformMakeTranslation(0, y))
+            self.mainTableView.endUpdates()
         }, completion: { (finish:Bool) in
-            self.mainTableView.tableHeaderView?.frame = CGRectMake(8, 8, self.view.bounds.width, 118)
-//            self.mainTableView.headerViewForSection(0)!.frame = CGRectMake(8, 8, self.view.bounds.width - 16, 118)
-            self.mainTableView.tableHeaderView = self.mainTableView.tableHeaderView
         })
     }
-    
-    //新建事件按钮（旧版）
-//    func handleNewItem(){
-//        let alert = UIAlertController(title: "创建任务", message: "", preferredStyle: UIAlertControllerStyle.Alert)
-//        alert.addTextFieldWithConfigurationHandler { (textField : UITextField!) -> Void in
-//            textField.placeholder = "Title"
-//        }
-//        alert.addTextFieldWithConfigurationHandler { (textField : UITextField!) -> Void in
-//            textField.placeholder = "Content"
-//        }
-//        alert.addAction(UIAlertAction(title: "确定", style: UIAlertActionStyle.Default, handler:{ (UIAlertAction) in
-//            if (alert.textFields?.first)!.text == ""{
-//                let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-//                hud.mode = MBProgressHUDMode.Text
-//                hud.label.text = "请输入标题"
-//                hud.hideAnimated(true, afterDelay: 0.5)
-//            }
-//            else{
-//                let formatter:NSDateFormatter = NSDateFormatter()
-//                let formatterWithMs:NSDateFormatter = NSDateFormatter()
-//                formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-//                formatterWithMs.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
-//                self.insertData(ItemModel(title: (alert.textFields?.first)!.text!, content: (alert.textFields?.last)!.text!, createTime: formatterWithMs.stringFromDate(NSDate()), lastEditTime: formatter.stringFromDate(NSDate()), alertTime: formatter.stringFromDate(NSDate()), level: 0, state: 0), withAnimation: true)
-//                let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-//                hud.mode = MBProgressHUDMode.Text
-//                hud.label.text = "完成"
-//                hud.hideAnimated(true, afterDelay: 0.5)
-//            }
-//        }))
-//        alert.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.Default, handler: {(UIAlertAction) in
-//            let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-//            hud.mode = MBProgressHUDMode.Text
-//            hud.label.text = "已取消"
-//            hud.hideAnimated(true, afterDelay: 0.5)
-//        }))
-//        self.presentViewController(alert, animated: true, completion: nil)
-//    }
-
-    //左滑更改level
-//    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
-//        var levelArr:[UITableViewRowAction] = [UITableViewRowAction]()
-//        for i in 0 ..< 4{
-//            let level = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "") {
-//                action, index in
-//                self.dataArr[indexPath.row].level = i
-//                let data:ItemModel = self.dataArr[indexPath.row]
-//                self.removeData(row: indexPath.row)
-//                self.insertData(data, withAnimation: true)
-//            }
-//            switch i{
-//            case 0:
-//                level.backgroundColor = UIColor(red: 254/255, green: 98/255, blue: 4/255, alpha: 1.0)
-//            case 1:
-//                level.backgroundColor = UIColor(red: 254/255, green: 228/255, blue: 4/255, alpha: 1.0)
-//            case 2:
-//                level.backgroundColor = UIColor(red: 75/255, green: 207/255, blue: 45/255, alpha: 1.0)
-//            case 3:
-//                level.backgroundColor = UIColor(red: 4/255, green: 163/255, blue: 254/255, alpha: 1.0)
-//            default:
-//                break
-//            }
-//            levelArr.append(level)
-//        }
-//        return levelArr
-//    }
-    
-    //Cell点击事件，编辑事件。
-//    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-//        let alert = UIAlertController(title: "编辑任务", message: "", preferredStyle: UIAlertControllerStyle.Alert)
-//        alert.addTextFieldWithConfigurationHandler { (textField : UITextField!) -> Void in
-//            textField.placeholder = "Title"
-//            textField.text = self.dataArr[indexPath.row].title
-//        }
-//        alert.addTextFieldWithConfigurationHandler { (textField : UITextField!) -> Void in
-//            textField.placeholder = "Content"
-//            textField.text = self.dataArr[indexPath.row].content
-//        }
-//        alert.addAction(UIAlertAction(title: "确定", style: UIAlertActionStyle.Default, handler:{ (UIAlertAction) in
-//            if (alert.textFields?.first)!.text == ""{
-//                let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-//                hud.mode = MBProgressHUDMode.Text
-//                hud.label.text = "请输入标题"
-//                hud.hideAnimated(true, afterDelay: 0.5)
-//            }
-//            else{
-//                let formatter:NSDateFormatter = NSDateFormatter()
-//                formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-//                let data = ItemModel(title: (alert.textFields?.first)!.text!, content: (alert.textFields?.last)!.text!, createTime: self.dataArr[indexPath.row].createTime, lastEditTime: self.dataArr[indexPath.row].lastEditTime, alertTime: self.dataArr[indexPath.row].alertTime, level: self.dataArr[indexPath.row].level, state: self.dataArr[indexPath.row].state)
-//                self.removeData(row: indexPath.row)
-//                self.insertData(data, withAnimation: true)
-//                let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-//                hud.mode = MBProgressHUDMode.Text
-//                hud.label.text = "完成"
-//                hud.hideAnimated(true, afterDelay: 0.5)
-//            }
-//        }))
-//        alert.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.Default, handler: {(UIAlertAction) in
-//            let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-//            hud.mode = MBProgressHUDMode.Text
-//            hud.label.text = "已取消"
-//            hud.hideAnimated(true, afterDelay: 0.5)
-//        }))
-//        self.presentViewController(alert, animated: true, completion: nil)
-//    }
     
 }
