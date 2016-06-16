@@ -18,6 +18,8 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
     var levelButton = [UIButton]()
     var starlevel:Int!
     var tempAlert:String!
+    let levelBar = UIView()
+    var originPos:CGPoint!
     
     
     
@@ -52,7 +54,7 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         self.titleTextField.backgroundColor=UIColor.whiteColor()
         self.titleTextField.layer.cornerRadius = 10;
         self.titleTextField.text = currentList.title
-        self.titleTextField.font = UIFont.systemFontOfSize(16)
+        self.titleTextField.font = UIFont.systemFontOfSize(15)
         self.titleTextField.delegate = self
         self.view.addSubview(self.titleTextField)
         
@@ -131,7 +133,7 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
                                             value: comment_message_style,
                                             range: NSMakeRange(0, comment_message_indent.length))
         comment_message_indent.addAttribute(NSFontAttributeName,
-                                            value: UIFont.systemFontOfSize(14),
+                                            value: UIFont.systemFontOfSize(15),
                                             range: NSMakeRange(0, comment_message_indent.length))
         self.contentTextView.attributedText = comment_message_indent
         
@@ -153,7 +155,7 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
 //            button.backgroundColor=UIColor.grayColor()
             button.addTarget(self, action: Selector("setLevel:"), forControlEvents: .TouchDown)
             self.levelButton.append(button)
-//            self.levelBar.addSubview(button)
+            self.levelBar.addSubview(button)
             self.view.addSubview(button)
         }
         for i in currentList.level+1..<5 {
@@ -164,11 +166,12 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
             button.imageEdgeInsets = UIEdgeInsetsMake(2.5, 2.5, 2.5, 2.5)
             button.addTarget(self, action: Selector("setLevel:"), forControlEvents: .TouchDown)
             self.levelButton.append(button)
-//            self.levelBar.addSubview(button)
+            self.levelBar.addSubview(button)
             self.view.addSubview(button)
         }
-//        self.levelBar.frame = CGRectMake(self.view.frame.size.width - 125, 0, 100, 15)
-//        self.view.addSubview(levelBar)
+        self.levelBar.frame = CGRectMake(self.view.frame.size.width - 130, self.view.frame.size.height - 150, 100, 20)
+        self.levelBar.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: Selector("changeLevel:")))
+        self.view.addSubview(levelBar)
         
         //之间的横线
         let line = UITextView(frame: CGRectMake(30, self.view.frame.size.height - 122, self.view.frame.size.width - 60, 0.4))
@@ -222,6 +225,7 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         let datePicker = UIDatePicker( )
         datePicker.locale = NSLocale(localeIdentifier: "zh_CN")
         datePicker.date = NSDate()
+        datePicker.frame = CGRectMake(0, 0, alertController.view.bounds.width-25, 200)
         alertController.addAction(UIAlertAction(title: "确定", style: UIAlertActionStyle.Default){
             (alertAction)->Void in
             print("date select: \(datePicker.date.description)")
@@ -269,5 +273,34 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         self.navigationController!.popViewControllerAnimated(true)
     }
     
+    //滑动改变星级
+    func changeLevel(gesture:UIPanGestureRecognizer){
+        switch gesture.state{
+        case .Began:
+            self.originPos = gesture.locationInView(self.levelBar)
+        case .Changed:
+            let level = Int.init(self.originPos.x + gesture.translationInView(self.levelBar).x) / 20
+            if level >= 0 && level < 5{
+                for i in 0 ... level{
+                    self.levelButton[i].setImage(UIImage(named: "黄星"), forState: .Normal)
+                }
+                if level < 4{
+                    for i in level+1 ..< 5{
+                        self.levelButton[i].setImage(UIImage(named: "灰星"), forState: .Normal)
+                    }
+                }
+            }
+        case .Ended:
+            self.starlevel = Int.init(self.originPos.x + gesture.translationInView(self.levelBar).x) / 20
+            if(self.starlevel < 0){
+                self.starlevel = 0
+            }
+            else if(self.starlevel > 4){
+                self.starlevel = 4
+            }
+        default:
+            break
+        }
+    }
     
 }
