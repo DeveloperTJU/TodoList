@@ -51,7 +51,7 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
         self.mainTableView.delegate = self
         self.mainTableView.backgroundColor = .clearColor()
         self.mainTableView.separatorStyle = .None
-        self.mainTableView.scrollEnabled = false
+        self.mainTableView.scrollEnabled = true
         self.view.addSubview(self.mainTableView)
         self.view.backgroundColor = UIColor(patternImage: UIImage(named: "background")!)
     }
@@ -157,7 +157,7 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
             switch(indexPath.row){
             case 1:
                 urlText1 = UrlLabel(frame: textFrame)
-                urlText1.text = "github.com"
+                urlText1.text = "github.com/xuexcy"
                 cell.addSubview(urlText1)
             case 2:
                 urlText2 = UrlLabel(frame: textFrame)
@@ -165,27 +165,27 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
                 cell.addSubview(urlText2)
             case 3:
                 urlText3 = UrlLabel(frame: textFrame)
-                urlText3.text = "how123.com"
+                urlText3.text = "github.com/hyiszcx"
                 cell.addSubview(urlText3)
             case 4:
                 urlText4 = UrlLabel(frame: textFrame)
-                urlText4.text = "3g.qq.com"
+                urlText4.text = "github.com/hailuy"
                 cell.addSubview(urlText4)
             case 5:
                 urlText5 = UrlLabel(frame: textFrame)
-                urlText5.text = "sina.cn"
+                urlText5.text = "github.com/luvianlan"
                 cell.addSubview(urlText5)
             case 6:
                 urlText6 = UrlLabel(frame: textFrame)
-                urlText6.text = "baidu.com"
+                urlText6.text = "github.com/lixuntao"
                 cell.addSubview(urlText6)
             case 7:
                 urlText7 = UrlLabel(frame: textFrame)
-                urlText7.text = "baidu.com"
+                urlText7.text = "github.com/tysb"
                 cell.addSubview(urlText7)
             case 8:
                 urlText8 = UrlLabel(frame: textFrame)
-                urlText8.text = "baidu.com"
+                urlText8.text = "github.com/yangyaohua"
                 cell.addSubview(urlText8)
             default:break
             }
