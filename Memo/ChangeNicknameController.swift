@@ -34,9 +34,12 @@ class ChangeNicknameController: UIViewController,UITextFieldDelegate ,UITableVie
         self.mainTableView.delegate = self
         self.mainTableView.backgroundColor = .clearColor()
         self.mainTableView.separatorStyle = .None
-        self.mainTableView.scrollEnabled = false
+        self.mainTableView.scrollEnabled = true
         self.view.addSubview(self.mainTableView)
         self.view.backgroundColor = UIColor(patternImage: UIImage(named: "background")!)
+        self.view.userInteractionEnabled = true
+        let tapGeture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "onViewClicked:")
+        self.view.addGestureRecognizer(tapGeture)
     }
     
     //    //行高
@@ -95,7 +98,7 @@ class ChangeNicknameController: UIViewController,UITextFieldDelegate ,UITableVie
             self.showAlert("网络连接失败")
         }
         else{
-            let url:String = "todolist/index.php/Home/User/ChangeNickname"
+            let url:String = "index.php/Home/User/ChangeNickname"
             let paramDict = ["UID":UserInfo.UID, "user_newNickname":nickname]
             RequestAPI.POST(url, body: paramDict, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
                 let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
@@ -124,5 +127,8 @@ class ChangeNicknameController: UIViewController,UITextFieldDelegate ,UITableVie
         self.presentViewController(alert, animated: true, completion: nil)
     }
     
+    func onViewClicked(gesture:UIGestureRecognizer){
+        self.nicknameText.resignFirstResponder()
+    }
     
 }

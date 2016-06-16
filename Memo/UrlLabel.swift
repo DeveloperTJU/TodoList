@@ -25,19 +25,19 @@ class UrlLabel: UILabel {
         let ctx:CGContextRef = UIGraphicsGetCurrentContext()!
         CGContextSetLineWidth(ctx, 0.5)
         let font = UIFont(name: "HelveticaNeue-Thin", size: 14.0)
-        self.textAlignment = .Left
+        self.textAlignment = .Right
         self.font = font
         let text:NSString = self.text! as NSString
         let fontSize:CGSize = text.sizeWithAttributes(["sizeWithFont":self.font,"forWidth":self.bounds.size.width])
         CGContextSetStrokeColorWithColor(ctx, UIColor.blackColor().CGColor)
-        let leftPoint = CGPointMake(0, self.frame.size.height/2+fontSize.height/2)
-        let rightPoint = CGPointMake(fontSize.width,self.frame.size.height/2+fontSize.height/2)
+        let leftPoint = CGPointMake(self.frame.size.width - fontSize.width, self.frame.size.height/2+fontSize.height/2)
+        let rightPoint = CGPointMake(self.frame.size.width,self.frame.size.height/2+fontSize.height/2)
         CGContextMoveToPoint(ctx, leftPoint.x, leftPoint.y)
         CGContextAddLineToPoint(ctx, rightPoint.x, rightPoint.y)
         CGContextStrokePath(ctx)
         super.drawRect(rect)
     }
- 
+    
     func onLabelClicked(gesture:UITapGestureRecognizer){
         let result = self.text! as String
         let url:NSURL = NSURL(string: "http://\(result)")!

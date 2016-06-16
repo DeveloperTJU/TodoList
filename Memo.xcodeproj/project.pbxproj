@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5B07E1201D1050B100D2682D /* UrlLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B07E11F1D1050B100D2682D /* UrlLabel.swift */; };
+		5BFC39F01D124694007EEAF7 /* ImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BFC39EF1D124694007EEAF7 /* ImageHelper.swift */; };
 		A502F6A41D05159800C519E9 /* EditDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502F6A21D05159800C519E9 /* EditDetailViewController.swift */; };
 		A502F6A51D05159800C519E9 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502F6A31D05159800C519E9 /* EditViewController.swift */; };
 		A5046D871D0115230046B511 /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5046D7B1D0115220046B511 /* AFHTTPSessionManager.m */; };
@@ -80,6 +81,7 @@
 
 /* Begin PBXFileReference section */
 		5B07E11F1D1050B100D2682D /* UrlLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UrlLabel.swift; path = Memo/UrlLabel.swift; sourceTree = SOURCE_ROOT; };
+		5BFC39EF1D124694007EEAF7 /* ImageHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageHelper.swift; path = Memo/ImageHelper.swift; sourceTree = SOURCE_ROOT; };
 		A502F6A21D05159800C519E9 /* EditDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditDetailViewController.swift; sourceTree = "<group>"; };
 		A502F6A31D05159800C519E9 /* EditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
 		A5046D7A1D0115220046B511 /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
@@ -218,6 +220,7 @@
 		5B1C65171D06CA8E00EEAA8B /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				5BFC39EF1D124694007EEAF7 /* ImageHelper.swift */,
 				5B07E11F1D1050B100D2682D /* UrlLabel.swift */,
 				A53A92EF1D07A19200144FE6 /* ChangeNicknameController.swift */,
 				A53A92F01D07A19200144FE6 /* PersonalCenterController.swift */,
@@ -628,6 +631,7 @@
 				A5C5C4CC1CF688360078C4CF /* FMDatabaseQueue.m in Sources */,
 				A5C4D3D01D11CA3600FF5021 /* UIScrollView+MJRefresh.m in Sources */,
 				A5C4D3C51D11CA3600FF5021 /* MJRefreshAutoStateFooter.m in Sources */,
+				5BFC39F01D124694007EEAF7 /* ImageHelper.swift in Sources */,
 				A5046DE61D011D2F0046B511 /* MyRect.swift in Sources */,
 				A599E43C1CF68C44005CDB8D /* DatabaseService.swift in Sources */,
 				A53A92EC1D07A14300144FE6 /* ChangePaswordController.swift in Sources */,
