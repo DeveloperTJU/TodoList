@@ -62,6 +62,7 @@ class ChangeNicknameController: UIViewController,UITextFieldDelegate ,UITableVie
         nicknameText.textAlignment = .Left
         nicknameText.layer.cornerRadius = 5
         nicknameText.textColor = UIColor.blackColor()
+        nicknameText.clearButtonMode = .WhileEditing
         cell.addSubview(nicknameText)
         cell.layer.cornerRadius = 3
         return cell

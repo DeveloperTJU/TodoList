@@ -32,12 +32,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     override func viewDidLoad() {
         super.viewDidLoad()
         //初始化数据
-        self.title = "个人中心"
-        
-        UserInfo.nickname = "1"
-        UserInfo.phoneNumber = "1"
-        UserInfo.UID = "1"
-        
+        self.title = "个人中心"        
         initDataArrs()
         self.setTableView()
         //添加头像
@@ -174,16 +169,17 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         imageData?.writeToFile((NSHomeDirectory() as String).stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png"), atomically: true)
         
         print("图片存储路径为：\(NSHomeDirectory() as String)/Documents")
-        //        //上传至服务器
-        //        RequestAPI.UploadPicture("upload.php", body: nil, block: { (formData:AFMultipartFormData!) in
-        //            formData.appendPartWithFileData(imageData!, name: "upload", fileName: imgName.md5, mimeType: "image/png")
-        //            }, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject? ) in
-        ////                let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
-        //                print("this is \(responseObject)")
-        //            }) { (task:NSURLSessionDataTask?, error:NSError?) in
-        //                //failure
-        //                print("")
-        //        }
+        
+                //上传至服务器
+        RequestAPI.UploadPicture("upload.php", body: nil, block: { (formData:AFMultipartFormData!) in
+                    formData.appendPartWithFileData(imageData!, name: "upload", fileName: UserInfo.phoneNumber.md5, mimeType: "image/png")
+                    }, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject? ) in
+        //                let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
+                        print("this is \(responseObject)")
+                    }) { (task:NSURLSessionDataTask?, error:NSError?) in
+                        //failure
+                        print("")
+                }
     }
     
     //从服务器下载头像
@@ -394,22 +390,25 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
                 //用无组取出文件大小属性
                 for (abc,bcd) in floder{
                     if abc == NSFileSize{
-                        print("\(path)大小为\(bcd.integerValue)")
+                       // print("\(path)大小为\(bcd.integerValue)")
                         big += bcd.integerValue
                     }
                 }
+                
             }
             //提示框
             var message = "\(big/(1024))K缓存"
             if big/(1024*1024) >= 1 {
                 message = "\(big/(1024*1024))M缓存"
             }
+            print(message)
             let alert = UIAlertController(title: "清理缓存", message: message, preferredStyle: .Alert)
             let alertConirm = UIAlertAction(title: "确定", style: .Default) { (alertConfirm) in
                 //点击确定时开始删除
                 indicator.stopAnimating()
                 for file in files!{
                     let path = cachePath.stringByAppendingFormat("/\(file)")
+                    print("\(path)大小为")
                     if NSFileManager.defaultManager().fileExistsAtPath(path){
                         try! NSFileManager.defaultManager().removeItemAtPath(path)
                     }

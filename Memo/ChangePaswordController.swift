@@ -118,69 +118,69 @@ class ChangePaswordController: UIViewController ,UITextFieldDelegate,UITableView
 
     }
     
-    //设置登录式UI界面
-    func setMainView(){
-        //获取屏幕尺寸
-        let mainSize = self.view.bounds.size
-        self.view.backgroundColor = .whiteColor()
-        let img = UIImage(named:"background")
-        let vImg = UIImageView(image: img)
-        vImg.frame = CGRect(x:0,y:0,width:mainSize.width ,height:mainSize.height)
-        self.view.sendSubviewToBack(vImg)
-        self.view.addSubview(vImg)
-        
-        
-        //登录框背景
-        let passwordView = UIView(frame:CGRectMake(10, 148, mainSize.width - 20, 132))
-        self.view.addSubview(passwordView)
-        passwordView.addSubview(MyRect(frame: CGRectMake(0, 41, mainSize.width - 20, 3)))
-        passwordView.layer.cornerRadius = 3
-        passwordView.backgroundColor = .whiteColor()
-        
-        //原密码输入框
-        oldPasswordText = UITextField(frame:CGRectMake(0, 0, passwordView.frame.size.width , 44))
-        oldPasswordText.placeholder = "请输入原密码"
-        oldPasswordText.delegate = self
-        oldPasswordText.becomeFirstResponder()
-        oldPasswordText.secureTextEntry = true
-        oldPasswordText.leftView = UIView(frame:CGRectMake(0, 0, 44, 44))
-        oldPasswordText.leftViewMode = UITextFieldViewMode.Always
-        
-        //用户名输入框左侧图标
-        let oldImg =  UIImageView(frame:CGRectMake(11, 11, 22, 22))
-        oldImg.image = UIImage(named:"灰锁")
-        oldPasswordText.leftView!.addSubview(oldImg)
-        passwordView.addSubview(oldPasswordText)
-        
-        //新密码输入框
-        newPasswordText = UITextField(frame:CGRectMake(0, 44, passwordView.frame.size.width , 44))
-        newPasswordText.delegate = self
-        newPasswordText.placeholder = "请输入新密码"
-        newPasswordText.secureTextEntry = true
-        newPasswordText.leftView = UIView(frame:CGRectMake(0, 0, 44, 44))
-        newPasswordText.leftViewMode = UITextFieldViewMode.Always
-        passwordView.addSubview(MyRect(frame: CGRectMake(0, 85, mainSize.width - 20, 3)))
-        
-        //认证密码输入框
-        confirmPasswordText = UITextField(frame:CGRectMake(0, 88, passwordView.frame.size.width , 44))
-        confirmPasswordText.delegate = self
-        confirmPasswordText.placeholder = "请确认新密码"
-        confirmPasswordText.secureTextEntry = true
-        confirmPasswordText.leftView = UIView(frame:CGRectMake(0, 0, 44, 44))
-        confirmPasswordText.leftViewMode = UITextFieldViewMode.Always
-        
-        //密码输入框左侧图标
-        let newImg =  UIImageView(frame:CGRectMake(11, 11, 22, 22))
-        newImg.image = UIImage(named:"灰锁")
-        newPasswordText.leftView!.addSubview(newImg)
-        passwordView.addSubview(newPasswordText)
-        
-        let confirmImg =  UIImageView(frame:CGRectMake(11, 11, 22, 22))
-        confirmImg.image = UIImage(named:"灰锁")
-        confirmPasswordText.leftView!.addSubview(confirmImg)
-        passwordView.addSubview(confirmPasswordText)
-        
-    }
+//    //设置登录式UI界面
+//    func setMainView(){
+//        //获取屏幕尺寸
+//        let mainSize = self.view.bounds.size
+//        self.view.backgroundColor = .whiteColor()
+//        let img = UIImage(named:"background")
+//        let vImg = UIImageView(image: img)
+//        vImg.frame = CGRect(x:0,y:0,width:mainSize.width ,height:mainSize.height)
+//        self.view.sendSubviewToBack(vImg)
+//        self.view.addSubview(vImg)
+//        
+//        
+//        //登录框背景
+//        let passwordView = UIView(frame:CGRectMake(10, 148, mainSize.width - 20, 132))
+//        self.view.addSubview(passwordView)
+//        passwordView.addSubview(MyRect(frame: CGRectMake(0, 41, mainSize.width - 20, 3)))
+//        passwordView.layer.cornerRadius = 3
+//        passwordView.backgroundColor = .whiteColor()
+//        
+//        //原密码输入框
+//        oldPasswordText = UITextField(frame:CGRectMake(0, 0, passwordView.frame.size.width , 44))
+//        oldPasswordText.placeholder = "请输入原密码"
+//        oldPasswordText.delegate = self
+//        oldPasswordText.becomeFirstResponder()
+//        oldPasswordText.secureTextEntry = true
+//        oldPasswordText.leftView = UIView(frame:CGRectMake(0, 0, 44, 44))
+//        oldPasswordText.leftViewMode = UITextFieldViewMode.Always
+//        
+//        //用户名输入框左侧图标
+//        let oldImg =  UIImageView(frame:CGRectMake(11, 11, 22, 22))
+//        oldImg.image = UIImage(named:"灰锁")
+//        oldPasswordText.leftView!.addSubview(oldImg)
+//        passwordView.addSubview(oldPasswordText)
+//        
+//        //新密码输入框
+//        newPasswordText = UITextField(frame:CGRectMake(0, 44, passwordView.frame.size.width , 44))
+//        newPasswordText.delegate = self
+//        newPasswordText.placeholder = "请输入新密码"
+//        newPasswordText.secureTextEntry = true
+//        newPasswordText.leftView = UIView(frame:CGRectMake(0, 0, 44, 44))
+//        newPasswordText.leftViewMode = UITextFieldViewMode.Always
+//        passwordView.addSubview(MyRect(frame: CGRectMake(0, 85, mainSize.width - 20, 3)))
+//        
+//        //认证密码输入框
+//        confirmPasswordText = UITextField(frame:CGRectMake(0, 88, passwordView.frame.size.width , 44))
+//        confirmPasswordText.delegate = self
+//        confirmPasswordText.placeholder = "请确认新密码"
+//        confirmPasswordText.secureTextEntry = true
+//        confirmPasswordText.leftView = UIView(frame:CGRectMake(0, 0, 44, 44))
+//        confirmPasswordText.leftViewMode = UITextFieldViewMode.Always
+//        
+//        //密码输入框左侧图标
+//        let newImg =  UIImageView(frame:CGRectMake(11, 11, 22, 22))
+//        newImg.image = UIImage(named:"灰锁")
+//        newPasswordText.leftView!.addSubview(newImg)
+//        passwordView.addSubview(newPasswordText)
+//        
+//        let confirmImg =  UIImageView(frame:CGRectMake(11, 11, 22, 22))
+//        confirmImg.image = UIImage(named:"灰锁")
+//        confirmPasswordText.leftView!.addSubview(confirmImg)
+//        passwordView.addSubview(confirmPasswordText)
+//        
+//    }
     
     //添加导航栏左侧按钮
     func addLeftButtonItem(){
