@@ -97,14 +97,16 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         vReg.addSubview(txtNickname)
         txtNickname.clearButtonMode = .WhileEditing
         
-        self.register = UIButton(type:.System)
+        self.register = UIButton(type: .Custom)
         //设置按钮位置和大小
         self.register.frame = CGRectMake(vReg.frame.size.width - 125, 7, 114, 31)
         self.register.tintColor = UIColor(red: 232/255, green: 208/255, blue: 120/255, alpha: 1)
         //设置按钮文字
         self.register.backgroundColor = UIColor(patternImage: UIImage(named: "发验证码框")!)
-        self.register.setTitle("发送验证码", forState:UIControlState.Normal)
+        self.register.setTitle("发送验证码", forState:.Normal)
+        self.register.setTitleColor(UIColor(red: 232/255, green: 208/255, blue: 120/255, alpha: 1), forState: .Normal)
         self.register.addTarget(self, action:Selector("tapped:"),forControlEvents: .TouchUpInside)
+        self.register.titleLabel?.font = UIFont.boldSystemFontOfSize(14)
         vReg.addSubview(self.register)
         
         let buttonVerifyCode:UIButton = UIButton(type:.System)
@@ -186,6 +188,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
                 //self.register.setTitle("再次发送", forState: UIControlState.Normal)
             }else{
                 self.alertWindow("提示", message: "发送失败")
+                print(error.debugDescription)
                 
             }
             
