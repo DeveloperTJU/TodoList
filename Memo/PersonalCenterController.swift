@@ -34,6 +34,10 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         //初始化数据
         self.title = "个人中心"
         
+        UserInfo.nickname = "1"
+        UserInfo.phoneNumber = "1"
+        UserInfo.UID = "1"
+        
         initDataArrs()
         self.setTableView()
         //添加头像
@@ -157,7 +161,8 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         //如上传成功，将头像保存至本地资源文件夹，名称为UserInfo.phoneNumber.md5
         let scale = image.size.width > image.size.height ? image.size.height/160 : image.size.width/160
         let tempImg = UIImage(CGImage: image.CGImage!, scale: scale, orientation: .Up)
-        self.saveLocalImage(tempImg)
+        let resizeImg = tempImg.resizeImage(tempImg, newSize: CGSizeMake(160, 160))
+        self.saveLocalImage(resizeImg)
         picker.dismissViewControllerAnimated(true) {        }
     }
     
