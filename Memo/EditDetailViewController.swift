@@ -148,7 +148,7 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         self.starlevel = currentList.level
         for i in 0..<currentList.level+1 {
             let button = UIButton()
-            button.frame = CGRectMake(self.view.frame.size.width - 130 + CGFloat.init(integerLiteral: 20 * i ), self.view.frame.size.height - 150, 20, 20)
+            button.frame = CGRectMake( CGFloat.init(integerLiteral: 20 * i ), 0, 20, 20)
             button.setImage(UIImage(named: "黄星"), forState: .Normal)
             button.setImage(UIImage(named: "黄星"), forState: .Highlighted)
             button.imageEdgeInsets = UIEdgeInsetsMake(2.5, 2.5, 2.5, 2.5)
@@ -156,18 +156,18 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
             button.addTarget(self, action: Selector("setLevel:"), forControlEvents: .TouchDown)
             self.levelButton.append(button)
             self.levelBar.addSubview(button)
-            self.view.addSubview(button)
+//            self.view.addSubview(button)
         }
         for i in currentList.level+1..<5 {
             let button = UIButton()
-            button.frame = CGRectMake(self.view.frame.size.width - 130 + CGFloat.init(integerLiteral: 20 * i), self.view.frame.size.height - 150, 20, 20)
+            button.frame = CGRectMake(CGFloat.init(integerLiteral: 20 * i), 0, 20, 20)
             button.setImage(UIImage(named: "灰星"), forState: .Normal)
             button.setImage(UIImage(named: "灰星"), forState: .Highlighted)
             button.imageEdgeInsets = UIEdgeInsetsMake(2.5, 2.5, 2.5, 2.5)
             button.addTarget(self, action: Selector("setLevel:"), forControlEvents: .TouchDown)
             self.levelButton.append(button)
             self.levelBar.addSubview(button)
-            self.view.addSubview(button)
+//            self.view.addSubview(button)
         }
         self.levelBar.frame = CGRectMake(self.view.frame.size.width - 130, self.view.frame.size.height - 150, 100, 20)
         self.levelBar.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: Selector("changeLevel:")))
@@ -256,8 +256,8 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
     
     //选择星级
     func setLevel(button:UIButton){
-        let differ:Int! = Int((self.view.frame.size.width - 130)/20)
-        let level = (Int.init(button.frame.origin.x) / 20) - differ
+//        let differ:Int! = Int((self.view.frame.size.width - 130)/20)
+        let level = Int.init(button.frame.origin.x) / 20
         print(level)
         self.starlevel = level
         for i in 0 ... level {
