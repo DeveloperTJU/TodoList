@@ -10,7 +10,6 @@ import UIKit
 
 class ChangeNicknameController: UIViewController,UITextFieldDelegate ,UITableViewDelegate,UITableViewDataSource{
     
-    // var nicknameTextField:UITextField!
     var isNicknameChanged:Bool = false
     var nicknameText:UITextField!
     var mainTableView:UITableView!
@@ -18,7 +17,6 @@ class ChangeNicknameController: UIViewController,UITextFieldDelegate ,UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "修改昵称"
-        //self.setNicknameTextField()
         self.setTableView()
         self.addLeftButtonItem()
         self.addRightButtonItem()
@@ -41,11 +39,6 @@ class ChangeNicknameController: UIViewController,UITextFieldDelegate ,UITableVie
         let tapGeture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "onViewClicked:")
         self.view.addGestureRecognizer(tapGeture)
     }
-    
-    //    //行高
-    //    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-    //        return 60
-    //    }
     
     //修改密码的tableView样式。
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -96,12 +89,8 @@ class ChangeNicknameController: UIViewController,UITextFieldDelegate ,UITableVie
     
     func updateNickname() -> Void{
         let nickname = self.nicknameText.text! as String
-        let reachability = Reachability.reachabilityForInternetConnection()
         if nickname == "" || nickname == UserInfo.nickname{
             self.navigationController?.popViewControllerAnimated(true)
-        }
-        else if !reachability!.isReachable(){
-            self.showAlert("网络连接失败")
         }
         else{
             let url:String = "index.php/Home/User/ChangeNickname"

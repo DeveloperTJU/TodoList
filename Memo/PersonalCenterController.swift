@@ -16,41 +16,22 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     var imageView = UIImageView()
     var dataArrs:[[String]] = [[String]]()
     var nicknameText:UILabel!
-    
-    
-    
-    //服务器下载头像代码函数,此方法返回image，同时将图片存储到本地。
-    // self.loadAvatarImg()->UIImage;
-    
-    //获取本地存储图像的方法如下
-    //let documentPath:String = NSHomeDirectory() as String
-    //self.imagePath = documentPath.stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).jpg")
-    //存储路径为：NSHomeDirectory/Documents/phoneNumber.md5.jpg
-    
-    
-    //由于同一时间内存中只有一个User，所以删除User模型，使用全局常量UserInfo存储当前用户信息，用户中心只用到nickname和phoneNumber。头像使用UserInfo.phoneNumber.md5作为文件名，从服务器获得并存入资源文件夹。
-    //请设置AutoLyout，简单使用self.view.size设置相应的frame即可。有问题请直接找我。
+    var indicator:UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         //初始化数据
-        
         self.title = "个人中心"
-//        UserInfo.nickname = "1"
-//        UserInfo.phoneNumber = "1"
-//        UserInfo.UID = "1"
         initDataArrs()
         self.setTableView()
         //添加头像
         self.setAvaterImage()
         self.setNicknameText()
         //判断联网成功，则从服务器读取头像
-        let reachability = Reachability.reachabilityForInternetConnection()
-        if reachability!.isReachable(){
-            PersonalCenterController.loadAvatarImg()
-        }
+        PersonalCenterController.loadAvatarImg()
         //添加返回按钮
         self.addLeftButtonItem()
+        self.setProgressBar()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -59,6 +40,16 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
             UserInfo.avatar = UIImage(named: "默认头像小")
         }
         self.imageView.image = UserInfo.avatar
+    }
+    
+    //设置进程控制条
+    func setProgressBar(){
+        let frame = CGRectMake(self.view.bounds.size.width/2-5, self.view.bounds.size.height/2-60, 10, 10)
+        self.indicator = UIActivityIndicatorView(frame: frame)
+        indicator.activityIndicatorViewStyle = .WhiteLarge
+        indicator.color = UIColor.grayColor()
+        indicator.hidesWhenStopped = true
+        self.view.addSubview(indicator)
     }
     
     //添加tableView
@@ -112,9 +103,6 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         let textFrame:CGRect = CGRectMake(120, 0, 450, 100)
         self.nicknameText = UILabel(frame: textFrame)
         self.nicknameText.userInteractionEnabled = true
-       // self.nicknameText.userInteractionEnabled = UserInfo.phoneNumber != "Visitor"
-//        let tapGesture = UITapGestureRecognizer(target: self, action: "onNicknameClicked:")
-//        self.nicknameText.addGestureRecognizer(tapGesture)
     }
     
     //修改头像
@@ -156,6 +144,13 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     
     //显示图像
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        picker.dismissViewControllerAnimated(true) {}
+        
+        
+        //显示加载过程
+        self.indicator.startAnimating()
+        
+        
         let Orginmage = info[UIImagePickerControllerEditedImage] as! UIImage
         let image = Orginmage.fixOrientation()
         //此处调用上传，失败则提示用户修改头像失败
@@ -164,7 +159,6 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         let tempImg = UIImage(CGImage: image.CGImage!, scale: scale, orientation: .Up)
         let resizeImg = tempImg.resizeImage(tempImg, newSize: CGSizeMake(160, 160))
         self.saveLocalImage(resizeImg)
-        picker.dismissViewControllerAnimated(true) {        }
     }
     
     //保存图片到本地和服务器
@@ -180,12 +174,17 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
                 imageData?.writeToFile((NSHomeDirectory() as String).stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).jpg"), atomically: true)
                 UserInfo.avatar = UIImage(CGImage: tempImg.CGImage!, scale: 2, orientation: .Up)
                 self.imageView.image = tempImg
+                
+                //停止加载进程控制条
+                self.indicator.stopAnimating()
+                
             }) { (task:NSURLSessionDataTask?, error:NSError?) in
                 //failure
                 let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
                 hud.mode = MBProgressHUDMode.Text
                 hud.label.text = "修改头像失败,请检查网络连接"
                 hud.hideAnimated(true, afterDelay: 1)
+                self.indicator.stopAnimating()
         }
 
     }
@@ -196,11 +195,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         let loadedData = NSData(contentsOfURL: NSURL(string: "\(RequestClient.URL)/uploadimg/\(UserInfo.phoneNumber.md5).jpg")!)
         //存储到本地
         loadedData?.writeToFile((NSHomeDirectory() as String).stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).jpg"), atomically: true)
-        
-        print("路径为：\((NSHomeDirectory() as String))/Documents")
     }
-    
-    
     
     //控制分区数
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -261,7 +256,6 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
                 phoneNumberText.textAlignment = .Right
                 phoneNumberText.font = font
                 cell.addSubview(phoneNumberText)
-//                cell.separatorStyle = .SingleLine
             }
             else if indexPath.section == 4 && indexPath.row == 0{
                 font = UIFont(name: "HelveticaNeue", size: 16.0)
@@ -317,7 +311,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
                     cell = UITableViewCell(frame: frame)
                     detailImageView.frame = CGRectMake(self.view.bounds.size.width - 40, 44, 12, 12)
                     cell.addSubview(imageView)
-                        //设置跳到登录界面按钮
+                    //设置跳到登录界面按钮
                     self.nicknameText.text = "登录/注册"
                     let tapGesture = UITapGestureRecognizer(target: self, action: "onLoginClicked:")
                     self.nicknameText.addGestureRecognizer(tapGesture)
@@ -341,17 +335,9 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         case 1:
             if indexPath.row == 0{
             }else if indexPath.row == 1 && UserInfo.phoneNumber != "Visitor"{
-                let reachability = Reachability.reachabilityForInternetConnection()
-                if reachability!.isReachable(){
-                    let ChangePassVC = ChangePaswordController()
-                    ChangePassVC.hidesBottomBarWhenPushed = true
-                    self.navigationController?.pushViewController(ChangePassVC, animated: true)
-                }else{
-                    let alert = UIAlertController(title: "网络提示", message: "无可用网络，不可修改密码", preferredStyle: .Alert)
-                    let cancelAction = UIAlertAction(title: "确定", style: .Cancel, handler: nil)
-                    alert.addAction(cancelAction)
-                    self.presentViewController(alert, animated: true, completion: nil)
-                }
+                let ChangePassVC = ChangePaswordController()
+                ChangePassVC.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(ChangePassVC, animated: true)
             }
         case 2:
             self.clearCache()
@@ -421,49 +407,9 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     }
     
     
-    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-        if buttonIndex == 1 {
-            let cachePath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory,NSSearchPathDomainMask.UserDomainMask, true).first
-            if NSFileManager.defaultManager().fileExistsAtPath(cachePath!){
-                // 取出文件夹下所有文件数组
-                let fileArr = NSFileManager.defaultManager().subpathsAtPath(cachePath!)
-                // 遍历删除
-                for file in fileArr! {
-                    let path = cachePath?.stringByAppendingString("/\(file)")
-                    if NSFileManager.defaultManager().fileExistsAtPath(path!) {
-                        do {
-                            try NSFileManager.defaultManager().removeItemAtPath(path!)
-                        } catch {
-                            
-                        }
-                    }
-                }
-            }
-        }
-    }
-    //清理缓存
-    func clearCache() {
-        let frame = CGRectMake(self.view.bounds.size.width/2-5, self.view.bounds.size.height/2-50, 10, 10)
-        let indicator:UIActivityIndicatorView = UIActivityIndicatorView(frame: frame)
-        indicator.activityIndicatorViewStyle = .WhiteLarge
-        indicator.color = UIColor.grayColor()
-        indicator.hidesWhenStopped = true
-       // self.view.addSubview(indicator)
-        indicator.startAnimating()
-        let size = self.fileSizeOfCache()
-        var message = "\(size)K缓存"
-        if size > 1024{
-            message = "\(size/1024)M缓存"
-        }
-        print(message)
-        
-        let alert = UIAlertView(title: "清理缓存", message: message, delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "确定")
-        alert.show()
-//        let alert = UIAlertController(title: "清理缓存", message: message, preferredStyle: .Alert)
-//        let alertConirm = UIAlertAction(title: "确定", style: .Default) { (alertConfirm) in
-//           // indicator.stopAnimating()
-//            // 取出cache文件夹目录 缓存文件都在这个目录下
-//            let cachePath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true).first
+//    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+//        if buttonIndex == 1 {
+//            let cachePath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory,NSSearchPathDomainMask.UserDomainMask, true).first
 //            if NSFileManager.defaultManager().fileExistsAtPath(cachePath!){
 //                // 取出文件夹下所有文件数组
 //                let fileArr = NSFileManager.defaultManager().subpathsAtPath(cachePath!)
@@ -474,21 +420,53 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
 //                        do {
 //                            try NSFileManager.defaultManager().removeItemAtPath(path!)
 //                        } catch {
+//                            
 //                        }
 //                    }
 //                }
 //            }
 //        }
-//        alert.addAction(alertConirm)
-//        let cancel = UIAlertAction(title: "取消", style: .Cancel) { (no) in
-//            //indicator.stopAnimating()
-//        }
-//        alert.addAction(cancel)
-//        self.mainTableView.beginUpdates()
-//        self.presentViewController(alert, animated: true) { 
-//            indicator.stopAnimating()
-//        }
-//        self.mainTableView.endUpdates()
+//    }
+    
+    //清理缓存
+    func clearCache() {
+        self.indicator.startAnimating()
+        let size = self.fileSizeOfCache()
+        var message = "\(size)K缓存"
+        if size > 1024{
+            message = "\(size/1024)M缓存"
+        }
+        
+//        let alert = UIAlertView(title: "清理缓存", message: message, delegate: self, cancelButtonTitle: "取消", otherButtonTitles: "确定")
+//        alert.show()
+        let alert = UIAlertController(title: "清理缓存", message: message, preferredStyle: .Alert)
+        let alertConirm = UIAlertAction(title: "确定", style: .Default) { (alertConfirm) in
+            // 取出cache文件夹目录 缓存文件都在这个目录下
+            let cachePath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true).first
+            if NSFileManager.defaultManager().fileExistsAtPath(cachePath!){
+                // 取出文件夹下所有文件数组
+                let fileArr = NSFileManager.defaultManager().subpathsAtPath(cachePath!)
+                // 遍历删除
+                for file in fileArr! {
+                    let path = cachePath?.stringByAppendingString("/\(file)")
+                    if NSFileManager.defaultManager().fileExistsAtPath(path!) {
+                        do {
+                            try NSFileManager.defaultManager().removeItemAtPath(path!)
+                        } catch {
+                        }
+                    }
+                }
+            }
+        }
+        alert.addAction(alertConirm)
+        let cancel = UIAlertAction(title: "取消", style: .Cancel) { (no) in
+        }
+        alert.addAction(cancel)
+        self.mainTableView.beginUpdates()
+        self.presentViewController(alert, animated: true) { 
+            self.indicator.stopAnimating()
+        }
+        self.mainTableView.endUpdates()
     }
     
     //nickname点击手势

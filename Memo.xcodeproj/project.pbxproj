@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5B07E1201D1050B100D2682D /* UrlLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B07E11F1D1050B100D2682D /* UrlLabel.swift */; };
 		5BFC39F01D124694007EEAF7 /* ImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BFC39EF1D124694007EEAF7 /* ImageHelper.swift */; };
 		A502F6A41D05159800C519E9 /* EditDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502F6A21D05159800C519E9 /* EditDetailViewController.swift */; };
 		A502F6A51D05159800C519E9 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A502F6A31D05159800C519E9 /* EditViewController.swift */; };
@@ -21,7 +20,6 @@
 		A5046DE81D012CCC0046B511 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5046DE71D012CCC0046B511 /* Assets.xcassets */; };
 		A5151EDD1D1427E40085444C /* UIViewControllerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5151EDC1D1427E40085444C /* UIViewControllerHelper.swift */; };
 		A53A92EC1D07A14300144FE6 /* ChangePaswordController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53A92EB1D07A14300144FE6 /* ChangePaswordController.swift */; };
-		A53A92EE1D07A17600144FE6 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53A92ED1D07A17600144FE6 /* Reachability.swift */; };
 		A53A92F11D07A19200144FE6 /* ChangeNicknameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53A92EF1D07A19200144FE6 /* ChangeNicknameController.swift */; };
 		A53A92F21D07A19200144FE6 /* PersonalCenterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53A92F01D07A19200144FE6 /* PersonalCenterController.swift */; };
 		A53A92FA1D07A8EA00144FE6 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53A92F91D07A8EA00144FE6 /* SearchViewController.swift */; };
@@ -80,7 +78,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		5B07E11F1D1050B100D2682D /* UrlLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UrlLabel.swift; path = Memo/UrlLabel.swift; sourceTree = SOURCE_ROOT; };
 		5BFC39EF1D124694007EEAF7 /* ImageHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageHelper.swift; path = Memo/ImageHelper.swift; sourceTree = SOURCE_ROOT; };
 		A502F6A21D05159800C519E9 /* EditDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditDetailViewController.swift; sourceTree = "<group>"; };
 		A502F6A31D05159800C519E9 /* EditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
@@ -101,7 +98,6 @@
 		A5046DE71D012CCC0046B511 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A5151EDC1D1427E40085444C /* UIViewControllerHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewControllerHelper.swift; sourceTree = "<group>"; };
 		A53A92EB1D07A14300144FE6 /* ChangePaswordController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChangePaswordController.swift; path = Memo/ChangePaswordController.swift; sourceTree = SOURCE_ROOT; };
-		A53A92ED1D07A17600144FE6 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Reachability.swift; path = Memo/Reachability.swift; sourceTree = SOURCE_ROOT; };
 		A53A92EF1D07A19200144FE6 /* ChangeNicknameController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChangeNicknameController.swift; path = Memo/ChangeNicknameController.swift; sourceTree = SOURCE_ROOT; };
 		A53A92F01D07A19200144FE6 /* PersonalCenterController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersonalCenterController.swift; path = Memo/PersonalCenterController.swift; sourceTree = SOURCE_ROOT; };
 		A53A92F91D07A8EA00144FE6 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -220,12 +216,9 @@
 		5B1C65171D06CA8E00EEAA8B /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				5BFC39EF1D124694007EEAF7 /* ImageHelper.swift */,
-				5B07E11F1D1050B100D2682D /* UrlLabel.swift */,
 				A53A92EF1D07A19200144FE6 /* ChangeNicknameController.swift */,
 				A53A92F01D07A19200144FE6 /* PersonalCenterController.swift */,
 				A53A92EB1D07A14300144FE6 /* ChangePaswordController.swift */,
-				A53A92ED1D07A17600144FE6 /* Reachability.swift */,
 				A5AD1B0F1D0E3B6600DF12DA /* AboutViewController.swift */,
 			);
 			name = Controller;
@@ -285,6 +278,7 @@
 				A548B9A51CF5892B00773A58 /* Memo-Bridging-Header.h */,
 				A5151EDC1D1427E40085444C /* UIViewControllerHelper.swift */,
 				A5DAA8841CFFCFD9008B8CAC /* StringHelper.swift */,
+				5BFC39EF1D124694007EEAF7 /* ImageHelper.swift */,
 				A599E43B1CF68C44005CDB8D /* DatabaseService.swift */,
 				A8DB470D1D07F94C00ECAD49 /* RequestClient.swift */,
 				A8DB470F1D07F9E900ECAD49 /* RequestAPI.swift */,
@@ -610,7 +604,6 @@
 				A5C4D3CD1D11CA3600FF5021 /* MJRefreshConst.m in Sources */,
 				A5A9A1151CEC3795006BB3A1 /* ItemCell.swift in Sources */,
 				A85783591D03F7D5003D73D9 /* PhoneNumberViewController.swift in Sources */,
-				A53A92EE1D07A17600144FE6 /* Reachability.swift in Sources */,
 				A5046D871D0115230046B511 /* AFHTTPSessionManager.m in Sources */,
 				A5046D881D0115230046B511 /* AFNetworkReachabilityManager.m in Sources */,
 				A5C4D3C71D11CA3600FF5021 /* MJRefreshBackNormalFooter.m in Sources */,
@@ -659,7 +652,6 @@
 				A5A9A1001CEBF8B2006BB3A1 /* UnfinishedViewController.swift in Sources */,
 				A599E4401CF68CA6005CDB8D /* MBProgressHUD.m in Sources */,
 				A5C4D3C81D11CA3600FF5021 /* MJRefreshBackStateFooter.m in Sources */,
-				5B07E1201D1050B100D2682D /* UrlLabel.swift in Sources */,
 				A5046D8B1D0115230046B511 /* AFURLResponseSerialization.m in Sources */,
 				A5C4D3CB1D11CA3600FF5021 /* MJRefreshStateHeader.m in Sources */,
 				A502F6A51D05159800C519E9 /* EditViewController.swift in Sources */,
