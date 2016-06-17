@@ -43,7 +43,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if (UIDevice.currentDevice().systemVersion as NSString).floatValue >= 8 {
             application.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: [.Badge, .Sound, .Alert], categories: nil))
         }
-        
         return true
     }
     

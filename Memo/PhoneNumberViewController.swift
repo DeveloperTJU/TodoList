@@ -215,8 +215,13 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
                         let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
                         //注册成功
                         if resultDict["isSuccess"] as! Int == 1{
-                            self.showAlert("注册成功")
-                            self.presentViewController(LogInViewController(), animated: true, completion: nil)
+                            let loginVC = LogInViewController()
+                            self.presentViewController(loginVC, animated: true, completion: {
+                                let hud = MBProgressHUD.showHUDAddedTo(loginVC.view, animated: true)
+                                hud.mode = MBProgressHUDMode.Text
+                                hud.label.text = "注册成功"
+                                hud.hideAnimated(true, afterDelay: 0.5)
+                            })
                         }
                         else{
                             self.showAlert("账号已存在")

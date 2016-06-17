@@ -30,7 +30,7 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
         //初始化数据
         self.title = "关于我们"
         initDataArrs()
-        cellHeight = self.view.bounds.size.height/16
+        cellHeight = (self.view.bounds.size.height - 112) / 13
 
         self.setTableView()
         //添加头像
@@ -38,10 +38,6 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
         self.setversionText()
         //添加返回按钮
         self.addLeftButtonItem()
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        self.versionText.text = UserInfo.nickname == "" ? UserInfo.phoneNumber : UserInfo.nickname
     }
     
     //添加tableView
@@ -71,24 +67,21 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
     func initDataArrs() {
         let arr0 = [""]
         let arr1 = ["开发团队"]
-        //let arr2 = ["指导教师"]
         let arr3 = ["开发小组", "    薛成韵乀(ˉεˉ乀)",  "    张彦辉",  "    郑艺峰",  "    nmpp:Github@hailuy",  "    杨若岚",  "    李训涛",  "    田嘉诺","    杨耀华"]
         self.dataArrs = [arr0,arr1,arr3]
     }
     
     //设置第一行头像
     func setAvaterImage(){
-        self.imageView = UIImageView(frame: CGRectMake(self.view.bounds.size.width/2 - cellHeight*5/6, 10, cellHeight * 5/3, cellHeight*5/3))
-        print(imageView.bounds.width)
+        self.imageView = UIImageView(frame: CGRectMake(self.view.bounds.size.width/2 - cellHeight*5/6 - 8, 10, cellHeight * 5/3, cellHeight*5/3))
         self.imageView.layer.cornerRadius = 10
         self.imageView.layer.masksToBounds = true
         let image = UIImage(named: "Icon-76")
         self.imageView.image = image
     }
     
-    //设置昵称
     func setversionText(){
-        let textFrame:CGRect = CGRectMake(self.view.bounds.size.width/2 - cellHeight*5/6-3, cellHeight*9/5, 100, 50)
+        let textFrame:CGRect = CGRectMake(15, cellHeight*9/5, self.view.bounds.size.width - 46, 50)
         self.versionText = UILabel(frame: textFrame)
     }
     
@@ -157,37 +150,38 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
             switch(indexPath.row){
             case 1:
                 urlText1 = UrlLabel(frame: textFrame)
-                urlText1.text = "github.com/xuexcy"
+                urlText1.text = "GitHub.com/xuexcy"
                 cell.addSubview(urlText1)
             case 2:
                 urlText2 = UrlLabel(frame: textFrame)
-                urlText2.text = "gitHub.com/CodeInDreams"
+                urlText2.text = "GitHub.com/CodeInDreams"
                 cell.addSubview(urlText2)
             case 3:
                 urlText3 = UrlLabel(frame: textFrame)
-                urlText3.text = "github.com/hyiszcx"
+                urlText3.text = "GitHub.com/hyiszcx"
                 cell.addSubview(urlText3)
             case 4:
                 urlText4 = UrlLabel(frame: textFrame)
-                urlText4.text = "github.com/hailuy"
+                urlText4.text = "GitHub.com/hailuy"
                 cell.addSubview(urlText4)
             case 5:
                 urlText5 = UrlLabel(frame: textFrame)
-                urlText5.text = "github.com/luvianlan"
+                urlText5.text = "GitHub.com/luvianlan"
                 cell.addSubview(urlText5)
             case 6:
                 urlText6 = UrlLabel(frame: textFrame)
-                urlText6.text = "github.com/lixuntao"
+                urlText6.text = "GitHub.com/lixuntao"
                 cell.addSubview(urlText6)
             case 7:
                 urlText7 = UrlLabel(frame: textFrame)
-                urlText7.text = "github.com/tysb"
+                urlText7.text = "GitHub.com/tysb"
                 cell.addSubview(urlText7)
             case 8:
                 urlText8 = UrlLabel(frame: textFrame)
-                urlText8.text = "github.com/yangyaohua"
+                urlText8.text = "GitHub.com/yangyaohua"
                 cell.addSubview(urlText8)
-            default:break
+            default:
+                break
             }
         }
         else{
@@ -196,9 +190,9 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
                 cell = UITableViewCell(frame: frame)
                 cell.addSubview(imageView)
                 self.versionText.text = "咕嘟笔记 v1.0"
+                self.versionText.textAlignment = .Center
                 cell.addSubview(versionText)
                 versionText.font = font
-                cell.selectionStyle = .None
             }
         }
         cell.selectionStyle = .None

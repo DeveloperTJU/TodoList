@@ -51,16 +51,15 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         formatter.locale = NSLocale(localeIdentifier: "zh_CN")
         formatter.setLocalizedDateFormatFromTemplate("yyyy-MM-dd HH:mm:ss.SSS")
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
+        if UserInfo.phoneNumber != "Visitor"{
+            let refresher = MJRefreshNormalHeader()
+            refresher.setRefreshingTarget(self, refreshingAction: Selector("refreshManually"))
+            self.mainTableView.mj_header = refresher
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //添加下拉刷新手势
-//        let refresher = MJRefreshHeader()
-//        
-//        self.view.addSubview(refresher)
-        
         //添加导航栏按钮
         let refreshButton = UIBarButtonItem(image: UIImage(named: "更新"), style: .Plain, target: self, action: Selector("refreshManually"))
         let searchButton = UIBarButtonItem(image: UIImage(named: "搜索"), style: .Plain, target: self, action: Selector("search"))
@@ -409,5 +408,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         hud.label.text = message
         hud.hideAnimated(true, afterDelay: 0.5)
     }
+    
+    
     
 }
