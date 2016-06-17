@@ -92,7 +92,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         //昵称输入框
         txtNickname = UITextField(frame:CGRectMake(0, 88, vReg.frame.size.width, 44))
         self.createTextField(txtNickname, isPasswordTextfield: false, hint: "请输入昵称")
-        self.addImageToTextfield(txtNickname, imageName: "灰手机")
+        self.addImageToTextfield(txtNickname, imageName: "默认头像小")
         vReg.addSubview(txtNickname)
         txtNickname.clearButtonMode = .WhileEditing
         
