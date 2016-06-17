@@ -207,17 +207,6 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
             newItem.addTextField.resignFirstResponder()
             newItem.data.title = newItem.addTextField.text!
             self.insertData(newItem.data, withAnimation: true)
-            if newItem.data.alertTime != ""{
-                let notification = UILocalNotification()
-                let formatter = NSDateFormatter()
-                formatter.locale = NSLocale(localeIdentifier: "zh_CN")
-                formatter.setLocalizedDateFormatFromTemplate("yyyy-MM-dd HH:mm")
-                notification.fireDate = formatter.dateFromString(self.newItem.data.alertTime)
-                notification.alertBody = self.newItem.data.title
-                notification.soundName = UILocalNotificationDefaultSoundName
-                notification.userInfo = ["time": self.newItem.data.createTime]
-                UIApplication.sharedApplication().scheduleLocalNotification(notification)
-            }
             self.reloadNewItem()
             self.mainTableView.scrollToRowAtIndexPath(NSIndexPath(forRow: self.findIndex(dateTime), inSection: 0), atScrollPosition: .Top, animated: true)
             return true

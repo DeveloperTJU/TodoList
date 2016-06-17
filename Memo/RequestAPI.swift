@@ -79,15 +79,15 @@ class RequestAPI: NSObject {
                 }
             }
             else{
-                let hud = MBProgressHUD.showHUDAddedTo((RequestClient.sharedInstance.delegate as! UIViewController).view, animated: true)
-                hud.mode = MBProgressHUDMode.Text
-                hud.hideAnimated(true, afterDelay: 0.5)
+                let alert = UIAlertController(title: "提示", message: "数据同步出错，请稍后重试", preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: "确定", style: .Cancel, handler: nil))
                 switch afterEvent{
                 case 0:
-                    hud.label.text = "数据同步失败"
-                    (RequestClient.sharedInstance.delegate as! LogInViewController).presentViewController(RootTabBarController(), animated: true, completion: nil)
+                    let rootTabBarVC = RootTabBarController()
+                    (RequestClient.sharedInstance.delegate as! LogInViewController).presentViewController(rootTabBarVC, animated: true, completion: nil)
+                    UnfinishedVC.presentViewController(alert, animated: true, completion: nil)
                 case 1:
-                    hud.label.text = "同步失败"
+                    (RequestClient.sharedInstance.delegate as! UIViewController).presentViewController(alert, animated: true, completion: nil)
                 default:
                     break
                 }

@@ -258,6 +258,9 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
             RequestAPI.POST(url, body: paramDict, succeed:{ (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
             }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
             }
+            if data.alertTime != ""{
+                self.addNotification(data)
+            }
             dataArr.insert(data, atIndex: index)
             self.mainTableView.beginUpdates()
             self.mainTableView.insertRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: hasAnimation ? .Automatic : .None)
@@ -280,11 +283,13 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
             let paramDict = ["UID":UserInfo.UID, "createtime":self.dataArr[index].createTime, "timestamp":self.dataArr[index].timestamp]
             RequestAPI.POST(url, body: paramDict, succeed:{ (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
                 let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
-                //登陆成功
                 if resultDict["isSuccess"] as! Bool {
                     DatabaseService.sharedInstance.deleteInDB(time)
                 }
             }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
+            }
+            if dataArr[index].alertTime != ""{
+                self.removeNotification(dataArr[index].createTime)
             }
             dataArr.removeAtIndex(index)
             self.mainTableView.beginUpdates()
@@ -309,25 +314,28 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //更新一条数据
     func updateData(data:ItemModel) -> Void {
-        let temp = data.timestamp
+        let index = findIndex(data.createTime)
+        let temp = dataArr[index].timestamp
         data.timestamp = formatter.stringFromDate(NSDate())
         if DatabaseService.sharedInstance.updateInDB(data){
             self.updateInServer(data)
-            let index = findIndex(data.createTime)
+            if dataArr[index].alertTime != ""{
+                self.removeNotification(dataArr[index].createTime)
+            }
+            if data.alertTime != ""{
+                self.addNotification(data)
+            }
+            self.mainTableView.beginUpdates()
             dataArr.removeAtIndex(index)
+            self.mainTableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .None)
             let row = rank(data.level, lastEditTime: data.lastEditTime)
             dataArr.insert(data, atIndex: row)
-            self.mainTableView.beginUpdates()
-            self.mainTableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .None)
             self.mainTableView.insertRowsAtIndexPaths([NSIndexPath(forRow: row, inSection: 0)], withRowAnimation: .None)
             self.mainTableView.endUpdates()
         }
         else{
-            data.timestamp = temp
-            let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-            hud.mode = MBProgressHUDMode.Text
-            hud.label.text = "数据库操作失败"
-            hud.hideAnimated(true, afterDelay: 0.5)
+            print("数据库操作失败")
+            dataArr[index].timestamp = temp
         }
     }
     
@@ -388,6 +396,14 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.dataArr[row].timestamp = formatter.stringFromDate(NSDate())
         if DatabaseService.sharedInstance.updateInDB(data){
             self.updateInServer(data)
+            if data.alertTime != ""{
+                if isFinished!{
+                    self.removeNotification(createTime)
+                }
+                else{
+                    self.addNotification(data)
+                }
+            }
             self.dataArr.removeAtIndex(row)
             self.mainTableView.beginUpdates()
             self.mainTableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: row, inSection: 0)], withRowAnimation: .Automatic)
@@ -399,9 +415,10 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
             another.mainTableView.endUpdates()
         }
         else{
+            message = "操作失败，请重试"
+            print("数据库操作失败")
             self.dataArr[row].state = (isFinished! ? 2 : 0)
             self.dataArr[row].timestamp = temp
-            message = "数据库操作失败"
         }
         let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         hud.mode = MBProgressHUDMode.Text
@@ -409,6 +426,25 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         hud.hideAnimated(true, afterDelay: 0.5)
     }
     
+    func addNotification(data:ItemModel) -> Void{
+        let notification = UILocalNotification()
+        let formatter = NSDateFormatter()
+        formatter.locale = NSLocale(localeIdentifier: "zh_CN")
+        formatter.setLocalizedDateFormatFromTemplate("yyyy-MM-dd HH:mm")
+        notification.fireDate = formatter.dateFromString(data.alertTime)
+        notification.alertBody = "任务提醒：\(data.title)"
+        notification.soundName = UILocalNotificationDefaultSoundName
+        notification.userInfo = ["time": data.createTime]
+        UIApplication.sharedApplication().scheduleLocalNotification(notification)
+    }
     
-    
+    func removeNotification(createTime:String) -> Void{
+        for notification in UIApplication.sharedApplication().scheduledLocalNotifications! {
+            let userInfoCurrent = notification.userInfo! as! [String:AnyObject]
+            if userInfoCurrent["time"]! as! String == createTime {
+                UIApplication.sharedApplication().cancelLocalNotification(notification)
+                break;
+            }
+        }
+    }
 }

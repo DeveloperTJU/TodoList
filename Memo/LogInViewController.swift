@@ -145,7 +145,6 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
                 //失败回调
                 print("网络调用失败:\(error)")
                 self.showAlert("网络连接有问题")
-                
             }
         }
     }
@@ -155,9 +154,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
         UserInfo.nickname = "游客"
         DatabaseService.sharedInstance.initDataTable()
         self.presentViewController(RootTabBarController(), animated: true, completion: nil)
-        print(123)
     }
-    
 }
 
 //登录框状态枚举
