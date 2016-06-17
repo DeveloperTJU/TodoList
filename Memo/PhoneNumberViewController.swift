@@ -28,7 +28,6 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
                 countdownTimer = nil
                 
             }
-            
             register.enabled = !newValue
         }
     }
@@ -36,7 +35,6 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         willSet {
             self.register.backgroundColor = UIColor(patternImage: UIImage(named: "发验证码框")!)
             register.setTitle("\(newValue)秒后重新获取", forState: .Normal)
-            
             if newValue <= 0 {
                 self.register.backgroundColor = UIColor(patternImage: UIImage(named: "发验证码框")!)
                 register.setTitle("重新获取验证码", forState: .Normal)
@@ -48,8 +46,9 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
     var VerifyCodeRight:Bool = false
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
-
+        SMSSDK.registerApp("13497b5a4a530", withSecret: "5d4aa8cc0c6a64db874b7db0ad428360")
         self.view.backgroundColor = .whiteColor()
         let mainSize = UIScreen.mainScreen().bounds.size
         let img = UIImage(named:"background")
@@ -179,16 +178,16 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
     
     //发送验证码
     func tapped(button:UIButton){
+        self.register.enabled = false
         let phoneNum = phoneText.text
-        SMSSDK.registerApp("13497b5a4a530", withSecret: "5d4aa8cc0c6a64db874b7db0ad428360")
         SMSSDK.getVerificationCodeByMethod(SMSGetCodeMethodSMS, phoneNumber:phoneNum, zone: "86",customIdentifier: nil,result: {(error: NSError!) ->Void in
             if(error == nil){
                 NSLog("发送成功")
                 self.isCounting = true
-                //self.register.setTitle("再次发送", forState: UIControlState.Normal)
             }else{
                 self.alertWindow("提示", message: "发送失败")
                 print(error.debugDescription)
+                self.register.enabled = true
                 
             }
             
