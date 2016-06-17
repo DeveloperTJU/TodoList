@@ -23,14 +23,15 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
     var urlText7:UrlLabel = UrlLabel()
     var urlText8:UrlLabel = UrlLabel()
     var dataArr:[UrlLabel]!
-    
+    var cellHeight:CGFloat = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         //初始化数据
         self.title = "关于我们"
         initDataArrs()
-        
+        cellHeight = self.view.bounds.size.height/16
+
         self.setTableView()
         //添加头像
         self.setAvaterImage()
@@ -77,7 +78,7 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
     
     //设置第一行头像
     func setAvaterImage(){
-        self.imageView = UIImageView(frame: CGRectMake(self.view.bounds.size.width/2 - 40, 10, 80, 80))
+        self.imageView = UIImageView(frame: CGRectMake(self.view.bounds.size.width/2 - cellHeight*5/6, 10, cellHeight * 5/3, cellHeight*5/3))
         self.imageView.layer.cornerRadius = CGRectGetHeight(imageView.bounds)/2
         self.imageView.layer.masksToBounds = true
         self.imageView.layer.borderColor = UIColor.grayColor().CGColor
@@ -88,7 +89,7 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
     
     //设置昵称
     func setversionText(){
-        let textFrame:CGRect = CGRectMake(self.view.bounds.size.width/2 - 45, 80, 100, 50)
+        let textFrame:CGRect = CGRectMake(self.view.bounds.size.width/2 - cellHeight*5/6-7, cellHeight*9/5, 100, 50)
         self.versionText = UILabel(frame: textFrame)
     }
     
@@ -110,10 +111,10 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
     //设置行高
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if indexPath.section == 0 && indexPath.row == 0{
-            return 140
+            return cellHeight * 3
         }
         else{
-            return 42
+            return cellHeight
         }
     }
     
@@ -161,7 +162,7 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
                 cell.addSubview(urlText1)
             case 2:
                 urlText2 = UrlLabel(frame: textFrame)
-                urlText2.text = "GitHub.com/CodeInDreams"
+                urlText2.text = "gitHub.com/CodeInDreams"
                 cell.addSubview(urlText2)
             case 3:
                 urlText3 = UrlLabel(frame: textFrame)

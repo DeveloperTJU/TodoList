@@ -17,6 +17,8 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     var dataArrs:[[String]] = [[String]]()
     var nicknameText:UILabel!
     
+    
+    
     //服务器下载头像代码函数,此方法返回image，同时将图片存储到本地。
     // self.loadAvatarImg()->UIImage;
     
@@ -32,7 +34,11 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     override func viewDidLoad() {
         super.viewDidLoad()
         //初始化数据
-        self.title = "个人中心"        
+        
+        self.title = "个人中心"
+//        UserInfo.nickname = "1"
+//        UserInfo.phoneNumber = "1"
+//        UserInfo.UID = "1"
         initDataArrs()
         self.setTableView()
         //添加头像
@@ -169,8 +175,10 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         imageData?.writeToFile((NSHomeDirectory() as String).stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png"), atomically: true)
         
         print("图片存储路径为：\(NSHomeDirectory() as String)/Documents")
-        
-                //上传至服务器
+       
+
+
+                    //上传至服务
         RequestAPI.UploadPicture("upload.php", body: nil, block: { (formData:AFMultipartFormData!) in
                     formData.appendPartWithFileData(imageData!, name: "upload", fileName: UserInfo.phoneNumber.md5, mimeType: "image/png")
                     }, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject? ) in
@@ -180,6 +188,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
                         //failure
                         print("")
                 }
+
     }
     
     //从服务器下载头像
@@ -238,79 +247,100 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     
     //控制样式
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
-        tableView.separatorStyle = .SingleLine
-        let frame:CGRect = CGRectMake(20, 20, 20, 42)
-        var cell = UITableViewCell(frame:frame)
-        let sectionArr = dataArrs[indexPath.section]
-        cell.textLabel?.text = sectionArr[indexPath.row]
-        var font = UIFont(name: "HelveticaNeue-Thin", size: 14.0)
-        if indexPath.section == 1 && indexPath.row == 0{
-            let frame:CGRect = CGRectMake(self.view.bounds.size.width - 180, 0, 140, 42)
-            let phoneNumberText = UILabel(frame: frame)
-            phoneNumberText.text = UserInfo.phoneNumber
-            phoneNumberText.textAlignment = .Right
-            phoneNumberText.font = font
-            cell.addSubview(phoneNumberText)
-            if UserInfo.nickname == "Visitor"{
-                phoneNumberText.text = ""
-                cell.textLabel?.text = ""
+        if UserInfo.nickname != "Visitor"{
+            tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
+            tableView.separatorStyle = .SingleLine
+            let frame:CGRect = CGRectMake(20, 20, 20, 42)
+            var cell = UITableViewCell(frame:frame)
+            let sectionArr = dataArrs[indexPath.section]
+            cell.textLabel?.text = sectionArr[indexPath.row]
+            var font = UIFont(name: "HelveticaNeue-Thin", size: 14.0)
+            if indexPath.section == 1 && indexPath.row == 0{
+                let frame:CGRect = CGRectMake(self.view.bounds.size.width - 180, 0, 140, 42)
+                let phoneNumberText = UILabel(frame: frame)
+                phoneNumberText.text = UserInfo.phoneNumber
+                phoneNumberText.textAlignment = .Right
+                phoneNumberText.font = font
+                cell.addSubview(phoneNumberText)
             }
-        }else if indexPath.section == 1 && indexPath.row == 1 && UserInfo.nickname == "Visitor"{
-            cell.textLabel?.text = ""
-        }
-        else if indexPath.section == 4 && indexPath.row == 0{
-            font = UIFont(name: "HelveticaNeue", size: 16.0)
-            if UserInfo.phoneNumber == "Visitor"{
-                cell.backgroundColor = UIColor(red: 129/255, green: 192/255, blue: 23/255, alpha: 1.0)
-                cell.textLabel?.text = "我 要 注 册"
-            }
-            else{
+            else if indexPath.section == 4 && indexPath.row == 0{
+                font = UIFont(name: "HelveticaNeue", size: 16.0)
                 cell.backgroundColor = .redColor()
                 cell.textLabel?.textColor = .whiteColor()
+                cell.textLabel?.textAlignment = .Center
             }
-            if UserInfo.nickname == "Visitor"{
-                cell.textLabel?.text = ""
-            }
-            cell.textLabel?.textAlignment = .Center
-        }
-        else{
-            let detailImageView = UIImageView(image: UIImage(named: "右箭头"))
-            detailImageView.frame = CGRectMake(self.view.bounds.size.width - 40, (cell.frame.minY + cell.frame.maxY) / 2 - 6, 12, 12)
-            if indexPath.section == 0 && indexPath.row == 0{
-                let frame:CGRect = CGRectMake(20, 0, 200, 200)
-                cell = UITableViewCell(frame: frame)
-                detailImageView.frame = CGRectMake(self.view.bounds.size.width - 40, 44, 12, 12)
-                cell.addSubview(imageView)
-                if UserInfo.nickname != "Visitor"{
+            else{
+                let detailImageView = UIImageView(image: UIImage(named: "右箭头"))
+                detailImageView.frame = CGRectMake(self.view.bounds.size.width - 40, (cell.frame.minY + cell.frame.maxY) / 2 - 6, 12, 12)
+                if indexPath.section == 0 && indexPath.row == 0{
+                    let frame:CGRect = CGRectMake(20, 0, 200, 200)
+                    cell = UITableViewCell(frame: frame)
+                    detailImageView.frame = CGRectMake(self.view.bounds.size.width - 40, 44, 12, 12)
+                    cell.addSubview(imageView)
                     let tapGesture = UITapGestureRecognizer(target: self, action: "onNicknameClicked:")
                     self.nicknameText.addGestureRecognizer(tapGesture)
-                }else{
-                    //设置跳到登录界面按钮
-                    self.nicknameText.text = "登录"
+                    cell.addSubview(nicknameText)
+                    nicknameText.font = font
+                    cell.selectionStyle = .None
+                }
+                cell.addSubview(detailImageView)
+            }
+            cell.textLabel!.font = font
+            cell.layer.cornerRadius = 3
+            cell.selectionStyle = .None
+            return cell
+        }else{
+            let frame:CGRect = CGRectMake(20, 20, 20, 42)
+            var cell = UITableViewCell(frame:frame)
+            let sectionArr = dataArrs[indexPath.section]
+            cell.textLabel?.text = sectionArr[indexPath.row]
+            let font = UIFont(name: "HelveticaNeue-Thin", size: 14.0)
+            if indexPath.section == 1 && indexPath.row == 0{
+                let frame:CGRect = CGRectMake(self.view.bounds.size.width - 180, 0, 140, 42)
+                let phoneNumberText = UILabel(frame: frame)
+                phoneNumberText.text = UserInfo.phoneNumber
+                phoneNumberText.textAlignment = .Right
+                phoneNumberText.font = font
+                cell.addSubview(phoneNumberText)
+                if UserInfo.nickname == "Visitor"{
+                    phoneNumberText.text = ""
+                    cell.textLabel?.text = ""
+                }
+            }else if indexPath.section == 1 && indexPath.row == 1{
+                cell.textLabel?.text = ""
+            }
+            else{
+                let detailImageView = UIImageView(image: UIImage(named: "右箭头"))
+                detailImageView.frame = CGRectMake(self.view.bounds.size.width - 40, (cell.frame.minY + cell.frame.maxY) / 2 - 6, 12, 12)
+                if indexPath.section == 0 && indexPath.row == 0{
+                    let frame:CGRect = CGRectMake(20, 0, 200, 200)
+                    cell = UITableViewCell(frame: frame)
+                    detailImageView.frame = CGRectMake(self.view.bounds.size.width - 40, 44, 12, 12)
+                    cell.addSubview(imageView)
+                        //设置跳到登录界面按钮
+                    self.nicknameText.text = "登录/注册"
                     let tapGesture = UITapGestureRecognizer(target: self, action: "onLoginClicked:")
                     self.nicknameText.addGestureRecognizer(tapGesture)
+                    cell.addSubview(nicknameText)
+                    nicknameText.font = font
+                    cell.selectionStyle = .None
                 }
-                cell.addSubview(nicknameText)
-                nicknameText.font = font
-                cell.selectionStyle = .None
+                cell.addSubview(detailImageView)
             }
-            cell.addSubview(detailImageView)
+            cell.textLabel!.font = font
+            cell.layer.cornerRadius = 3
+            cell.selectionStyle = .None
+            return cell
         }
-        cell.textLabel!.font = font
-        cell.layer.cornerRadius = 3
-        cell.selectionStyle = .None
-        return cell
     }
     
     //tableView点击事件
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell:UITableViewCell = tableView.cellForRowAtIndexPath(indexPath)!
-        //  cell.selectionStyle = .Default
         switch(indexPath.section){
         case 1:
             if indexPath.row == 0{
-            }else if indexPath.row == 1 && UserInfo.phoneNumber != "Visitor"{
+            }else if indexPath.row == 1 && UserInfo.nickname != "Visitor"{
                 let reachability = Reachability.reachabilityForInternetConnection()
                 if reachability!.isReachable(){
                     let ChangePassVC = ChangePaswordController()
@@ -328,12 +358,8 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         case 3:
             let AboutVc = AboutViewController()
             self.navigationController?.pushViewController(AboutVc, animated: true)
-            //            let alert = UIAlertController(title: "", message: "天津市大学软件学院\nswift语言开发团队", preferredStyle: .Alert)
-            //            let cancelAction = UIAlertAction(title: "确定", style: .Cancel, handler: nil)
-            //            alert.addAction(cancelAction)
-        //            self.presentViewController(alert, animated: true, completion: nil)
         case 4:
-            if UserInfo.phoneNumber == "Visitor"{
+            if UserInfo.nickname == "Visitor"{
                 UserInfo = UserInfoStruct()
                 self.presentViewController(PhoneNumberViewController(), animated: true, completion: nil)
             }
@@ -362,8 +388,37 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         cell.selectionStyle = .None
     }
     
+    
+    //统计缓存大小
+    func fileSizeOfCache()-> Int {
+        // 取出cache文件夹目录 缓存文件都在这个目录下
+        let cachePath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true).first
+        //缓存目录路径
+        print(cachePath)
+        // 取出文件夹下所有文件数组
+        let fileArr = NSFileManager.defaultManager().subpathsAtPath(cachePath!)
+        //快速枚举出所有文件名 计算文件大小
+        var size = 0
+        for file in fileArr! {
+            // 把文件名拼接到路径中
+            let path = cachePath?.stringByAppendingString("/\(file)")
+            // 取出文件属性
+            let floder = try! NSFileManager.defaultManager().attributesOfItemAtPath(path!)
+            // 用元组取出文件大小属性
+            for (abc, bcd) in floder {
+                // 累加文件大小
+                if abc == NSFileSize {
+                    size += bcd.integerValue
+                }
+            }
+        }
+        
+        let mm = size / 1024
+        
+        return mm
+    }
     //清理缓存
-    func clearCache(){
+    func clearCache() {
         let frame = CGRectMake(self.view.bounds.size.width/2-5, self.view.bounds.size.height/2-50, 10, 10)
         let indicator:UIActivityIndicatorView = UIActivityIndicatorView(frame: frame)
         indicator.activityIndicatorViewStyle = .WhiteLarge
@@ -371,59 +426,34 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         indicator.hidesWhenStopped = true
         self.view.addSubview(indicator)
         indicator.startAnimating()
-        //取出cache文件路径
-        let cachePath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true).first! as String
-        //打印路径
-        print(cachePath)
-        //取出文件夹下所有文件数组
-        let fileManager = NSFileManager.defaultManager()
-        if fileManager.fileExistsAtPath(cachePath){
-            let files = NSFileManager.defaultManager().subpathsAtPath(cachePath)
-            //统计文件夹所有文件大小
-            var big = Int()
-            for file in files!{
-                //拼接出文件路径
-                let path = cachePath.stringByAppendingFormat("/\(file)")
-                //取出文件属性
-                //print(path)
-                let floder = try! NSFileManager.defaultManager().attributesOfItemAtPath(path)
-                //用无组取出文件大小属性
-                for (abc,bcd) in floder{
-                    if abc == NSFileSize{
-                       // print("\(path)大小为\(bcd.integerValue)")
-                        big += bcd.integerValue
-                    }
-                }
-                
-            }
-            //提示框
-            var message = "\(big/(1024))K缓存"
-            if big/(1024*1024) >= 1 {
-                message = "\(big/(1024*1024))M缓存"
-            }
-            print(message)
-            let alert = UIAlertController(title: "清理缓存", message: message, preferredStyle: .Alert)
-            let alertConirm = UIAlertAction(title: "确定", style: .Default) { (alertConfirm) in
-                //点击确定时开始删除
-                indicator.stopAnimating()
-                for file in files!{
-                    let path = cachePath.stringByAppendingFormat("/\(file)")
-                    print("\(path)大小为")
-                    if NSFileManager.defaultManager().fileExistsAtPath(path){
-                        try! NSFileManager.defaultManager().removeItemAtPath(path)
+        // 取出cache文件夹目录 缓存文件都在这个目录下
+        let cachePath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true).first
+        // 取出文件夹下所有文件数组
+        let fileArr = NSFileManager.defaultManager().subpathsAtPath(cachePath!)
+        let message = "\(self.fileSizeOfCache())K缓存"
+        print(message)
+        let alert = UIAlertController(title: "清理缓存", message: message, preferredStyle: .Alert)
+        let alertConirm = UIAlertAction(title: "确定", style: .Default) { (alertConfirm) in
+            indicator.stopAnimating()
+            // 遍历删除
+            for file in fileArr! {
+                let path = cachePath?.stringByAppendingString("/\(file)")
+                if NSFileManager.defaultManager().fileExistsAtPath(path!) {
+                    do {
+                        try NSFileManager.defaultManager().removeItemAtPath(path!)
+                    } catch {
+                        
                     }
                 }
             }
-            alert.addAction(alertConirm)
-            let cancel = UIAlertAction(title: "取消", style: .Cancel) { (no) in
-                indicator.stopAnimating()
-            }
-            alert.addAction(cancel)
-            self.presentViewController(alert, animated: true) {}
         }
-    
+        alert.addAction(alertConirm)
+        let cancel = UIAlertAction(title: "取消", style: .Cancel) { (no) in
+            indicator.stopAnimating()
+        }
+        alert.addAction(cancel)
+        self.presentViewController(alert, animated: true) {}
     }
-    
     
     //nickname点击手势
     func onNicknameClicked(tapGesture:UITapGestureRecognizer){
