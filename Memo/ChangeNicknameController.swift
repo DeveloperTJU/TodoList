@@ -66,7 +66,7 @@ class ChangeNicknameController: UIViewController,UITextFieldDelegate ,UITableVie
         nicknameText.leftView = UIView(frame:CGRectMake(0, 0, 44, 44))
         nicknameText.leftViewMode = UITextFieldViewMode.Always
         let newImg =  UIImageView(frame:CGRectMake(11, 11, 22, 22))
-        newImg.image = UIImage(named:"默认头像小")
+        newImg.image = UIImage(named:"默认头像灰")
         nicknameText.leftView!.addSubview(newImg)
         cell.addSubview(nicknameText)
         cell.layer.cornerRadius = 3

@@ -118,6 +118,7 @@ class ChangePaswordController: UIViewController ,UITextFieldDelegate,UITableView
 
     }
     
+    
 //    //设置登录式UI界面
 //    func setMainView(){
 //        //获取屏幕尺寸
@@ -248,11 +249,17 @@ class ChangePaswordController: UIViewController ,UITextFieldDelegate,UITableView
     func getErrorType(oldPassword:String,newPassword:String,confirmPasswod:String) -> String{
         if oldPassword == ""{
             return "请输入原密码"
-        }else if newPassword == ""{
+        }else if newPassword.characters.count < 6{
+            return "密码不能少于6位数"
+        }
+        else if newPassword == ""{
             return "请输入新密码"
         }else if newPassword != confirmPasswod{
             return "密码不一致"
-        }else{
+        }else if newPassword == oldPassword{
+            return "密码与原密码相同"
+        }
+        else{
             return "ok"
         }
     }

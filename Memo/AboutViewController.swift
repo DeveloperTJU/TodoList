@@ -79,17 +79,16 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
     //设置第一行头像
     func setAvaterImage(){
         self.imageView = UIImageView(frame: CGRectMake(self.view.bounds.size.width/2 - cellHeight*5/6, 10, cellHeight * 5/3, cellHeight*5/3))
-        self.imageView.layer.cornerRadius = CGRectGetHeight(imageView.bounds)/2
+        print(imageView.bounds.width)
+        self.imageView.layer.cornerRadius = 10
         self.imageView.layer.masksToBounds = true
-        self.imageView.layer.borderColor = UIColor.grayColor().CGColor
-        self.imageView.layer.borderWidth = 1
-        let image = UIImage(named: "logo")
+        let image = UIImage(named: "Icon-76")
         self.imageView.image = image
     }
     
     //设置昵称
     func setversionText(){
-        let textFrame:CGRect = CGRectMake(self.view.bounds.size.width/2 - cellHeight*5/6-7, cellHeight*9/5, 100, 50)
+        let textFrame:CGRect = CGRectMake(self.view.bounds.size.width/2 - cellHeight*5/6-3, cellHeight*9/5, 100, 50)
         self.versionText = UILabel(frame: textFrame)
     }
     
@@ -196,7 +195,7 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
                 let frame:CGRect = CGRectMake(20, 0, 200, 200)
                 cell = UITableViewCell(frame: frame)
                 cell.addSubview(imageView)
-                self.versionText.text = "ToDoList v1.0.0"
+                self.versionText.text = "咕嘟笔记 v1.0"
                 cell.addSubview(versionText)
                 versionText.font = font
                 cell.selectionStyle = .None
