@@ -152,7 +152,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
     
     func tapped2(button:UIButton){
         UserInfo.phoneNumber = "Visitor"
-        UserInfo.nickname = "Visitor"
+        UserInfo.nickname = "游客"
         DatabaseService.sharedInstance.initDataTable()
         self.presentViewController(RootTabBarController(), animated: true, completion: nil)
         print(123)

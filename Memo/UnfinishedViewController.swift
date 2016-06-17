@@ -208,9 +208,8 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
                 formatter.setLocalizedDateFormatFromTemplate("yyyy-MM-dd HH:mm")
                 notification.fireDate = formatter.dateFromString(self.newItem.data.alertTime)
                 notification.alertBody = self.newItem.data.title
-                notification.alertAction = "be awesome!"
                 notification.soundName = UILocalNotificationDefaultSoundName
-                notification.userInfo = ["详情": self.newItem.data.content]
+                notification.userInfo = ["time": self.newItem.data.createTime]
                 UIApplication.sharedApplication().scheduleLocalNotification(notification)
             }
             self.reloadNewItem()
