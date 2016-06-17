@@ -58,7 +58,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         self.view.addSubview(vImg)
         
         //添加注册框
-        let vReg = UIView(frame:CGRectMake(10, 102, mainSize.width - 20, 176))
+        let vReg = UIView(frame:CGRectMake(10, 92, mainSize.width - 20, 176))
         self.view.addSubview(vReg)
         vReg.addSubview(MyRect(frame: CGRectMake(0, 41, mainSize.width - 20, 3)))
         vReg.addSubview(MyRect(frame: CGRectMake(0, 85, mainSize.width - 20, 3)))
@@ -110,7 +110,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         
         let buttonVerifyCode:UIButton = UIButton(type:.System)
         //设置按钮位置和大小
-        buttonVerifyCode.frame = CGRectMake(10, 290, vReg.frame.size.width , 44)
+        buttonVerifyCode.frame = CGRectMake(10, 280, vReg.frame.size.width , 44)
         buttonVerifyCode.backgroundColor = .grayColor()
         //设置按钮文字
         buttonVerifyCode.setTitle("注   册", forState:UIControlState.Normal)
@@ -122,7 +122,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         
         let buttonlogin:UIButton = UIButton(type:.System)
         //设置按钮位置和大小
-        buttonlogin.frame = CGRectMake(10, 340, 100, 22)
+        buttonlogin.frame = CGRectMake(10, 330, 100, 22)
         
         //设置按钮文字
         buttonlogin.setTitle("账号登录", forState:UIControlState.Normal)
@@ -132,7 +132,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         
         let buttonVisitor:UIButton = UIButton(type:.System)
         //设置按钮位置和大小
-        buttonVisitor.frame = CGRectMake(vReg.frame.size.width-85, 340, 100, 22)
+        buttonVisitor.frame = CGRectMake(vReg.frame.size.width-85, 330, 100, 22)
 
         //设置按钮文字
         buttonVisitor.setTitle("游客模式", forState:UIControlState.Normal)
