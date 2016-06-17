@@ -21,7 +21,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
         self.view.addSubview(vImg)
       
         //登录框背景
-        let vLogin = UIView(frame:CGRectMake(10, 190, mainSize.width - 20, 88))
+        let vLogin = UIView(frame:CGRectMake(10, 180, mainSize.width - 20, 88))
         self.view.addSubview(vLogin)
         vLogin.addSubview(MyRect(frame: CGRectMake(0, 41, mainSize.width - 20, 3)))
         vLogin.layer.cornerRadius = 3
@@ -59,7 +59,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
     
         let button:UIButton = UIButton(type:.System)
         //设置按钮位置和大小
-        button.frame = CGRectMake(10, 340, 100, 22)
+        button.frame = CGRectMake(10, 330, 100, 22)
 
         //设置按钮文字
         button.setTitle("立即注册", forState:UIControlState.Normal)
@@ -69,7 +69,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
         
         let button1:UIButton = UIButton(type:.System)
         //设置按钮位置和大小
-        button1.frame = CGRectMake(10, 290, vLogin.frame.size.width , 44)
+        button1.frame = CGRectMake(10, 280, vLogin.frame.size.width , 44)
         button1.backgroundColor = UIColor(red: 67/255, green: 67/255, blue: 67/255, alpha: 1)
         button1.tintColor = UIColor(red: 232/255, green: 208/255, blue: 120/255, alpha: 1)
         button1.layer.cornerRadius = 4
@@ -80,7 +80,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
         
         let button2:UIButton = UIButton(type:.System)
         //设置按钮位置和大小
-        button2.frame = CGRectMake(vLogin.frame.size.width-85, 340, 100, 22)
+        button2.frame = CGRectMake(vLogin.frame.size.width-85, 330, 100, 22)
         button2.tintColor = UIColor(red: 67/255, green: 67/255, blue: 67/255, alpha: 1)
         
         //设置按钮文字
@@ -99,6 +99,16 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
         let alert = UIAlertView(title: title, message: message, delegate: nil, cancelButtonTitle: "Back")
         alert.show()
     }
+    func showAlert(message:String){
+        let alert = UIAlertController(title: "提示", message: message, preferredStyle: .Alert)
+        let cancelAction = UIAlertAction(title: "确定", style: .Cancel, handler: { (cancelAction) in
+            if message == "上传数据失败"{
+                self.navigationController?.popViewControllerAnimated(true)
+            }
+        })
+        alert.addAction(cancelAction)
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
     
     func tapped(button:UIButton){
         self.presentViewController(PhoneNumberViewController(), animated: true, completion: nil)
@@ -106,10 +116,10 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
     
     func tapped1(button:UIButton){
         if txtUser.text! == "" {
-            alertWindow("提示", message: "请输入用户名")
+            showAlert("请输入用户名")
         }
         else if txtPwd.text! == "" {
-            alertWindow("提示", message: "请输入密码")
+            showAlert("请输入密码")
         }
         else {
             UserInfo.phoneNumber = txtUser.text!
@@ -129,12 +139,12 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
                     RequestAPI.SynchronizeTask(0)
                 }
                 else{
-                    self.alertWindow("提示", message: "用户名或密码错误")
+                    self.showAlert("用户名或密码错误")
                 }
             }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
                 //失败回调
                 print("网络调用失败:\(error)")
-                self.alertWindow("提示", message: "网络连接有问题")
+                self.showAlert("网络连接有问题")
                 
             }
         }
