@@ -122,7 +122,7 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
         newItem.alertButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 12.0)
         newItem.alertButton.setTitleColor(.blackColor(),forState: .Normal)
         newItem.alertButton.addTarget(self, action: Selector("selectDate"), forControlEvents: .TouchDown)
-        newItem.alertButton.frame = CGRectMake(otherLimitFrame.width-108, 42, 100, 32)
+        newItem.alertButton.frame = CGRectMake(otherLimitFrame.width-106, 42, 100, 32)
         
         newItem.firstLineView.addSubview(newItem.addButton)
         newItem.firstLineView.addSubview(newItem.addTextField)
@@ -259,7 +259,9 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
         let y:CGFloat = self.newItem.isExpanded ? 0 : 74
         self.newItem.isExpanded = !self.newItem.isExpanded
         let height:CGFloat = self.newItem.isExpanded ? 118 : 54
+        self.mainTableView.beginUpdates()
         self.newItem.mainView.frame = CGRectMake(0, 0, self.view.bounds.width, height)
+        self.mainTableView.endUpdates()
         UIView.animateWithDuration(0.2, delay: 0, options: UIViewAnimationOptions.TransitionNone, animations: {
             self.mainTableView.beginUpdates()
             self.newItem.otherView.layer.setAffineTransform(CGAffineTransformMakeTranslation(0, y))
