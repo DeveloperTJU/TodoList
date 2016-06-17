@@ -14,15 +14,7 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
     var imageView = UIImageView()
     var dataArrs:[[String]] = [[String]]()
     var versionText:UILabel!
-    var urlText1:UrlLabel = UrlLabel()
-    var urlText2:UrlLabel = UrlLabel()
-    var urlText3:UrlLabel = UrlLabel()
-    var urlText4:UrlLabel = UrlLabel()
-    var urlText5:UrlLabel = UrlLabel()
-    var urlText6:UrlLabel = UrlLabel()
-    var urlText7:UrlLabel = UrlLabel()
-    var urlText8:UrlLabel = UrlLabel()
-    var dataArr:[UrlLabel]!
+    var urls = [UILabel]()
     var cellHeight:CGFloat = 0.0
     
     override func viewDidLoad() {
@@ -31,6 +23,12 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
         self.title = "关于我们"
         initDataArrs()
         cellHeight = (self.view.bounds.size.height - 112) / 13
+        
+        let textFrame:CGRect = CGRectMake(self.view.bounds.size.width * 0.55, 0, self.view.bounds.size.width * 0.4, cellHeight)
+        for i in 0 ..< 8{
+            urls.append(UILabel(frame: textFrame))
+            urls[i].font = UIFont(name: "HelveticaNeue-Thin", size: 11.0)
+        }
 
         self.setTableView()
         //添加头像
@@ -134,7 +132,7 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
         cell.textLabel!.font = font
         if indexPath.section == 1 && indexPath.row == 0{
             tableView.separatorStyle = .SingleLine
-            let frame:CGRect = CGRectMake(self.view.bounds.size.width - 250, 0, 200, 42)
+            let frame:CGRect = CGRectMake(self.view.bounds.size.width - 250, 0, 200, cellHeight)
             let developerText = UILabel(frame: frame)
             developerText.text = "tju酱油一号"
             developerText.textAlignment = .Right
@@ -143,43 +141,27 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
         }
         else if indexPath.section == 2 && indexPath.row > 0{
             cell.textLabel?.textAlignment = .Left
-            cell.textLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 14.0)
             tableView.separatorStyle = .SingleLine
             cell.textLabel?.autoresizingMask = UIViewAutoresizing.FlexibleWidth
-            let textFrame:CGRect = CGRectMake(self.view.bounds.size.width - 200,4,180,34)
+            let url = urls[indexPath.row - 1]
+            cell.addSubview(url)
             switch(indexPath.row){
             case 1:
-                urlText1 = UrlLabel(frame: textFrame)
-                urlText1.text = "GitHub.com/xuexcy"
-                cell.addSubview(urlText1)
+                url.text = "GitHub.com/xuexcy"
             case 2:
-                urlText2 = UrlLabel(frame: textFrame)
-                urlText2.text = "GitHub.com/CodeInDreams"
-                cell.addSubview(urlText2)
+                url.text = "hui068323@gmail.com"
             case 3:
-                urlText3 = UrlLabel(frame: textFrame)
-                urlText3.text = "GitHub.com/hyiszcx"
-                cell.addSubview(urlText3)
+                url.text = "GitHub.com/hyiszcx"
             case 4:
-                urlText4 = UrlLabel(frame: textFrame)
-                urlText4.text = "GitHub.com/hailuy"
-                cell.addSubview(urlText4)
+                url.text = "GitHub.com/hailuy"
             case 5:
-                urlText5 = UrlLabel(frame: textFrame)
-                urlText5.text = "GitHub.com/luvianlan"
-                cell.addSubview(urlText5)
+                url.text = "GitHub.com/luvianlan"
             case 6:
-                urlText6 = UrlLabel(frame: textFrame)
-                urlText6.text = "GitHub.com/lixuntao"
-                cell.addSubview(urlText6)
+                url.text = "GitHub.com/lixuntao"
             case 7:
-                urlText7 = UrlLabel(frame: textFrame)
-                urlText7.text = "GitHub.com/tysb"
-                cell.addSubview(urlText7)
+                url.text = "GitHub.com/tysb"
             case 8:
-                urlText8 = UrlLabel(frame: textFrame)
-                urlText8.text = "GitHub.com/yangyaohua"
-                cell.addSubview(urlText8)
+                url.text = "1007531454@qq.com"
             default:
                 break
             }
