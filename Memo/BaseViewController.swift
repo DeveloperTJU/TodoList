@@ -398,10 +398,10 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.updateInServer(data)
             if data.alertTime != ""{
                 if isFinished!{
-                    self.removeNotification(createTime)
+                    self.addNotification(data)
                 }
                 else{
-                    self.addNotification(data)
+                    self.removeNotification(createTime)
                 }
             }
             self.dataArr.removeAtIndex(row)

@@ -214,31 +214,31 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
             let localArray:NSArray = app.scheduledLocalNotifications!
             //声明本地通知对象
 //            var localNotification:UILocalNotification!
-            if (localArray.count != 0) {
-                for noti in localArray as! [UILocalNotification] {
-                    
-                    let dict:NSDictionary = noti.userInfo!
-                    let inKey:NSString = String(dict.objectForKey("time"))
-                    if (inKey == self.currentList.createTime) {
-                        //不推送 取消推送
-                        app.cancelLocalNotification(noti)
-                        break;
-                    }
-                }
-            }
+//            if (localArray.count != 0) {
+//                for noti in localArray as! [UILocalNotification] {
+//                    
+//                    let dict:NSDictionary = noti.userInfo!
+//                    let inKey:NSString = String(dict.objectForKey("time"))
+//                    if (inKey == self.currentList.createTime) {
+//                        //不推送 取消推送
+//                        app.cancelLocalNotification(noti)
+//                        break;
+//                    }
+//                }
+//            }
             
             //创建新的提醒
-            if(self.tempAlert != ""){
-                let notification = UILocalNotification()
-                let formatter2 = NSDateFormatter()
-                formatter2.locale = NSLocale(localeIdentifier: "zh_CN")
-                formatter2.setLocalizedDateFormatFromTemplate("yyyy-MM-dd HH:mm")
-                notification.fireDate = formatter.dateFromString(self.tempAlert)
-                notification.alertBody = self.currentList.title
-                notification.soundName = UILocalNotificationDefaultSoundName
-                notification.userInfo = ["time": self.currentList.createTime]
-                UIApplication.sharedApplication().scheduleLocalNotification(notification)
-            }
+//            if(self.tempAlert != ""){
+//                let notification = UILocalNotification()
+//                let formatter2 = NSDateFormatter()
+//                formatter2.locale = NSLocale(localeIdentifier: "zh_CN")
+//                formatter2.setLocalizedDateFormatFromTemplate("yyyy-MM-dd HH:mm")
+//                notification.fireDate = formatter.dateFromString(self.tempAlert)
+//                notification.alertBody = self.currentList.title
+//                notification.soundName = UILocalNotificationDefaultSoundName
+//                notification.userInfo = ["time": self.currentList.createTime]
+//                UIApplication.sharedApplication().scheduleLocalNotification(notification)
+//            }
             
             currentList.alertTime = self.tempAlert
             UnfinishedVC.updateData(currentList)

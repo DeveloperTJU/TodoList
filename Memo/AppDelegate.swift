@@ -51,7 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if state == .Active{
             let alert = UIAlertController(title: "提醒", message: "notification.alertBody?.substringFromIndex()", preferredStyle: .Alert)
             alert.addAction(UIAlertAction(title: "我知道了", style: .Cancel, handler: nil))
-            self.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
+            self.window?.rootViewController!.presentViewController(alert, animated: true, completion: nil)
         }
     }
     
