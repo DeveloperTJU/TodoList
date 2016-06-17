@@ -11,12 +11,11 @@ import UIKit
 class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
 
     
-    var phoneText:UITextField!
+    var txtPhoneNumber:UITextField!
     var txtPwd:UITextField!
     var txtVerifyCode:UITextField!
     var txtNickname:UITextField!
-    var register:UIButton!
-    var sendVerifyCode:UIButton!
+    var buttonVerifyCode:UIButton!
     var countdownTimer: NSTimer?
     var isCounting = false {
         willSet {
@@ -26,24 +25,20 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
             } else {
                 countdownTimer?.invalidate()
                 countdownTimer = nil
-                
-            }
-            register.enabled = !newValue
-        }
-    }
-    var remainingSeconds: Int = 0 {
-        willSet {
-            self.register.backgroundColor = UIColor(patternImage: UIImage(named: "发验证码框")!)
-            register.setTitle("\(newValue)秒后重新获取", forState: .Normal)
-            if newValue <= 0 {
-                self.register.backgroundColor = UIColor(patternImage: UIImage(named: "发验证码框")!)
-                register.setTitle("重新获取验证码", forState: .Normal)
-                isCounting = false
             }
         }
     }
     
-    var VerifyCodeRight:Bool = false
+    var remainingSeconds: Int = 0 {
+        willSet {
+            buttonVerifyCode.setTitle("\(newValue)秒后重新获取", forState: .Normal)
+            if newValue <= 0 {
+                buttonVerifyCode.enabled = true
+                buttonVerifyCode.setTitle("重新获取验证码", forState: .Normal)
+                isCounting = false
+            }
+        }
+    }
     
     override func viewDidLoad() {
         
@@ -67,12 +62,12 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         vReg.backgroundColor = .whiteColor()
         
         //手机号输入框
-        phoneText = UITextField(frame:CGRectMake(0, 0, vReg.frame.size.width-122, 44))
-        self.createTextField(phoneText,isPasswordTextfield: false, hint: "手机号码")
-        self.addImageToTextfield(phoneText, imageName: "灰手机")
-        vReg.addSubview(phoneText)
-        phoneText.clearButtonMode = .WhileEditing
-        phoneText.keyboardType = UIKeyboardType.NumberPad
+        txtPhoneNumber = UITextField(frame:CGRectMake(0, 0, vReg.frame.size.width-122, 44))
+        self.createTextField(txtPhoneNumber,isPasswordTextfield: false, hint: "手机号码")
+        self.addImageToTextfield(txtPhoneNumber, imageName: "灰手机")
+        vReg.addSubview(txtPhoneNumber)
+        txtPhoneNumber.clearButtonMode = .WhileEditing
+        txtPhoneNumber.keyboardType = UIKeyboardType.NumberPad
         
         //密码输入框
         txtPwd = UITextField(frame:CGRectMake(0, 132, vReg.frame.size.width , 44))
@@ -92,33 +87,33 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         //昵称输入框
         txtNickname = UITextField(frame:CGRectMake(0, 88, vReg.frame.size.width, 44))
         self.createTextField(txtNickname, isPasswordTextfield: false, hint: "请输入昵称")
-        self.addImageToTextfield(txtNickname, imageName: "默认头像小")
+        self.addImageToTextfield(txtNickname, imageName: "默认头像灰")
         vReg.addSubview(txtNickname)
         txtNickname.clearButtonMode = .WhileEditing
         
-        self.register = UIButton(type: .Custom)
+        self.buttonVerifyCode = UIButton(type: .Custom)
         //设置按钮位置和大小
-        self.register.frame = CGRectMake(vReg.frame.size.width - 125, 7, 114, 31)
-        self.register.tintColor = UIColor(red: 232/255, green: 208/255, blue: 120/255, alpha: 1)
+        self.buttonVerifyCode.frame = CGRectMake(vReg.frame.size.width - 125, 7, 114, 31)
+        self.buttonVerifyCode.tintColor = UIColor(red: 232/255, green: 208/255, blue: 120/255, alpha: 1)
         //设置按钮文字
-        self.register.backgroundColor = UIColor(patternImage: UIImage(named: "发验证码框")!)
-        self.register.setTitle("发送验证码", forState:.Normal)
-        self.register.setTitleColor(UIColor(red: 232/255, green: 208/255, blue: 120/255, alpha: 1), forState: .Normal)
-        self.register.addTarget(self, action:Selector("tapped:"),forControlEvents: .TouchUpInside)
-        self.register.titleLabel?.font = UIFont.boldSystemFontOfSize(14)
-        vReg.addSubview(self.register)
+        self.buttonVerifyCode.backgroundColor = UIColor(patternImage: UIImage(named: "发验证码框")!)
+        self.buttonVerifyCode.setTitle("发送验证码", forState:.Normal)
+        self.buttonVerifyCode.setTitleColor(UIColor(red: 232/255, green: 208/255, blue: 120/255, alpha: 1), forState: .Normal)
+        self.buttonVerifyCode.addTarget(self, action:Selector("tapped:"),forControlEvents: .TouchUpInside)
+        self.buttonVerifyCode.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 13.0)
+        vReg.addSubview(self.buttonVerifyCode)
         
-        let buttonVerifyCode:UIButton = UIButton(type:.System)
+        let ButtonRegister:UIButton = UIButton(type:.System)
         //设置按钮位置和大小
-        buttonVerifyCode.frame = CGRectMake(10, 280, vReg.frame.size.width , 44)
-        buttonVerifyCode.backgroundColor = .grayColor()
+        ButtonRegister.frame = CGRectMake(10, 280, vReg.frame.size.width , 44)
+        ButtonRegister.backgroundColor = .grayColor()
         //设置按钮文字
-        buttonVerifyCode.setTitle("注   册", forState:UIControlState.Normal)
-        buttonVerifyCode.backgroundColor = UIColor(red: 67/255, green: 67/255, blue: 67/255, alpha: 1)
-        buttonVerifyCode.tintColor = UIColor(red: 232/255, green: 208/255, blue: 120/255, alpha: 1)
-        buttonVerifyCode.addTarget(self, action:Selector("tapped1:"),forControlEvents: .TouchUpInside)
-        buttonVerifyCode.layer.cornerRadius = 4
-        self.view.addSubview(buttonVerifyCode)
+        ButtonRegister.setTitle("注   册", forState:UIControlState.Normal)
+        ButtonRegister.backgroundColor = UIColor(red: 67/255, green: 67/255, blue: 67/255, alpha: 1)
+        ButtonRegister.tintColor = UIColor(red: 232/255, green: 208/255, blue: 120/255, alpha: 1)
+        ButtonRegister.addTarget(self, action:Selector("tapped1:"),forControlEvents: .TouchUpInside)
+        ButtonRegister.layer.cornerRadius = 4
+        self.view.addSubview(ButtonRegister)
         
         let buttonlogin:UIButton = UIButton(type:.System)
         //设置按钮位置和大小
@@ -148,7 +143,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
     }
     
     func hideKeyboard(){
-        phoneText.resignFirstResponder()
+        txtPhoneNumber.resignFirstResponder()
         txtPwd.resignFirstResponder()
         txtVerifyCode.resignFirstResponder()
         txtNickname.resignFirstResponder()
@@ -188,8 +183,8 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
     
     //发送验证码
     func tapped(button:UIButton){
-        self.register.enabled = false
-        let phoneNum = phoneText.text
+        button.enabled = false
+        let phoneNum = txtPhoneNumber.text
         SMSSDK.getVerificationCodeByMethod(SMSGetCodeMethodSMS, phoneNumber:phoneNum, zone: "86",customIdentifier: nil,result: {(error: NSError!) ->Void in
             if(error == nil){
                 NSLog("发送成功")
@@ -197,62 +192,48 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
             }else{
                 self.showAlert("发送失败")
                 print(error.debugDescription)
-                self.register.enabled = true
-                
+                button.enabled = true
             }
-            
         })
     }
     
     //13207620165
     func tapped1(button:UIButton){
-        
+        button.enabled = false
         let authCode = txtVerifyCode.text
-        let phoneNum = phoneText.text
-        var resultMessage:String = ""
+        let phoneNum = txtPhoneNumber.text
         if checkPassword(){
-            SMSSDK.commitVerificationCode(authCode, phoneNumber: phoneNum, zone: "86" ,
-                                          result:{ (error: NSError!) -> Void in
-                                            if(error == nil){
-                                                resultMessage = "恭喜您，验证成功！"
-                                                NSLog("验证成功")
-                                                self.VerifyCodeRight = true
-                                                UserInfo.phoneNumber = self.phoneText.text!
-                                                let url:String = "index.php/Home/User/SignUp"
-                                                let paramDict:Dictionary = ["user_phoneNumber": UserInfo.phoneNumber, "user_psw":self.txtPwd.text!.md5, "user_nickname":self.txtNickname.text!]
-                                                RequestAPI.POST(url, body: paramDict, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
-                                                    //成功回调
-                                                    let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
-                                                    //注册成功
-                                                    if resultDict["isSuccess"] as! Int == 1{
-                                                        self.showAlert("注册成功!")
-                                                        self.presentViewController(LogInViewController(), animated: true, completion: nil)
-                                                    }
-                                                    else{
-                                                        self.showAlert("注册失败!")
-                                                    }
-                                                }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
-                                                    //失败回调
-                                                    print("网络调用失败:\(error)")
-                                                    self.showAlert("网络连接有问题")
-
-                                                }
-                                                
-                                            }else{
-                                                resultMessage = "很抱歉，验证失败！"
-                                                NSLog("验证失败！" , error)
-                                                self.VerifyCodeRight = false
-                                                self.showAlert("验证失败")
-                                                
-                                            }
-                                            //self.alertWindow("验证结果789", message: resultMessage)
+            SMSSDK.commitVerificationCode(authCode, phoneNumber: phoneNum, zone: "86", result:{ (error: NSError!) -> Void in
+                if(error == nil){
+                    NSLog("验证成功")
+                    UserInfo.phoneNumber = self.txtPhoneNumber.text!
+                    let url:String = "index.php/Home/User/SignUp"
+                    let paramDict:Dictionary = ["user_phoneNumber": UserInfo.phoneNumber, "user_psw":self.txtPwd.text!.md5, "user_nickname":self.txtNickname.text!]
+                    RequestAPI.POST(url, body: paramDict, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
+                        //成功回调
+                        button.enabled = true
+                        let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
+                        //注册成功
+                        if resultDict["isSuccess"] as! Int == 1{
+                            self.showAlert("注册成功")
+                            self.presentViewController(LogInViewController(), animated: true, completion: nil)
+                        }
+                        else{
+                            self.showAlert("账号已存在")
+                        }
+                    }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
+                        //失败回调
+                        button.enabled = true
+                        print("网络调用失败:\(error)")
+                        self.showAlert("网络连接失败")
+                    }
+                }else{
+                    NSLog("验证失败！" , error)
+                    self.showAlert("验证失败")
+                    button.enabled = true
+                }
             })
-            
         }
-//        else{
-//            
-//            alertWindow("提示", message: "密码格式错误")
-//        }
     }
 
     func tapped2(button:UIButton){
@@ -261,30 +242,9 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
     
     func tapped3(button:UIButton){
         UserInfo.phoneNumber = "Visitor"
-        UserInfo.nickname = "Visitor"
+        UserInfo.nickname = "游客"
         DatabaseService.sharedInstance.initDataTable()
         self.presentViewController(RootTabBarController(), animated: true, completion: nil)
-    }
-    
-    func submitAuthCode() -> Void{
-        let authCode = txtVerifyCode.text
-        let phoneNum = phoneText.text
-        var resultMessage = ""
-        self.VerifyCodeRight = false
-        SMSSDK.commitVerificationCode(authCode, phoneNumber: phoneNum, zone: "86", result:{ (error: NSError!) -> Void in
-            if(error == nil){
-                resultMessage = "恭喜您，验证成功！"
-                NSLog("验证成功")
-                self.VerifyCodeRight = true
-                
-            }else{
-                resultMessage = "很抱歉，验证失败！"
-                NSLog("验证失败！" , error)
-                self.VerifyCodeRight = false
-                
-            }
-            self.showAlert(resultMessage)
-        })
     }
     
     func checkPassword() -> Bool  {
