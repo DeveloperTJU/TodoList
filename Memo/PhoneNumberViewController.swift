@@ -175,6 +175,16 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         let alert : UIAlertView = UIAlertView(title: title, message: message, delegate: nil, cancelButtonTitle: "Back")
         alert.show()
     }
+    func showAlert(message:String){
+        let alert = UIAlertController(title: "提示", message: message, preferredStyle: .Alert)
+        let cancelAction = UIAlertAction(title: "确定", style: .Cancel, handler: { (cancelAction) in
+            if message == "上传数据失败"{
+                self.navigationController?.popViewControllerAnimated(true)
+            }
+        })
+        alert.addAction(cancelAction)
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
     
     //发送验证码
     func tapped(button:UIButton){
@@ -185,7 +195,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
                 NSLog("发送成功")
                 self.isCounting = true
             }else{
-                self.alertWindow("提示", message: "发送失败")
+                self.showAlert("发送失败")
                 print(error.debugDescription)
                 self.register.enabled = true
                 
@@ -215,16 +225,16 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
                                                     let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
                                                     //注册成功
                                                     if resultDict["isSuccess"] as! Int == 1{
-                                                        self.alertWindow("成功", message: "注册成功!")
+                                                        self.showAlert("注册成功!")
                                                         self.presentViewController(LogInViewController(), animated: true, completion: nil)
                                                     }
                                                     else{
-                                                        self.alertWindow("提示", message: "注册失败!")
+                                                        self.showAlert("注册失败!")
                                                     }
                                                 }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
                                                     //失败回调
                                                     print("网络调用失败:\(error)")
-                                                    self.alertWindow("提示", message: "网络连接有问题")
+                                                    self.showAlert("网络连接有问题")
 
                                                 }
                                                 
@@ -232,7 +242,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
                                                 resultMessage = "很抱歉，验证失败！"
                                                 NSLog("验证失败！" , error)
                                                 self.VerifyCodeRight = false
-                                                self.alertWindow("提示", message: "验证失败")
+                                                self.showAlert("验证失败")
                                                 
                                             }
                                             //self.alertWindow("验证结果789", message: resultMessage)
@@ -273,18 +283,18 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
                 self.VerifyCodeRight = false
                 
             }
-            self.alertWindow("验证结果", message: resultMessage)
+            self.showAlert(resultMessage)
         })
     }
     
     func checkPassword() -> Bool  {
         if txtPwd.text == Optional(""){
-            alertWindow("错误", message: "密码为空")
+            showAlert("密码为空")
             print("used")
             return false
         }
         else if txtPwd.text?.characters.count < 6{
-            alertWindow("错误", message: "密码至少是六位")
+            showAlert("密码至少是六位")
             return false
         }
         return true

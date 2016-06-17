@@ -99,6 +99,16 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
         let alert = UIAlertView(title: title, message: message, delegate: nil, cancelButtonTitle: "Back")
         alert.show()
     }
+    func showAlert(message:String){
+        let alert = UIAlertController(title: "提示", message: message, preferredStyle: .Alert)
+        let cancelAction = UIAlertAction(title: "确定", style: .Cancel, handler: { (cancelAction) in
+            if message == "上传数据失败"{
+                self.navigationController?.popViewControllerAnimated(true)
+            }
+        })
+        alert.addAction(cancelAction)
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
     
     func tapped(button:UIButton){
         self.presentViewController(PhoneNumberViewController(), animated: true, completion: nil)
@@ -106,10 +116,10 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
     
     func tapped1(button:UIButton){
         if txtUser.text! == "" {
-            alertWindow("提示", message: "请输入用户名")
+            showAlert("请输入用户名")
         }
         else if txtPwd.text! == "" {
-            alertWindow("提示", message: "请输入密码")
+            showAlert("请输入密码")
         }
         else {
             UserInfo.phoneNumber = txtUser.text!
@@ -129,12 +139,12 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
                     RequestAPI.SynchronizeTask(0)
                 }
                 else{
-                    self.alertWindow("提示", message: "用户名或密码错误")
+                    self.showAlert("用户名或密码错误")
                 }
             }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
                 //失败回调
                 print("网络调用失败:\(error)")
-                self.alertWindow("提示", message: "网络连接有问题")
+                self.showAlert("网络连接有问题")
                 
             }
         }
