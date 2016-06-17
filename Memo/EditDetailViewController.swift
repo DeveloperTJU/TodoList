@@ -208,37 +208,35 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
             formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
             currentList.lastEditTime = formatter.stringFromDate(NSDate())
             
-            // 获得 UIApplication
-            let app:UIApplication = UIApplication.sharedApplication()
-            //获取本地推送数组
-            let localArray:NSArray = app.scheduledLocalNotifications!
-            //声明本地通知对象
-//            var localNotification:UILocalNotification!
-            if (localArray.count != 0) {
-                for noti in localArray as! [UILocalNotification] {
-                    
-                    let dict:NSDictionary = noti.userInfo!
-                    let inKey:NSString = String(dict.objectForKey("time"))
-                    if (inKey == self.currentList.createTime) {
-                        //不推送 取消推送
-                        app.cancelLocalNotification(noti)
-                        break;
-                    }
-                }
-            }
-            
-            //创建新的提醒
-            if(self.tempAlert != ""){
-                let notification = UILocalNotification()
-                let formatter2 = NSDateFormatter()
-                formatter2.locale = NSLocale(localeIdentifier: "zh_CN")
-                formatter2.setLocalizedDateFormatFromTemplate("yyyy-MM-dd HH:mm")
-                notification.fireDate = formatter.dateFromString(self.tempAlert)
-                notification.alertBody = self.currentList.title
-                notification.soundName = UILocalNotificationDefaultSoundName
-                notification.userInfo = ["time": self.currentList.createTime]
-                UIApplication.sharedApplication().scheduleLocalNotification(notification)
-            }
+//            // 获得 UIApplication
+//            let app:UIApplication = UIApplication.sharedApplication()
+//            //获取本地推送数组
+//            let localArray:NSArray = app.scheduledLocalNotifications!
+//            if (localArray.count != 0) {
+//                for noti in localArray as! [UILocalNotification] {
+//                    
+//                    let dict:NSDictionary = noti.userInfo!
+//                    let inKey:NSString = String(dict.objectForKey("time"))
+//                    if (inKey == self.currentList.createTime) {
+//                        //不推送 取消推送
+//                        app.cancelLocalNotification(noti)
+//                        break;
+//                    }
+//                }
+//            }
+//            
+//            //创建新的提醒
+//            if(self.tempAlert != ""){
+//                let notification = UILocalNotification()
+//                let formatter2 = NSDateFormatter()
+//                formatter2.locale = NSLocale(localeIdentifier: "zh_CN")
+//                formatter2.setLocalizedDateFormatFromTemplate("yyyy-MM-dd HH:mm")
+//                notification.fireDate = formatter.dateFromString(self.tempAlert)
+//                notification.alertBody = self.currentList.title
+//                notification.soundName = UILocalNotificationDefaultSoundName
+//                notification.userInfo = ["time": self.currentList.createTime]
+//                UIApplication.sharedApplication().scheduleLocalNotification(notification)
+//            }
             
             currentList.alertTime = self.tempAlert
             UnfinishedVC.updateData(currentList)
@@ -259,7 +257,7 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
         datePicker.locale = NSLocale(localeIdentifier: "zh_CN")
         datePicker.date = NSDate()
         datePicker.frame = CGRectMake(0, 0, alertController.view.bounds.width-25, 200)
-        alertController.addAction(UIAlertAction(title: "确定", style: UIAlertActionStyle.Default){
+        alertController.addAction(UIAlertAction(title: "设置提醒", style: UIAlertActionStyle.Default){
             (alertAction)->Void in
             print("date select: \(datePicker.date.description)")
             let formatter = NSDateFormatter()
@@ -269,7 +267,7 @@ class EditDetailViewController: UIViewController, UITextFieldDelegate, UITextVie
             self.timeButton.setTitle(self.tempAlert, forState:UIControlState.Normal)
             })
         
-        alertController.addAction(UIAlertAction(title: "取消提醒", style: UIAlertActionStyle.Default){
+        alertController.addAction(UIAlertAction(title: "关闭提醒", style: UIAlertActionStyle.Default){
             (alertAction)->Void in
             
             self.tempAlert = ""
