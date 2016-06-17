@@ -27,7 +27,7 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
         let textFrame:CGRect = CGRectMake(self.view.bounds.size.width * 0.55, 0, self.view.bounds.size.width * 0.4, cellHeight)
         for i in 0 ..< 8{
             urls.append(UILabel(frame: textFrame))
-            urls[i].font = UIFont(name: "HelveticaNeue-Thin", size: 11.0)
+            urls[i].font = UIFont(name: "HelveticaNeue-Thin", size: 10.0)
         }
 
         self.setTableView()
@@ -147,7 +147,7 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
             cell.addSubview(url)
             switch(indexPath.row){
             case 1:
-                url.text = "GitHub.com/xuexcy"
+                url.text = "xuechengyunxue@gmail.com"
             case 2:
                 url.text = "hui068323@gmail.com"
             case 3:
