@@ -51,11 +51,11 @@ class ChangeNicknameController: UIViewController,UITextFieldDelegate ,UITableVie
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let frame:CGRect = CGRectMake(10, 0, self.view.bounds.size.width, 20)
         let cell = UITableViewCell(frame: frame)
-        cell.textLabel?.text = "新昵称： "
+        //cell.textLabel?.text = "新昵称： "
         cell.selectionStyle = .None
         let font = UIFont(name: "HelveticaNeue-Thin", size: 14.0)
         cell.textLabel?.font = font
-        let textFrame:CGRect = CGRectMake(80,2,self.view.bounds.size.width - 110,40)
+        let textFrame:CGRect = CGRectMake(0,2,self.view.bounds.size.width-10,40)
         nicknameText = UITextField(frame: textFrame)
         nicknameText.becomeFirstResponder()
         nicknameText.text = UserInfo.nickname
@@ -63,6 +63,11 @@ class ChangeNicknameController: UIViewController,UITextFieldDelegate ,UITableVie
         nicknameText.layer.cornerRadius = 5
         nicknameText.textColor = UIColor.blackColor()
         nicknameText.clearButtonMode = .WhileEditing
+        nicknameText.leftView = UIView(frame:CGRectMake(0, 0, 44, 44))
+        nicknameText.leftViewMode = UITextFieldViewMode.Always
+        let newImg =  UIImageView(frame:CGRectMake(11, 11, 22, 22))
+        newImg.image = UIImage(named:"默认头像小")
+        nicknameText.leftView!.addSubview(newImg)
         cell.addSubview(nicknameText)
         cell.layer.cornerRadius = 3
         return cell

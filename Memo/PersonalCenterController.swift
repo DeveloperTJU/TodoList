@@ -24,8 +24,8 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     
     //获取本地存储图像的方法如下
     //let documentPath:String = NSHomeDirectory() as String
-    //self.imagePath = documentPath.stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png")
-    //存储路径为：NSHomeDirectory/Documents/phoneNumber.md5.png
+    //self.imagePath = documentPath.stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).jpg")
+    //存储路径为：NSHomeDirectory/Documents/phoneNumber.md5.jpg
     
     
     //由于同一时间内存中只有一个User，所以删除User模型，使用全局常量UserInfo存储当前用户信息，用户中心只用到nickname和phoneNumber。头像使用UserInfo.phoneNumber.md5作为文件名，从服务器获得并存入资源文件夹。
@@ -56,7 +56,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     override func viewWillAppear(animated: Bool) {
         self.nicknameText.text = UserInfo.nickname == "" ? UserInfo.phoneNumber : UserInfo.nickname
         if UserInfo.avatar == nil{
-            UserInfo.avatar = UIImage(named: "黑邮件")
+            UserInfo.avatar = UIImage(named: "默认头像小")
         }
         self.imageView.image = UserInfo.avatar
     }
@@ -170,33 +170,34 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     //保存图片到本地和服务器
     func saveLocalImage(tempImg:UIImage){
         UserInfo.avatar = UIImage(CGImage: tempImg.CGImage!, scale: 2, orientation: .Up)
-        let imageData = UIImagePNGRepresentation(tempImg)
+        let imageData = UIImageJPEGRepresentation(tempImg, 1)
         //保存至本地
-        imageData?.writeToFile((NSHomeDirectory() as String).stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png"), atomically: true)
+        imageData?.writeToFile((NSHomeDirectory() as String).stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).jpg"), atomically: true)
         
-        print("图片存储路径为：\(NSHomeDirectory() as String)/Documents")
-       
-
-
-                    //上传至服务
+        //上传至服务
         RequestAPI.UploadPicture("upload.php", body: nil, block: { (formData:AFMultipartFormData!) in
-                    formData.appendPartWithFileData(imageData!, name: "upload", fileName: UserInfo.phoneNumber.md5, mimeType: "image/png")
-                    }, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject? ) in
-        //                let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
-                        print("this is \(responseObject)")
-                    }) { (task:NSURLSessionDataTask?, error:NSError?) in
-                        //failure
-                        print("")
-                }
+            formData.appendPartWithFileData(imageData!, name: "file", fileName: UserInfo.phoneNumber.md5, mimeType: "image/jpg")
+            }, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject? ) in
+                let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                hud.mode = MBProgressHUDMode.Text
+                hud.label.text = "上传头像成功"
+                hud.hideAnimated(true, afterDelay: 0.5)
+            }) { (task:NSURLSessionDataTask?, error:NSError?) in
+                //failure
+                let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                hud.mode = MBProgressHUDMode.Text
+                hud.label.text = "上传头像失败"
+                hud.hideAnimated(true, afterDelay: 0.5)
+        }
 
     }
     
     //从服务器下载头像
     static func loadAvatarImg()->Void{
         //load pitcure
-        let loadedData = NSData(contentsOfURL: NSURL(string: "\(RequestClient.URL)/uploadimg/\(UserInfo.phoneNumber.md5).png")!)
+        let loadedData = NSData(contentsOfURL: NSURL(string: "\(RequestClient.URL)/uploadimg/\(UserInfo.phoneNumber.md5).jpg")!)
         //存储到本地
-        loadedData?.writeToFile((NSHomeDirectory() as String).stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).png"), atomically: true)
+        loadedData?.writeToFile((NSHomeDirectory() as String).stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).jpg"), atomically: true)
     }
     
     
@@ -426,15 +427,15 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         indicator.hidesWhenStopped = true
         self.view.addSubview(indicator)
         indicator.startAnimating()
-        // 取出cache文件夹目录 缓存文件都在这个目录下
-        let cachePath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true).first
-        // 取出文件夹下所有文件数组
-        let fileArr = NSFileManager.defaultManager().subpathsAtPath(cachePath!)
         let message = "\(self.fileSizeOfCache())K缓存"
         print(message)
         let alert = UIAlertController(title: "清理缓存", message: message, preferredStyle: .Alert)
         let alertConirm = UIAlertAction(title: "确定", style: .Default) { (alertConfirm) in
             indicator.stopAnimating()
+            // 取出cache文件夹目录 缓存文件都在这个目录下
+            let cachePath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true).first
+            // 取出文件夹下所有文件数组
+            let fileArr = NSFileManager.defaultManager().subpathsAtPath(cachePath!)
             // 遍历删除
             for file in fileArr! {
                 let path = cachePath?.stringByAppendingString("/\(file)")
