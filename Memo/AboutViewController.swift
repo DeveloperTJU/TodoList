@@ -72,7 +72,7 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
         let arr0 = [""]
         let arr1 = ["开发团队"]
         //let arr2 = ["指导教师"]
-        let arr3 = ["开发小组", "    薛成韵乀(ˉεˉ乀)",  "    张彦辉",  "    郑艺峰",  "    nmpp:Github@hailuy",  "    杨若岚",  "    李训涛",  "    田佳诺","    杨耀华"]
+        let arr3 = ["开发小组", "    薛成韵乀(ˉεˉ乀)",  "    张彦辉",  "    郑艺峰",  "    nmpp:Github@hailuy",  "    杨若岚",  "    李训涛",  "    田嘉诺","    杨耀华"]
         self.dataArrs = [arr0,arr1,arr3]
     }
     
