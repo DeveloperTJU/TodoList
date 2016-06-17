@@ -180,6 +180,12 @@ class UnfinishedViewController: BaseViewController, UITextFieldDelegate{
             }
         case .Ended:
             self.newItem.data.level = Int.init(self.newItem.originPos.x + gesture.translationInView(self.newItem.levelBar).x) / 20
+            if(self.newItem.data.level < 0){
+                self.newItem.data.level = 0
+            }
+            else if(self.newItem.data.level > 4){
+                self.newItem.data.level = 4
+            }
         default:
             break
         }

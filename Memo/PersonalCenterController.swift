@@ -221,12 +221,12 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if indexPath.section == 0 && indexPath.row == 0{
             return 100
-        }else if indexPath.section == 1 && indexPath.row == 1 && UserInfo.nickname == "Visitor"{
+        }else if indexPath.section == 1 && indexPath.row == 1 && UserInfo.phoneNumber == "Visitor"{
             return 0
         }
-        else if indexPath.section == 4 && indexPath.row == 0 && UserInfo.nickname == "Visitor"{
+        else if indexPath.section == 4 && indexPath.row == 0 && UserInfo.phoneNumber == "Visitor"{
             return 0
-        }else if indexPath.section == 1 && indexPath.row == 0 && UserInfo.nickname == "Visitor"{
+        }else if indexPath.section == 1 && indexPath.row == 0 && UserInfo.phoneNumber == "Visitor"{
             return 0
         }
         else{
@@ -248,7 +248,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     
     //控制样式
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if UserInfo.nickname != "Visitor"{
+        if UserInfo.phoneNumber != "Visitor"{
             let frame:CGRect = CGRectMake(20, 20, 20, 42)
             var cell = UITableViewCell(frame:frame)
             let sectionArr = dataArrs[indexPath.section]
@@ -302,7 +302,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
                 phoneNumberText.textAlignment = .Right
                 phoneNumberText.font = font
                 cell.addSubview(phoneNumberText)
-                if UserInfo.nickname == "Visitor"{
+                if UserInfo.phoneNumber == "Visitor"{
                     phoneNumberText.text = ""
                     cell.textLabel?.text = ""
                 }
@@ -340,7 +340,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         switch(indexPath.section){
         case 1:
             if indexPath.row == 0{
-            }else if indexPath.row == 1 && UserInfo.nickname != "Visitor"{
+            }else if indexPath.row == 1 && UserInfo.phoneNumber != "Visitor"{
                 let reachability = Reachability.reachabilityForInternetConnection()
                 if reachability!.isReachable(){
                     let ChangePassVC = ChangePaswordController()
@@ -359,7 +359,7 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
             let AboutVc = AboutViewController()
             self.navigationController?.pushViewController(AboutVc, animated: true)
         case 4:
-            if UserInfo.nickname == "Visitor"{
+            if UserInfo.phoneNumber == "Visitor"{
                 UserInfo = UserInfoStruct()
                 self.presentViewController(PhoneNumberViewController(), animated: true, completion: nil)
             }

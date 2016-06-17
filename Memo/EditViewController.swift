@@ -65,7 +65,7 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
         titleLabel.text = currentList.title
         titleLabel.frame = CGRectMake(60, 35, self.view.frame.size.width - 90, 20)
         titleLabel.textColor = UIColor.grayColor()
-        titleLabel.font = UIFont.systemFontOfSize(16)
+        titleLabel.font = UIFont.systemFontOfSize(15)
         self.view.addSubview(titleLabel)
         
         //添加detail
@@ -81,7 +81,7 @@ class EditViewController: UIViewController, UITextFieldDelegate, UITextViewDeleg
                                             value: comment_message_style,
                                             range: NSMakeRange(0, comment_message_indent.length))
         comment_message_indent.addAttribute(NSFontAttributeName,
-                                            value: UIFont.systemFontOfSize(14),
+                                            value: UIFont.systemFontOfSize(15),
                                             range: NSMakeRange(0, comment_message_indent.length))
         comment_message_indent.addAttribute(NSForegroundColorAttributeName,
                                             value: UIColor.grayColor(),
