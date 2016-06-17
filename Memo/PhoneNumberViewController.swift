@@ -166,10 +166,6 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
     }
     
     //弹窗
-    func alertWindow(title:String, message:String)  {
-        let alert : UIAlertView = UIAlertView(title: title, message: message, delegate: nil, cancelButtonTitle: "Back")
-        alert.show()
-    }
     func showAlert(message:String){
         let alert = UIAlertController(title: "提示", message: message, preferredStyle: .Alert)
         let cancelAction = UIAlertAction(title: "确定", style: .Cancel, handler: { (cancelAction) in
@@ -217,10 +213,21 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
                         if resultDict["isSuccess"] as! Int == 1{
                             let loginVC = LogInViewController()
                             self.presentViewController(loginVC, animated: true, completion: {
-                                let hud = MBProgressHUD.showHUDAddedTo(loginVC.view, animated: true)
-                                hud.mode = MBProgressHUDMode.Text
-                                hud.label.text = "注册成功"
-                                hud.hideAnimated(true, afterDelay: 0.5)
+                                let alert = UIAlertController(title: "提示", message: "注册成功，是否导入访客数据？", preferredStyle: .Alert)
+                                alert.addAction(UIAlertAction(title: "取消", style: .Default, handler: nil))
+                                alert.addAction(UIAlertAction(title: "导入", style: .Default, handler: {(UIAlertAction) in
+                                    DatabaseService.sharedInstance.initDataTable()
+                                    if DatabaseService.sharedInstance.importDataFromVisitor(){
+                                        let hud = MBProgressHUD.showHUDAddedTo(loginVC.view, animated: true)
+                                        hud.mode = MBProgressHUDMode.Text
+                                        hud.label.text = "导入完成"
+                                        hud.hideAnimated(true, afterDelay: 0.5)
+                                    }
+                                    else{
+                                        loginVC.showAlert("导入出错，部分未完成")
+                                    }
+                                }))
+                                loginVC.presentViewController(alert, animated: true, completion: nil)
                             })
                         }
                         else{

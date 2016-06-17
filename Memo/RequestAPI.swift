@@ -74,6 +74,7 @@ class RequestAPI: NSObject {
                     hud.mode = MBProgressHUDMode.Text
                     hud.label.text = "同步成功"
                     hud.hideAnimated(true, afterDelay: 0.5)
+                    (RequestClient.sharedInstance.delegate as! BaseViewController).mainTableView.mj_header.endRefreshing()
                 default:
                     break
                 }

@@ -19,6 +19,7 @@
 		A5046D8C1D0115230046B511 /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A5046D861D0115230046B511 /* AFURLSessionManager.m */; };
 		A5046DE61D011D2F0046B511 /* MyRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5046DE51D011D2F0046B511 /* MyRect.swift */; };
 		A5046DE81D012CCC0046B511 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5046DE71D012CCC0046B511 /* Assets.xcassets */; };
+		A5151EDD1D1427E40085444C /* UIViewControllerHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5151EDC1D1427E40085444C /* UIViewControllerHelper.swift */; };
 		A53A92EC1D07A14300144FE6 /* ChangePaswordController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53A92EB1D07A14300144FE6 /* ChangePaswordController.swift */; };
 		A53A92EE1D07A17600144FE6 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53A92ED1D07A17600144FE6 /* Reachability.swift */; };
 		A53A92F11D07A19200144FE6 /* ChangeNicknameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A53A92EF1D07A19200144FE6 /* ChangeNicknameController.swift */; };
@@ -74,7 +75,6 @@
 		A85783501D03F5A3003D73D9 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A857834F1D03F5A3003D73D9 /* libstdc++.tbd */; };
 		A85783581D03F7D5003D73D9 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85783561D03F7D5003D73D9 /* LogInViewController.swift */; };
 		A85783591D03F7D5003D73D9 /* PhoneNumberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85783571D03F7D5003D73D9 /* PhoneNumberViewController.swift */; };
-		A87690841D050EE700BAB593 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87690831D050EE700BAB593 /* ViewController.swift */; };
 		A8DB470E1D07F94C00ECAD49 /* RequestClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8DB470D1D07F94C00ECAD49 /* RequestClient.swift */; };
 		A8DB47101D07F9E900ECAD49 /* RequestAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8DB470F1D07F9E900ECAD49 /* RequestAPI.swift */; };
 /* End PBXBuildFile section */
@@ -99,6 +99,7 @@
 		A5046D861D0115230046B511 /* AFURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLSessionManager.m; sourceTree = "<group>"; };
 		A5046DE51D011D2F0046B511 /* MyRect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyRect.swift; sourceTree = "<group>"; };
 		A5046DE71D012CCC0046B511 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A5151EDC1D1427E40085444C /* UIViewControllerHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewControllerHelper.swift; sourceTree = "<group>"; };
 		A53A92EB1D07A14300144FE6 /* ChangePaswordController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChangePaswordController.swift; path = Memo/ChangePaswordController.swift; sourceTree = SOURCE_ROOT; };
 		A53A92ED1D07A17600144FE6 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Reachability.swift; path = Memo/Reachability.swift; sourceTree = SOURCE_ROOT; };
 		A53A92EF1D07A19200144FE6 /* ChangeNicknameController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChangeNicknameController.swift; path = Memo/ChangeNicknameController.swift; sourceTree = SOURCE_ROOT; };
@@ -184,7 +185,6 @@
 		A857834F1D03F5A3003D73D9 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
 		A85783561D03F7D5003D73D9 /* LogInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		A85783571D03F7D5003D73D9 /* PhoneNumberViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneNumberViewController.swift; sourceTree = "<group>"; };
-		A87690831D050EE700BAB593 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		A8DB470D1D07F94C00ECAD49 /* RequestClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestClient.swift; sourceTree = "<group>"; };
 		A8DB470F1D07F9E900ECAD49 /* RequestAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestAPI.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -283,6 +283,7 @@
 			children = (
 				A5A9A0E51CEBF6C4006BB3A1 /* AppDelegate.swift */,
 				A548B9A51CF5892B00773A58 /* Memo-Bridging-Header.h */,
+				A5151EDC1D1427E40085444C /* UIViewControllerHelper.swift */,
 				A5DAA8841CFFCFD9008B8CAC /* StringHelper.swift */,
 				A599E43B1CF68C44005CDB8D /* DatabaseService.swift */,
 				A8DB470D1D07F94C00ECAD49 /* RequestClient.swift */,
@@ -297,7 +298,6 @@
 				A5046DE71D012CCC0046B511 /* Assets.xcassets */,
 				A5A9A0EE1CEBF6C4006BB3A1 /* LaunchScreen.storyboard */,
 				A5A9A0F11CEBF6C4006BB3A1 /* Info.plist */,
-				A87690831D050EE700BAB593 /* ViewController.swift */,
 			);
 			path = Memo;
 			sourceTree = "<group>";
@@ -621,11 +621,11 @@
 				A5C4D3BE1D11CA3600FF5021 /* MJRefreshAutoFooter.m in Sources */,
 				A5C5C4C91CF688360078C4CF /* FMDatabase.m in Sources */,
 				A5A9A0F81CEBF77F006BB3A1 /* BaseViewController.swift in Sources */,
-				A87690841D050EE700BAB593 /* ViewController.swift in Sources */,
 				A5046D8A1D0115230046B511 /* AFURLRequestSerialization.m in Sources */,
 				A5046D891D0115230046B511 /* AFSecurityPolicy.m in Sources */,
 				A5C4D3CE1D11CA3600FF5021 /* NSBundle+MJRefresh.m in Sources */,
 				A85783581D03F7D5003D73D9 /* LogInViewController.swift in Sources */,
+				A5151EDD1D1427E40085444C /* UIViewControllerHelper.swift in Sources */,
 				A5046D8C1D0115230046B511 /* AFURLSessionManager.m in Sources */,
 				A5C4D3C91D11CA3600FF5021 /* MJRefreshGifHeader.m in Sources */,
 				A5C5C4CC1CF688360078C4CF /* FMDatabaseQueue.m in Sources */,

@@ -55,6 +55,8 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
             let refresher = MJRefreshNormalHeader()
             refresher.setRefreshingTarget(self, refreshingAction: Selector("refreshManually"))
             self.mainTableView.mj_header = refresher
+            refresher.stateLabel?.font = UIFont.systemFontOfSize(11)
+            refresher.lastUpdatedTimeLabel?.font = UIFont.systemFontOfSize(11)
         }
     }
     
@@ -135,8 +137,7 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
     func refreshManually(){
         if UserInfo.phoneNumber == "Visitor" {
             let alert = UIAlertController(title: "提示", message: "同步功能需要登录后才能使用，是否立即前往登录？", preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: "取消", style: .Default, handler: {(UIAlertAction) in
-            }))
+            alert.addAction(UIAlertAction(title: "取消", style: .Default, handler: nil))
             alert.addAction(UIAlertAction(title: "确定", style: .Default, handler:{ (UIAlertAction) in
                 UserInfo = UserInfoStruct()
                 self.presentViewController(LogInViewController(), animated: true, completion: nil)

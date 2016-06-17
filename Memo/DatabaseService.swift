@@ -82,6 +82,26 @@ class DatabaseService: NSObject {
         return succeed
     }
     
+    //新注册可选是否导入访客数据
+    func importDataFromVisitor() -> Bool{
+        self.database.open()
+        var sqlStr = "SELECT * FROM data_\("Visitor".md5)"
+        let rs = self.database.executeQuery(sqlStr, withArgumentsInArray: [])
+        var dataArr:[ItemModel]!
+        while rs.next(){
+            dataArr.append(ItemModel(title: rs.stringForColumn("TITLE"), content: rs.stringForColumn("CONTENT"), createTime: rs.stringForColumn("CREATE_TIME"), lastEditTime: rs.stringForColumn("LAST_EDIT_TIME"), timestamp: rs.stringForColumn("TIMESTAMP"), alertTime: rs.stringForColumn("ALERT_TIME"), level: rs.longForColumn("LEVEL"), state: rs.longForColumn("STATE")))
+        }
+        var succeed = true
+        sqlStr = "INSERT INTO data_\(UserInfo.phoneNumber.md5) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+        for data in dataArr{
+            if !self.database.executeUpdate(sqlStr, withArgumentsInArray: [data.title, data.content, data.createTime, data.lastEditTime, data.timestamp, data.alertTime, data.level, data.state]){
+                succeed = false
+            }
+        }
+        self.database.close()
+        return succeed
+    }
+    
     //新增用户
     func insertUser(UID:String, phoneNumber:String, nickname:String, isCurrentUser:Int) -> Bool{
         self.database.open()
@@ -152,17 +172,6 @@ class DatabaseService: NSObject {
         return succeed
     }
     
-    //新增或更新任务
-    func refreshInDB(data:ItemModel) -> Bool {
-        self.database.open()
-        var sqlStr = "DELETE FROM data_\(UserInfo.phoneNumber.md5) WHERE CREATE_TIME=?"
-        self.database.executeUpdate(sqlStr, withArgumentsInArray: [data.createTime])
-        sqlStr = "INSERT INTO data_\(UserInfo.phoneNumber.md5) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
-        let succeed = self.database.executeUpdate(sqlStr, withArgumentsInArray: [data.title, data.content, data.createTime, data.lastEditTime, data.timestamp, data.alertTime, data.level, data.state])
-        self.database.close()
-        return succeed
-    }
-    
     //同步成功后清除本地已删除任务
     func clearDeletedData() -> Bool {
         self.database.open()
@@ -184,7 +193,7 @@ class DatabaseService: NSObject {
     //selectAllInDB().0 是未完成列表，selectAllInDB().1 是已完成列表。
     func selectAllInDB() -> ([ItemModel], [ItemModel]) {
         self.database.open()
-        let sqlStr = "SELECT * FROM data_\(UserInfo.phoneNumber.md5) ORDER BY LEVEL, LAST_EDIT_TIME DESC"
+        let sqlStr = "SELECT * FROM data_\(UserInfo.phoneNumber.md5) ORDER BY LEVEL DESC, LAST_EDIT_TIME DESC"
         let rs =  self.database.executeQuery(sqlStr, withArgumentsInArray: [])
         var unfinished:[ItemModel] = [ItemModel]()
         var finished:[ItemModel] = [ItemModel]()

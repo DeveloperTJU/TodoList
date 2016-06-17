@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let dirParh = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
         let docsDir = dirParh[0] as NSString
         self.databasePath = docsDir.stringByAppendingPathComponent("task.db")
-        
+
         let screenFrame = UIScreen.mainScreen().bounds
         self.window = UIWindow(frame: screenFrame)
         self.window?.backgroundColor = .whiteColor()
@@ -49,9 +49,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
         let state = application.applicationState
         if state == .Active{
-            let alert = UIAlertController(title: "提醒", message: "notification.alertBody?.substringFromIndex()", preferredStyle: .Alert)
+            let alert = UIAlertController(title: "咕嘟笔记", message: notification.alertBody, preferredStyle: .Alert)
             alert.addAction(UIAlertAction(title: "我知道了", style: .Cancel, handler: nil))
-            self.window?.rootViewController!.presentViewController(alert, animated: true, completion: nil)
+            application.keyWindow!.rootViewController!.topMostViewController().presentViewController(alert, animated: true, completion: nil)
         }
     }
     

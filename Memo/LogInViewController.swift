@@ -95,10 +95,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
         txtUser.resignFirstResponder()
         txtPwd.resignFirstResponder()
     }
-    func alertWindow(title:String, message:String)  {
-        let alert = UIAlertView(title: title, message: message, delegate: nil, cancelButtonTitle: "Back")
-        alert.show()
-    }
+    
     func showAlert(message:String){
         let alert = UIAlertController(title: "提示", message: message, preferredStyle: .Alert)
         let cancelAction = UIAlertAction(title: "确定", style: .Cancel, handler: { (cancelAction) in

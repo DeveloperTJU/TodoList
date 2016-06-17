@@ -25,7 +25,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     var filtered1:[ItemModel] = [ItemModel]()
     //    var editVC = EditController()
     //    var resultSearchController : UISearchController = UISearchController()
-    lazy var searchBar:UISearchBar = UISearchBar(frame: CGRectMake(0, 0, 200, 20))
+    lazy var searchBar:UISearchBar = UISearchBar(frame: CGRectMake(0, 0, 200, 44))
     //    lazy var search:UITextField = UITextField(frame: CGRectMake(0, 0, 200, 20))
     //    var searchController:UISearchController!
     var tap:UITapGestureRecognizer!
@@ -42,7 +42,7 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
         mainTableView.delegate = self
         mainTableView.dataSource = self
         
-        let tableViewFrame:CGRect = self.view.bounds
+        let tableViewFrame = CGRectMake(0, 0, self.view.bounds.width, self.view.bounds.height - 44)
         self.mainTableView = UITableView(frame: tableViewFrame, style: UITableViewStyle.Grouped)
         self.mainTableView.backgroundColor = UIColor.whiteColor()
         self.mainTableView.delegate = self
