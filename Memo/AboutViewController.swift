@@ -65,7 +65,7 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
     func initDataArrs() {
         let arr0 = [""]
         let arr1 = ["开发团队"]
-        let arr3 = ["开发小组", "    薛成韵乀(ˉεˉ乀)",  "    张彦辉",  "    郑艺峰",  "    王贝妮",  "    杨若岚",  "    李训涛",  "    田嘉诺","    杨耀华"]
+        let arr3 = ["开发小组", "    薛成韵乀(ˉεˉ乀)",  "    张彦辉",  "    郑艺峰",  "    nmpp:Github:hailuy",  "    杨若岚",  "    李训涛",  "    田嘉诺","    杨耀华"]
         self.dataArrs = [arr0,arr1,arr3]
     }
     
@@ -153,7 +153,7 @@ class AboutViewController: UIViewController ,UITableViewDelegate,UITableViewData
             case 3:
                 url.text = "837056051@qq.com"
             case 4:
-                url.text = "304571519@qq.com"
+                url.text = "i-tria@hotmail.com"
             case 5:
                 url.text = "luvianlanjkl@gmail.com"
             case 6:
