@@ -67,7 +67,9 @@ class RequestAPI: NSObject {
                 DatabaseService.sharedInstance.clearDeletedData()
                 switch afterEvent{
                 case 0:
-                    (RequestClient.sharedInstance.delegate as! LogInViewController).presentViewController(RootTabBarController(), animated: true, completion: nil)
+                    (RequestClient.sharedInstance.delegate as! LogInViewController).presentViewController(RootTabBarController(), animated: true, completion:{
+                        (RequestClient.sharedInstance.delegate as! LogInViewController).indicator.stopAnimating()
+                    })
                 case 1:
                     UnfinishedVC.reloadDatabase() //随便调任何一个就可以同时刷新两个TableView
                     let hud = MBProgressHUD.showHUDAddedTo((RequestClient.sharedInstance.delegate as! BaseViewController).view, animated: true)

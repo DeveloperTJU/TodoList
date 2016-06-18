@@ -27,8 +27,6 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
         //添加头像
         self.setAvaterImage()
         self.setNicknameText()
-        //判断联网成功，则从服务器读取头像
-        PersonalCenterController.loadAvatarImg()
         //添加返回按钮
         self.addLeftButtonItem()
         self.setProgressBar()
@@ -145,16 +143,10 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     //显示图像
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         picker.dismissViewControllerAnimated(true) {}
-        
-        
         //显示加载过程
         self.indicator.startAnimating()
-        
-        
         let Orginmage = info[UIImagePickerControllerEditedImage] as! UIImage
         let image = Orginmage.fixOrientation()
-        //此处调用上传，失败则提示用户修改头像失败
-        //如上传成功，将头像保存至本地资源文件夹，名称为UserInfo.phoneNumber.md5
         let scale = image.size.width > image.size.height ? image.size.height/160 : image.size.width/160
         let tempImg = UIImage(CGImage: image.CGImage!, scale: scale, orientation: .Up)
         let resizeImg = tempImg.resizeImage(tempImg, newSize: CGSizeMake(160, 160))
@@ -164,29 +156,26 @@ class PersonalCenterController: UIViewController , UIActionSheetDelegate ,UIImag
     //保存图片到本地和服务器
     func saveLocalImage(tempImg:UIImage){
         let imageData = UIImageJPEGRepresentation(tempImg, 1)
-
         //上传至服务
-        RequestAPI.UploadPicture("upload.php", body: nil, block: { (formData:AFMultipartFormData!) in
-            formData.appendPartWithFileData(imageData!, name: "file", fileName: UserInfo.phoneNumber.md5, mimeType: "image/jpg")
-            }, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject? ) in
+        RequestAPI.UploadPicture("upload.php", body: nil, block: {
+            (formData:AFMultipartFormData!) in formData.appendPartWithFileData(imageData!, name: "file", fileName: UserInfo.phoneNumber.md5, mimeType: "image/jpg")
+        }, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject? ) in
                 //保存至本地
-                PersonalCenterController.loadAvatarImg()
-                imageData?.writeToFile((NSHomeDirectory() as String).stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).jpg"), atomically: true)
-                UserInfo.avatar = UIImage(CGImage: tempImg.CGImage!, scale: 2, orientation: .Up)
-                self.imageView.image = tempImg
-                
-                //停止加载进程控制条
-                self.indicator.stopAnimating()
-                
-            }) { (task:NSURLSessionDataTask?, error:NSError?) in
-                //failure
-                let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-                hud.mode = MBProgressHUDMode.Text
-                hud.label.text = "修改头像失败,请检查网络连接"
-                hud.hideAnimated(true, afterDelay: 1)
-                self.indicator.stopAnimating()
+            PersonalCenterController.loadAvatarImg()
+            imageData?.writeToFile((NSHomeDirectory() as String).stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).jpg"), atomically: true)
+            UserInfo.avatar = UIImage(CGImage: tempImg.CGImage!, scale: 2, orientation: .Up)
+            self.imageView.image = tempImg
+            
+            //停止加载进程控制条
+            self.indicator.stopAnimating()
+        }) { (task:NSURLSessionDataTask?, error:NSError?) in
+            //failure
+            let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+            hud.mode = MBProgressHUDMode.Text
+            hud.label.text = "修改头像失败,请检查网络连接"
+            hud.hideAnimated(true, afterDelay: 1)
+            self.indicator.stopAnimating()
         }
-
     }
     
     //从服务器下载头像

@@ -15,6 +15,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
     var txtPwd:UITextField!
     var txtVerifyCode:UITextField!
     var txtNickname:UITextField!
+    var indicator:UIActivityIndicatorView!
     var buttonVerifyCode:UIButton!
     var countdownTimer: NSTimer?
     var isCounting = false {
@@ -41,9 +42,9 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
     }
     
     override func viewDidLoad() {
-        
         super.viewDidLoad()
         SMSSDK.registerApp("13497b5a4a530", withSecret: "5d4aa8cc0c6a64db874b7db0ad428360")
+        
         self.view.backgroundColor = .whiteColor()
         let mainSize = UIScreen.mainScreen().bounds.size
         let img = UIImage(named:"background")
@@ -135,6 +136,13 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         buttonVisitor.addTarget(self,action:Selector("tapped3:"),forControlEvents:.TouchUpInside)
         self.view.addSubview(buttonVisitor)
         
+        let frame = CGRectMake(self.view.bounds.size.width/2-5, self.view.bounds.size.height/2-60, 10, 10)
+        self.indicator = UIActivityIndicatorView(frame: frame)
+        indicator.activityIndicatorViewStyle = .WhiteLarge
+        indicator.color = UIColor.grayColor()
+        indicator.hidesWhenStopped = true
+        self.view.addSubview(indicator)
+        
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector("hideKeyboard")))
         }
     func updateTime(timer: NSTimer) {
@@ -168,13 +176,10 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
     //弹窗
     func showAlert(message:String){
         let alert = UIAlertController(title: "提示", message: message, preferredStyle: .Alert)
-        let cancelAction = UIAlertAction(title: "确定", style: .Cancel, handler: { (cancelAction) in
-            if message == "上传数据失败"{
-                self.navigationController?.popViewControllerAnimated(true)
-            }
+        alert.addAction(UIAlertAction(title: "确定", style: .Cancel, handler: nil))
+        self.presentViewController(alert, animated: true, completion: {
+            self.indicator.stopAnimating()
         })
-        alert.addAction(cancelAction)
-        self.presentViewController(alert, animated: true, completion: nil)
     }
     
     //发送验证码
@@ -199,6 +204,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         let authCode = txtVerifyCode.text
         let phoneNum = txtPhoneNumber.text
         if checkPassword(){
+            self.indicator.startAnimating()
             SMSSDK.commitVerificationCode(authCode, phoneNumber: phoneNum, zone: "86", result:{ (error: NSError!) -> Void in
                 if(error == nil){
                     NSLog("验证成功")
@@ -213,6 +219,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
                         if resultDict["isSuccess"] as! Int == 1{
                             let loginVC = LogInViewController()
                             self.presentViewController(loginVC, animated: true, completion: {
+                                self.indicator.stopAnimating()
                                 let alert = UIAlertController(title: "提示", message: "注册成功，是否导入访客数据？", preferredStyle: .Alert)
                                 alert.addAction(UIAlertAction(title: "取消", style: .Default, handler: nil))
                                 alert.addAction(UIAlertAction(title: "导入", style: .Default, handler: {(UIAlertAction) in

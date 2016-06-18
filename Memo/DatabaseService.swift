@@ -87,7 +87,7 @@ class DatabaseService: NSObject {
         self.database.open()
         var sqlStr = "SELECT * FROM data_\("Visitor".md5)"
         let rs = self.database.executeQuery(sqlStr, withArgumentsInArray: [])
-        var dataArr:[ItemModel]!
+        var dataArr = [ItemModel]()
         while rs.next(){
             dataArr.append(ItemModel(title: rs.stringForColumn("TITLE"), content: rs.stringForColumn("CONTENT"), createTime: rs.stringForColumn("CREATE_TIME"), lastEditTime: rs.stringForColumn("LAST_EDIT_TIME"), timestamp: rs.stringForColumn("TIMESTAMP"), alertTime: rs.stringForColumn("ALERT_TIME"), level: rs.longForColumn("LEVEL"), state: rs.longForColumn("STATE")))
         }

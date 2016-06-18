@@ -6,10 +6,10 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
     var txtUser:UITextField!
     var txtPwd:UITextField!
     var logIn:UIButton!
+    var indicator:UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         
         //获取屏幕尺寸
         let mainSize = self.view.bounds.size
@@ -88,6 +88,13 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
         button2.addTarget(self,action:Selector("tapped2:"),forControlEvents: .TouchUpInside)
         self.view.addSubview(button2)
         
+        let frame = CGRectMake(self.view.bounds.size.width/2-5, self.view.bounds.size.height/2-60, 10, 10)
+        self.indicator = UIActivityIndicatorView(frame: frame)
+        indicator.activityIndicatorViewStyle = .WhiteLarge
+        indicator.color = UIColor.grayColor()
+        indicator.hidesWhenStopped = true
+        self.view.addSubview(indicator)
+        
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector("hideKeyboard")))
     }
     
@@ -98,13 +105,10 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
     
     func showAlert(message:String){
         let alert = UIAlertController(title: "提示", message: message, preferredStyle: .Alert)
-        let cancelAction = UIAlertAction(title: "确定", style: .Cancel, handler: { (cancelAction) in
-            if message == "上传数据失败"{
-                self.navigationController?.popViewControllerAnimated(true)
-            }
+        alert.addAction(UIAlertAction(title: "确定", style: .Cancel, handler: nil))
+        self.presentViewController(alert, animated: true, completion: {
+            self.indicator.stopAnimating()
         })
-        alert.addAction(cancelAction)
-        self.presentViewController(alert, animated: true, completion: nil)
     }
     
     func tapped(button:UIButton){
@@ -119,6 +123,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
             showAlert("请输入密码")
         }
         else {
+            self.indicator.startAnimating()
             UserInfo.phoneNumber = txtUser.text!
             let url:String = "index.php/Home/User/Login"
             let paramDict:Dictionary = ["user_phoneNumber":UserInfo.phoneNumber,"user_psw":txtPwd.text!.md5]

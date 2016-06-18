@@ -76,13 +76,6 @@ class BaseViewController: UIViewController, UITableViewDelegate, UITableViewData
         userButtonImage.layer.cornerRadius = 15
         userButton.addSubview(userButtonImage)
         userButton.addSubview(userButtonTitle)
-        PersonalCenterController.loadAvatarImg()
-        var image = UIImage(named: (NSHomeDirectory() as String).stringByAppendingFormat("/Documents/\(UserInfo.phoneNumber.md5).jpg"))
-        if image == nil || UserInfo.phoneNumber == "Visitor"{
-            image = UIImage(named: "默认头像小")
-        }
-        let scale = image!.size.width > image!.size.height ? image!.size.height/80 : image!.size.width/80
-        UserInfo.avatar = UIImage(CGImage: image!.CGImage!, scale: scale, orientation: .Up)
         userButton.addTarget(self, action: Selector("userInfo:"), forControlEvents: .TouchDown)
         let userBarButton = UIBarButtonItem(customView: userButton)
         

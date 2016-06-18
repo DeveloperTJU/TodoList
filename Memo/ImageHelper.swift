@@ -43,10 +43,7 @@ extension UIImage {
         default:
             break
         }
-        let ctx = CGBitmapContextCreate(nil, Int(self.size.width), Int(self.size.height),
-                                                                   CGImageGetBitsPerComponent(self.CGImage), 0,
-                                                                                                             CGImageGetColorSpace(self.CGImage),
-                                                                                                             CGImageGetBitmapInfo(self.CGImage).rawValue)
+        let ctx = CGBitmapContextCreate(nil, Int(self.size.width), Int(self.size.height), CGImageGetBitsPerComponent(self.CGImage), 0, CGImageGetColorSpace(self.CGImage), CGImageGetBitmapInfo(self.CGImage).rawValue)
         CGContextConcatCTM(ctx, transform)
         switch (self.imageOrientation) {
         case .Left, .LeftMirrored, .Right, .RightMirrored:
