@@ -142,15 +142,11 @@ class DatabaseService: NSObject {
     
     func hasVisitorData() -> Bool{
         self.database.open()
-        var sqlStr = "SELECT * FROM USER WHERE PHONENUMBER='Visitor'"
-        let rsUser = self.database.executeQuery(sqlStr, withArgumentsInArray: [])
-        if rsUser.next(){
-            sqlStr = "SELECT * FROM data_\("Visitor".md5)"
-            let rsData = self.database.executeQuery(sqlStr, withArgumentsInArray: [])
-            if rsData.next(){
-                self.database.close()
-                return true
-            }
+        let sqlStr = "SELECT * FROM data_\("Visitor".md5)"
+        let rs = self.database.executeQuery(sqlStr, withArgumentsInArray: [])
+        if rs.next(){
+            self.database.close()
+            return true
         }
         self.database.close()
         return false
