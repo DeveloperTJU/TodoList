@@ -140,6 +140,22 @@ class DatabaseService: NSObject {
         return succeed
     }
     
+    func hasVisitorData() -> Bool{
+        self.database.open()
+        var sqlStr = "SELECT * FROM USER WHERE PHONENUMBER='Visitor'"
+        let rsUser = self.database.executeQuery(sqlStr, withArgumentsInArray: [])
+        if rsUser.next(){
+            sqlStr = "SELECT * FROM data_\("Visitor".md5)"
+            let rsData = self.database.executeQuery(sqlStr, withArgumentsInArray: [])
+            if rsData.next(){
+                self.database.close()
+                return true
+            }
+        }
+        self.database.close()
+        return false
+    }
+    
     //选取当前用户所有数据准备上传
     func selectLocalData() -> Dictionary<String,AnyObject> {
         self.database.open()

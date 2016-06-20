@@ -220,21 +220,29 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
                             let loginVC = LogInViewController()
                             self.presentViewController(loginVC, animated: true, completion: {
                                 self.indicator.stopAnimating()
-                                let alert = UIAlertController(title: "提示", message: "注册成功，是否导入访客数据？", preferredStyle: .Alert)
-                                alert.addAction(UIAlertAction(title: "取消", style: .Default, handler: nil))
-                                alert.addAction(UIAlertAction(title: "导入", style: .Default, handler: {(UIAlertAction) in
-                                    DatabaseService.sharedInstance.initDataTable()
-                                    if DatabaseService.sharedInstance.importDataFromVisitor(){
-                                        let hud = MBProgressHUD.showHUDAddedTo(loginVC.view, animated: true)
-                                        hud.mode = MBProgressHUDMode.Text
-                                        hud.label.text = "导入完成"
-                                        hud.hideAnimated(true, afterDelay: 0.5)
-                                    }
-                                    else{
-                                        loginVC.showAlert("导入出错，部分未完成")
-                                    }
-                                }))
-                                loginVC.presentViewController(alert, animated: true, completion: nil)
+                                if DatabaseService.sharedInstance.hasVisitorData(){
+                                    let alert = UIAlertController(title: "提示", message: "注册成功，是否导入访客数据？", preferredStyle: .Alert)
+                                    alert.addAction(UIAlertAction(title: "取消", style: .Default, handler: nil))
+                                    alert.addAction(UIAlertAction(title: "导入", style: .Default, handler: {(UIAlertAction) in
+                                        DatabaseService.sharedInstance.initDataTable()
+                                        if DatabaseService.sharedInstance.importDataFromVisitor(){
+                                            let hud = MBProgressHUD.showHUDAddedTo(loginVC.view, animated: true)
+                                            hud.mode = MBProgressHUDMode.Text
+                                            hud.label.text = "导入完成"
+                                            hud.hideAnimated(true, afterDelay: 0.5)
+                                        }
+                                        else{
+                                            loginVC.showAlert("导入出错，部分未完成")
+                                        }
+                                    }))
+                                    loginVC.presentViewController(alert, animated: true, completion: nil)
+                                }
+                                else{
+                                    let hud = MBProgressHUD.showHUDAddedTo(loginVC.view, animated: true)
+                                    hud.mode = MBProgressHUDMode.Text
+                                    hud.label.text = "注册成功"
+                                    hud.hideAnimated(true, afterDelay: 0.5)
+                                }
                             })
                         }
                         else{
