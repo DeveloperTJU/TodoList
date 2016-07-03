@@ -10,7 +10,7 @@ import UIKit
 
 class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
 
-    
+    var type = 0//0->注册， 1->找回密码
     var txtPhoneNumber:UITextField!
     var txtPwd:UITextField!
     var txtVerifyCode:UITextField!
@@ -53,8 +53,13 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         self.view.sendSubviewToBack(vImg)
         self.view.addSubview(vImg)
         
+        var minusHeight: CGFloat = 0.0
+        if(self.type == 1){
+            minusHeight = 44.0
+        }
+        
         //添加注册框
-        let vReg = UIView(frame:CGRectMake(10, 92, mainSize.width - 20, 176))
+        let vReg = UIView(frame:CGRectMake(10, 92, mainSize.width - 20, 176-minusHeight))
         self.view.addSubview(vReg)
         vReg.addSubview(MyRect(frame: CGRectMake(0, 41, mainSize.width - 20, 3)))
         vReg.addSubview(MyRect(frame: CGRectMake(0, 85, mainSize.width - 20, 3)))
@@ -71,8 +76,13 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         txtPhoneNumber.keyboardType = UIKeyboardType.NumberPad
         
         //密码输入框
-        txtPwd = UITextField(frame:CGRectMake(0, 132, vReg.frame.size.width , 44))
-        self.createTextField(txtPwd,isPasswordTextfield: true,hint: "输入密码，至少六位")
+        txtPwd = UITextField(frame:CGRectMake(0, 132-minusHeight, vReg.frame.size.width , 44))
+        if(self.type == 0){
+            self.createTextField(txtPwd,isPasswordTextfield: true,hint: "输入密码，至少六位")
+        }
+        else{
+            self.createTextField(txtPwd,isPasswordTextfield: true,hint: "输入新密码，至少六位")
+        }
         self.addImageToTextfield(txtPwd, imageName: "灰锁")
         vReg.addSubview(txtPwd)
         txtPwd.clearButtonMode = .WhileEditing
@@ -85,12 +95,14 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         txtVerifyCode.clearButtonMode = .WhileEditing
         txtVerifyCode.keyboardType = UIKeyboardType.NumberPad
         
-        //昵称输入框
-        txtNickname = UITextField(frame:CGRectMake(0, 88, vReg.frame.size.width, 44))
-        self.createTextField(txtNickname, isPasswordTextfield: false, hint: "请输入昵称")
-        self.addImageToTextfield(txtNickname, imageName: "默认头像灰")
-        vReg.addSubview(txtNickname)
-        txtNickname.clearButtonMode = .WhileEditing
+        if(self.type == 0){
+            //昵称输入框
+            txtNickname = UITextField(frame:CGRectMake(0, 88, vReg.frame.size.width, 44))
+            self.createTextField(txtNickname, isPasswordTextfield: false, hint: "请输入昵称")
+            self.addImageToTextfield(txtNickname, imageName: "默认头像灰")
+            vReg.addSubview(txtNickname)
+            txtNickname.clearButtonMode = .WhileEditing
+        }
         
         self.buttonVerifyCode = UIButton(type: .Custom)
         //设置按钮位置和大小
@@ -106,19 +118,29 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         
         let ButtonRegister:UIButton = UIButton(type:.System)
         //设置按钮位置和大小
-        ButtonRegister.frame = CGRectMake(10, 280, vReg.frame.size.width , 44)
+        ButtonRegister.frame = CGRectMake(10, 280-minusHeight, vReg.frame.size.width , 44)
         ButtonRegister.backgroundColor = .grayColor()
         //设置按钮文字
-        ButtonRegister.setTitle("注   册", forState:UIControlState.Normal)
+        if(self.type == 0){
+            ButtonRegister.setTitle("注   册", forState:UIControlState.Normal)
+        }
+        else{
+            ButtonRegister.setTitle("重置密码", forState:UIControlState.Normal)
+        }
         ButtonRegister.backgroundColor = UIColor(red: 67/255, green: 67/255, blue: 67/255, alpha: 1)
         ButtonRegister.tintColor = UIColor(red: 232/255, green: 208/255, blue: 120/255, alpha: 1)
-        ButtonRegister.addTarget(self, action:Selector("tapped1:"),forControlEvents: .TouchUpInside)
+        if(self.type == 0){
+            ButtonRegister.addTarget(self, action:Selector("tapped1:"),forControlEvents: .TouchUpInside)
+        }
+        else{
+            ButtonRegister.addTarget(self, action:Selector("tapped4:"),forControlEvents: .TouchUpInside)
+        }
         ButtonRegister.layer.cornerRadius = 4
         self.view.addSubview(ButtonRegister)
         
         let buttonlogin:UIButton = UIButton(type:.System)
         //设置按钮位置和大小
-        buttonlogin.frame = CGRectMake(10, 330, 100, 22)
+        buttonlogin.frame = CGRectMake(10, 330-minusHeight, 100, 22)
         
         //设置按钮文字
         buttonlogin.setTitle("账号登录", forState:UIControlState.Normal)
@@ -128,7 +150,7 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         
         let buttonVisitor:UIButton = UIButton(type:.System)
         //设置按钮位置和大小
-        buttonVisitor.frame = CGRectMake(vReg.frame.size.width-85, 330, 100, 22)
+        buttonVisitor.frame = CGRectMake(vReg.frame.size.width-85, 330-minusHeight, 100, 22)
 
         //设置按钮文字
         buttonVisitor.setTitle("游客模式", forState:UIControlState.Normal)
@@ -154,7 +176,9 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         txtPhoneNumber.resignFirstResponder()
         txtPwd.resignFirstResponder()
         txtVerifyCode.resignFirstResponder()
-        txtNickname.resignFirstResponder()
+        if(type==0){
+          txtNickname.resignFirstResponder()
+        }
     }
     
     //设置输入框属性
@@ -274,6 +298,54 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         UserInfo.phoneNumber = "Visitor"
         UserInfo.nickname = "游客"
         self.presentViewController(RootTabBarController(), animated: true, completion: nil)
+    }
+    
+    func tapped4(button:UIButton){
+        button.enabled = false
+        let authCode = txtVerifyCode.text
+        let phoneNum = txtPhoneNumber.text
+        if checkPassword(){
+            self.indicator.startAnimating()
+            SMSSDK.commitVerificationCode(authCode, phoneNumber: phoneNum, zone: "86", result:{ (error: NSError!) -> Void in
+                if(error == nil){
+                    NSLog("验证成功")
+                    UserInfo.phoneNumber = self.txtPhoneNumber.text!
+                    let url:String = "index.php/Home/User/FindPassword"
+                    let paramDict:Dictionary = ["user_phoneNumber": UserInfo.phoneNumber, "user_psw":self.txtPwd.text!.md5]
+                    RequestAPI.POST(url, body: paramDict, succeed: { (task:NSURLSessionDataTask!, responseObject:AnyObject?) -> Void in
+                        //成功回调
+                        button.enabled = true
+                        let resultDict = try! NSJSONSerialization.JSONObjectWithData(responseObject as! NSData, options: NSJSONReadingOptions.MutableContainers)
+                        //注册成功
+                        if resultDict["isSuccess"] as! Int == 1{
+                            let loginVC = LogInViewController()
+                            self.presentViewController(loginVC, animated: true, completion: {
+                                self.indicator.stopAnimating()
+                                let hud = MBProgressHUD.showHUDAddedTo(loginVC.view, animated: true)
+                                hud.mode = MBProgressHUDMode.Text
+                                hud.label.text = "重置成功"
+                                hud.hideAnimated(true, afterDelay: 0.5)
+                            })
+                        }
+                        else{
+                            self.showAlert("账号已存在或服务器出错")
+                        }
+                    }) { (task:NSURLSessionDataTask?, error:NSError?) -> Void in
+                        //失败回调
+                        button.enabled = true
+                        print("网络调用失败:\(error)")
+                        self.showAlert("网络连接失败")
+                    }
+                }else{
+                    NSLog("验证失败！" , error)
+                    self.showAlert("验证失败")
+                    button.enabled = true
+                }
+            })
+        }
+        else{
+            button.enabled = true
+        }
     }
     
     func checkPassword() -> Bool  {

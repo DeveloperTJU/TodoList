@@ -88,6 +88,16 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
         button2.addTarget(self,action:Selector("tapped2:"),forControlEvents: .TouchUpInside)
         self.view.addSubview(button2)
         
+        let button3:UIButton = UIButton(type:.System)
+        //设置按钮位置和大小
+        button3.frame = CGRectMake(vLogin.frame.size.width/2-40, 330, 100, 22)
+        button3.tintColor = UIColor(red: 67/255, green: 67/255, blue: 67/255, alpha: 1)
+        
+        //设置按钮文字
+        button3.setTitle("找回密码", forState:UIControlState.Normal)
+        button3.addTarget(self,action:Selector("tapped3:"),forControlEvents: .TouchUpInside)
+        self.view.addSubview(button3)
+        
         let frame = CGRectMake(self.view.bounds.size.width/2-5, self.view.bounds.size.height/2-60, 10, 10)
         self.indicator = UIActivityIndicatorView(frame: frame)
         indicator.activityIndicatorViewStyle = .WhiteLarge
@@ -155,6 +165,12 @@ class LogInViewController: UIViewController, UITextFieldDelegate, RequestClientD
         UserInfo.phoneNumber = "Visitor"
         UserInfo.nickname = "游客"
         self.presentViewController(RootTabBarController(), animated: true, completion: nil)
+    }
+    
+    func tapped3(button:UIButton){
+        let pnVC = PhoneNumberViewController()
+        pnVC.type = 1
+        self.presentViewController(pnVC, animated: true, completion: nil)
     }
 }
 
