@@ -42,7 +42,8 @@ class DatabaseService: NSObject {
                 if !db.executeUpdate(sqlStr, withArgumentsInArray: []) {
                     print("Error:\(db.lastErrorMessage())")
                 }
-                sqlStr = "CREATE TABLE IF NOT EXISTS data_\("Visitor".md5)(TITLE TEXT, CONTENT TEXT, CREATE_TIME TEXT, LAST_EDIT_TIME TEXT, TIMESTAMP TEXT, ALERT_TIME TEXT, LEVEL INT, STATE INT, PRIMARY KEY(CREATE_TIME))"
+                let str = "Visitor".md5
+                sqlStr = "CREATE TABLE IF NOT EXISTS data_\(str)(TITLE TEXT, CONTENT TEXT, CREATE_TIME TEXT, LAST_EDIT_TIME TEXT, TIMESTAMP TEXT, ALERT_TIME TEXT, LEVEL INT, STATE INT, PRIMARY KEY(CREATE_TIME))"
                 if !db.executeUpdate(sqlStr, withArgumentsInArray: []) {
                     print("Error:\(db.lastErrorMessage())")
                 }
@@ -89,7 +90,8 @@ class DatabaseService: NSObject {
     //新注册可选是否导入访客数据
     func importDataFromVisitor() -> Bool{
         self.database.open()
-        var sqlStr = "SELECT * FROM data_\("Visitor".md5)"
+        let str = "Visitor".md5
+        var sqlStr = "SELECT * FROM data_\(str)"
         let rs = self.database.executeQuery(sqlStr, withArgumentsInArray: [])
         var dataArr = [ItemModel]()
         while rs.next(){
@@ -146,7 +148,8 @@ class DatabaseService: NSObject {
     
     func hasVisitorData() -> Bool{
         self.database.open()
-        let sqlStr = "SELECT * FROM data_\("Visitor".md5)"
+        let str = "Visitor".md5
+        let sqlStr = "SELECT * FROM data_\(str)"
         let rs = self.database.executeQuery(sqlStr, withArgumentsInArray: [])
         if rs.next(){
             self.database.close()
@@ -164,7 +167,8 @@ class DatabaseService: NSObject {
         let rs = self.database.executeQuery(sqlStr, withArgumentsInArray: [])
         while rs.next(){
             let data:NSDictionary = ["title": (rs.stringForColumn("TITLE")), "content": rs.stringForColumn("CONTENT"), "createtime": rs.stringForColumn("CREATE_TIME"), "lastedittime": rs.stringForColumn("LAST_EDIT_TIME"), "timestamp": rs.stringForColumn("TIMESTAMP"), "alerttime": rs.stringForColumn("ALERT_TIME"), "level": rs.longForColumn("LEVEL"), "state": rs.longForColumn("STATE")]
-            dictArr["\(rs.stringForColumn("CREATE_TIME"))"] = data
+            let str = rs.stringForColumn("CREATE_TIME")
+            dictArr["\(str)"] = data
         }
         self.database.close()
         return dictArr

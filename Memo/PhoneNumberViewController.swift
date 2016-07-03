@@ -205,9 +205,9 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
         let phoneNum = txtPhoneNumber.text
         if checkPassword(){
             self.indicator.startAnimating()
-//            SMSSDK.commitVerificationCode(authCode, phoneNumber: phoneNum, zone: "86", result:{ (error: NSError!) -> Void in
-//                if(error == nil){
-//                    NSLog("验证成功")
+            SMSSDK.commitVerificationCode(authCode, phoneNumber: phoneNum, zone: "86", result:{ (error: NSError!) -> Void in
+                if(error == nil){
+                    NSLog("验证成功")
                     UserInfo.phoneNumber = self.txtPhoneNumber.text!
                     let url:String = "index.php/Home/User/SignUp"
                     let paramDict:Dictionary = ["user_phoneNumber": UserInfo.phoneNumber, "user_psw":self.txtPwd.text!.md5, "user_nickname":self.txtNickname.text!]
@@ -254,12 +254,12 @@ class PhoneNumberViewController: UIViewController ,UITextFieldDelegate{
                         print("网络调用失败:\(error)")
                         self.showAlert("网络连接失败")
                     }
-//                }else{
-//                    NSLog("验证失败！" , error)
-//                    self.showAlert("验证失败")
-//                    button.enabled = true
-//                }
-//            })
+                }else{
+                    NSLog("验证失败！" , error)
+                    self.showAlert("验证失败")
+                    button.enabled = true
+                }
+            })
         }
         else{
             button.enabled = true
