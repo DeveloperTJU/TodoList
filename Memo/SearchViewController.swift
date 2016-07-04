@@ -188,15 +188,14 @@ class SearchViewController: UIViewController, UITableViewDataSource, UITableView
     
     // 当某一行cell已经被选中时调用
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
-        let editDetailVC = EditDetailViewController()
+        let editVC = EditViewController()
         if indexPath.section == 0 {
-            editDetailVC.currentList = filtered[indexPath.row]
+            editVC.currentList = filtered[indexPath.row]
         } else {
-            editDetailVC.currentList = filtered1[indexPath.row]
+            editVC.currentList = filtered1[indexPath.row]
         }
         self.hidesBottomBarWhenPushed = true;
-        self.navigationController?.pushViewController(editDetailVC, animated: true)
+        self.navigationController?.pushViewController(editVC, animated: true)
 
     }
     
